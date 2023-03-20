@@ -89,4 +89,5 @@ lazy val `rhs-example` = (project in file("rhs-example"))
     name                := "rhs-example",
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.0.0+6-5032529d+20230320-2154-SNAPSHOT")
-  ).dependsOn(`rhs-annotations`)
+  )
+  .dependsOn(`rhs-annotations`)

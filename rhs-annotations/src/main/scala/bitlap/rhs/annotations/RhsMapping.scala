@@ -1,6 +1,6 @@
 package bitlap.rhs.annotations
 
-import scala.annotation.{ConstantAnnotation, StaticAnnotation}
+import scala.annotation.{ ConstantAnnotation, StaticAnnotation }
 
 /** @author
  *    梦境迷离
