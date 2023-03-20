@@ -6,7 +6,6 @@ ThisBuild / resolvers ++= Seq(
 
 inThisBuild(
   List(
-    version                := "0.0.1-SNAPSHOT",
     organization           := "org.bitlap",
     sonatypeCredentialHost := "s01.oss.sonatype.org",
     sonatypeRepository :=
@@ -47,51 +46,47 @@ lazy val commonSettings =
     )
   )
 
-lazy val `id-mapping` = (project in file("."))
+lazy val `rhs` = (project in file("."))
   .aggregate(
-    `id-mapping-compiler-plugin`,
-    `id-mapping-annotations`,
-    `id-mapping-server`,
-    `id-mapping-compiler-plugin-example`
+    `rhs-compiler-plugin`,
+    `rhs-annotations`,
+    `rhs-server`
   )
   .settings(
     publish / skip := true,
     commonSettings
   )
 
-lazy val `id-mapping-annotations` = (project in file("id-mapping-annotations"))
+lazy val `rhs-annotations` = (project in file("rhs-annotations"))
   .settings(
     commonSettings,
-    name := "id-mapping-annotations"
+    name := "rhs-annotations"
   )
 
-lazy val `id-mapping-server` = (project in file("id-mapping-server"))
+lazy val `rhs-server` = (project in file("rhs-server"))
   .settings(
     commonSettings,
-    name := "id-mapping-server",
+    name := "rhs-server",
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % "42.6.0",
       "com.typesafe"   % "config"     % "1.4.2"
     )
   )
 
-lazy val `id-mapping-compiler-plugin` = (project in file("id-mapping-compiler-plugin"))
+lazy val `rhs-compiler-plugin` = (project in file("rhs-compiler-plugin"))
   .settings(
     commonSettings,
-    name := "id-mapping-compiler-plugin",
+    name := "rhs-compiler-plugin",
     libraryDependencies ++= List(
       "org.scala-lang" %% "scala3-compiler" % scala3Version
     )
   )
 
-lazy val `id-mapping-compiler-plugin-example` = (project in file("id-mapping-compiler-plugin-example"))
+lazy val `rhs-compiler-plugin-example` = (project in file("rhs-compiler-plugin-example"))
   .settings(
     scalaVersion        := scala3Version,
     publish / skip      := true,
-    name                := "id-mapping-compiler-plugin-example",
+    name                := "rhs-compiler-plugin-example",
     autoCompilerPlugins := true,
-    libraryDependencies ++= List(
-      "org.bitlap" %% "id-mapping-annotations" % "0.0.1-SNAPSHOT"
-    ),
-    addCompilerPlugin("org.bitlap" %% "id-mapping-compiler-plugin" % "0.0.1-SNAPSHOT")
-  )
+    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.0.0+2-5775c68e+20230320-2130-SNAPSHOT")
+  ).dependsOn(`rhs-annotations`)

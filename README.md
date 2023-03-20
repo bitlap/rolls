@@ -1,19 +1,19 @@
-# id-mapping
+# rhs
 
-> compile-time
+rhs uses standard compiler plugin to replace ValDel for constant type in compile-time.
 
-# 1. add dependency
+## 1. add dependency
 
 ```scala
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "id-mapping-compiler-plugin" % "0.0.1-SNAPSHOT")
+    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % <Version>)
 ```
 
-# 2. add config
+## 2. add config
 
 > It means: mapping resource to id by sql: `select id from schema.table where resource = ???"`
 ```scala
-    id-mapping {
+    rhs-mapping {
       url = "jdbc:postgresql://localhost/db"
       tableName = "schema.table"
       nameColumn = "resource"
@@ -22,15 +22,15 @@
     }
 ```
 
-# 3. start IdMappingHttpServer
+## 3. start RhsResolveHttpServer
 
-# 4. examples
+## 4. examples
 
 ```scala
     // If not found, continue using `rhs`, otherwise use mapping by sql.
-    @IdNameMapping(name = "permission") val re = "permission" // ast: mods val name: tpt = rhs
+    @RhsMapping val re = "permission" // ast: mods val name: tpt = rhs
 
-    @CustomIdNameMapping(name = "permission", idColumn = "id", nameColumn = "resource", tableName = "schema.table") val re2 =
+    @CustomRhsMapping(idColumn = "id", nameColumn = "resource", tableName = "schema.table") val re2 =
       "permission"
 
     println(re)  // permission is `select id from schema.table where resource = permission`
