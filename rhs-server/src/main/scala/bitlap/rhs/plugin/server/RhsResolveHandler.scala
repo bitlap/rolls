@@ -30,7 +30,10 @@ final class RhsResolveHandler extends HttpHandler {
           s"select $id from $table where $column=$value"
         )
       println(s"Query id by sql:$rs")
-      val response = rs.getString("id")
+      val response = if (rs.next()) {
+        rs.getString(id)
+      } else ""
+
       exchange.sendResponseHeaders(200, 0)
       val os = exchange.getResponseBody
       os.write(response.getBytes())

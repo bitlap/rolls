@@ -19,7 +19,7 @@
 
 ## 2. add config
 
-> It means: mapping resource to id by sql: `select id from schema.table where resource = ???"`
+> It means: mapping resource to id by sql: `select id from schema.table where resource = ???"` // Will only take one
 ```scala
     rhs-mapping {
       url = "jdbc:postgresql://localhost/db"
