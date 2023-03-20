@@ -30,7 +30,9 @@
     }
 ```
 
-## 3. start RhsResolveHttpServer
+## 3. start `RhsResolveHttpServer.scala`
+
+Default implementation, `where` conditions can be many, but must be a one-to-one mapping.
 
 ## 4. examples
 
