@@ -3,8 +3,8 @@
 ![CI][Badge-CI] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots]
 
 [Badge-CI]: https://github.com/bitlap/rhs/actions/workflows/ScalaCI.yml/badge.svg
-[Badge-Snapshots]: https://img.shields.io/nexus/s/org.bitlap/rhs_3?server=https%3A%2F%2Fs01.oss.sonatype.org
-[Link-Snapshots]: https://s01.oss.sonatype.org/content/repositories/snapshots/org/bitlap/rhs
+[Badge-Snapshots]: https://img.shields.io/nexus/s/org.bitlap/rhs-compiler-plugin_3?server=https%3A%2F%2Fs01.oss.sonatype.org
+[Link-Snapshots]: https://s01.oss.sonatype.org/content/repositories/snapshots/org/bitlap/rhs-compiler-plugin_3
 
 ----
 
