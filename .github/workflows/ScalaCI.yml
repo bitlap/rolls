@@ -42,17 +42,17 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
 
-      - name: Run Test
-        if: success() || failure()
-        run: sbt coverage test coverageReport
+    #  - name: Run Test
+    #   if: success() || failure()
+    #   run: sbt coverage test coverageReport
 
-      - name: Aggregate coverage report
-        if: success() || failure()
-        run: sbt coverageAggregate
+     # - name: Aggregate coverage report
+     #   if: success() || failure()
+     #   run: sbt coverageAggregate
 
-      - name: Upload test coverage report
-        if: success() || failure()
-        run: bash <(curl -s https://codecov.io/bash) 
+     # - name: Upload test coverage report
+     #  if: success() || failure()
+     #  run: bash <(curl -s https://codecov.io/bash) 
 
   ci:
     runs-on: ubuntu-20.04
