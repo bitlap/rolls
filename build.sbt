@@ -40,7 +40,6 @@ lazy val commonSettings =
       /** "-Ycheck:all",** */
       "-language:dynamics",
       "-explain",
-      "-release:11",
       "unchecked",
       "-deprecation",
       "-feature",
