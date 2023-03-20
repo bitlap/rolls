@@ -22,9 +22,9 @@
 > It means: mapping resource to id by sql: `select id from schema.table where resource = ???"` // Will only take one
 ```scala
     rhs-mapping {
-      url = "jdbc:postgresql://localhost/db"
+      url = "jdbc:postgresql://localhost/db?"
       tableName = "schema.table"
-      nameColumns = "resource.action"
+      nameColumns = "menu.operate"
       port = 18000
       idColumn = "id"
     }
@@ -37,16 +37,16 @@ Default implementation, `where` conditions can be many, but must be a one-to-one
 ```scala
     object RhsMappingExample extends App :
         
-        RhsResolveHttpServer.start
-        // If not found, continue using `rhs`, otherwise use mapping by sql.
-        @RhsMapping val re1 = "menu.operate" // ast: mods val name: tpt = rhs
-        
-        @CustomRhsMapping(idColumn = "id", nameColumns = "resource.action", tableName = "schema.table") val re2 =
-          "menu.operate"
-        
-        println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
-        println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
-        
-        RhsResolveHttpServer.stop
+      RhsResolveHttpServer.start
+      // If not found, continue using `rhs`, otherwise use mapping by sql.
+      @RhsMapping val re1 = "menu.operate" // ast: mods val name: tpt = rhs
+      
+      @CustomRhsMapping(idColumn = "id", nameColumns = "resource.action", tableName = "schema.table") val re2 =
+        "menu.operate"
+      
+      println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
+      println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
+      
+      RhsResolveHttpServer.stop
 ```
 
