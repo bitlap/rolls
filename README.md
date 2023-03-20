@@ -2,16 +2,16 @@
 
 > compile-time
 
-# 1. dependency
+# 1. add dependency
 
 ```scala
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "id-mapping-compiler-plugin" % "0.0.1-SNAPSHOT")
 ```
 
-# 2. config
+# 2. add config
 
-> It means: mapping name to id by sql: `select id from schema.table where resource = ???"`
+> It means: mapping resource to id by sql: `select id from schema.table where resource = ???"`
 ```scala
     id-mapping {
       url = "jdbc:postgresql://localhost/db"
