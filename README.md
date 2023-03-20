@@ -8,7 +8,6 @@
 
 ----
 
-rhs used standard compiler plugin to replace `rhs` of `ValDef` for constant type in compile-time.
 **rhs** uses a standard compiler plugin at compile time to replace the `rhs` of the constant type `ValDef` with specifying a different one.
 
 ## 1. add dependency
