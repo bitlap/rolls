@@ -1,17 +1,19 @@
 package bitlap.rhs.example
 
-import bitlap.rhs.annotations.{ CustomRhsMapping, RhsMapping }
+import bitlap.rhs.annotations.{CustomRhsMapping, RhsMapping}
+import bitlap.rhs.plugin.server.RhsResolveHttpServer
 
 object RhsMappingExample extends App :
 
-  @RhsMapping val re1 = "permission"
+  RhsResolveHttpServer.start
+  // If not found, continue using `rhs`, otherwise use mapping by sql.
+  @RhsMapping val re1 = "menu.operate" // ast: mods val name: tpt = rhs
+  
+  @CustomRhsMapping(idColumn = "id", nameColumns = "resource.action", tableName = "schema.table") val re2 =
+    "menu.operate"
+  
+  println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
+  println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
 
-  @CustomRhsMapping(
-    idColumn = "id",
-    nameColumn = "resource",
-    tableName = "schema.table"
-  ) val re2 = "permission"
-
-  println(re1)
-  println(re2)
+  RhsResolveHttpServer.stop
 

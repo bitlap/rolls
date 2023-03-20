@@ -8,18 +8,23 @@ import java.net.InetSocketAddress
  *    梦境迷离
  *  @version 1.0,2023/3/20
  */
-object RhsResolveHttpServer extends App {
+object RhsResolveHttpServer {
 
-  val server = HttpServer.create(new InetSocketAddress(ConfigUtils.port), 0)
-  println(""".__    .___                              .__                
-            ||__| __| _/   _____ _____  ______ ______ |__| ____    ____  
-            ||  |/ __ |   /     \\__  \ \____ \\____ \|  |/    \  / ___\ 
-            ||  / /_/ |  |  Y Y  \/ __ \|  |_> >  |_> >  |   |  \/ /_/  >
-            ||__\____ |  |__|_|  (____  /   __/|   __/|__|___|  /\___  / 
-            |        \/        \/     \/|__|   |__|           \//_____/  """.stripMargin)
-  println(s"started at port: ${ConfigUtils.port}")
+  private lazy val server = HttpServer.create(new InetSocketAddress(ConfigUtils.port), 0)
 
   server.createContext("/rhs-mapping", new RhsResolveHandler())
-  server.start()
+
+  def stop = server.stop(3)
+
+  def start = {
+    println(""".__            
+              |_______|  |__   ______
+              |\_  __ \  |  \ /  ___/
+              | |  | \/   Y  \\___ \ 
+              | |__|  |___|  /____  >
+              |            \/     \/ """.stripMargin)
+    println(s"started at port: ${ConfigUtils.port}")
+    server.start()
+  }
 
 }

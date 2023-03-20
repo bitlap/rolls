@@ -19,17 +19,23 @@ final class RhsResolveHandler extends HttpHandler {
         }
         .toMap
 
-      val value  = kvs.getOrElse("value", "")
-      val table  = kvs.get("tableName").fold(ConfigUtils.tableName)(t => if (t.isEmpty) ConfigUtils.tableName else t)
-      val column = kvs.get("nameColumn").fold(ConfigUtils.nameColumn)(t => if (t.isEmpty) ConfigUtils.nameColumn else t)
-      val id     = kvs.get("idColumn").fold(ConfigUtils.idColumn)(t => if (t.isEmpty) ConfigUtils.idColumn else t)
+      val value = kvs.getOrElse("value", "")
+      val table = kvs.get("tableName").fold(ConfigUtils.tableName)(t => if (t.isEmpty) ConfigUtils.tableName else t)
+      val columns =
+        kvs.get("nameColumns").fold(ConfigUtils.nameColumns)(t => if (t.isEmpty) ConfigUtils.nameColumns else t)
+      val id = kvs.get("idColumn").fold(ConfigUtils.idColumn)(t => if (t.isEmpty) ConfigUtils.idColumn else t)
 
-      val rs = ConfigUtils.conn
-        .createStatement()
-        .executeQuery(
-          s"select $id from $table where $column=$value"
-        )
-      println(s"Query id by sql:$rs")
+      val condAnd = columns
+        .split('.')
+        .zip(value.split('.'))
+        .toMap
+        .map(kv => s"${kv._1}='${kv._2}'")
+        .mkString("and")
+
+      println(s"items:${items.mkString(",")}, condAnd:$condAnd")
+
+      val rs = ConfigUtils.conn.createStatement().executeQuery(s"select $id from $table where $condAnd")
+
       val response = if (rs.next()) {
         rs.getString(id)
       } else ""

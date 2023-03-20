@@ -14,7 +14,7 @@ object ConfigUtils {
 
   lazy val tableName = config.getString("rhs-mapping.tableName")
 
-  lazy val nameColumn = config.getString("rhs-mapping.nameColumn")
+  lazy val nameColumns = config.getString("rhs-mapping.nameColumns")
 
   lazy val idColumn = config.getString("rhs-mapping.idColumn")
 

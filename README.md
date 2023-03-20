@@ -24,26 +24,29 @@
     rhs-mapping {
       url = "jdbc:postgresql://localhost/db"
       tableName = "schema.table"
-      nameColumn = "resource"
+      nameColumns = "resource.action"
       port = 18000
       idColumn = "id"
     }
 ```
 
-## 3. start `RhsResolveHttpServer.scala`
-
 Default implementation, `where` conditions can be many, but must be a one-to-one mapping.
 
-## 4. examples
+## 3. examples
 
 ```scala
-    // If not found, continue using `rhs`, otherwise use mapping by sql.
-    @RhsMapping val re = "permission" // ast: mods val name: tpt = rhs
-
-    @CustomRhsMapping(idColumn = "id", nameColumn = "resource", tableName = "schema.table") val re2 =
-      "permission"
-
-    println(re)  // permission is `select id from schema.table where resource = permission`
-    println(re2) // permission is `select id from schema.table where resource = permission`
+    object RhsMappingExample extends App :
+        
+        RhsResolveHttpServer.start
+        // If not found, continue using `rhs`, otherwise use mapping by sql.
+        @RhsMapping val re1 = "menu.operate" // ast: mods val name: tpt = rhs
+        
+        @CustomRhsMapping(idColumn = "id", nameColumns = "resource.action", tableName = "schema.table") val re2 =
+          "menu.operate"
+        
+        println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
+        println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
+        
+        RhsResolveHttpServer.stop
 ```
 

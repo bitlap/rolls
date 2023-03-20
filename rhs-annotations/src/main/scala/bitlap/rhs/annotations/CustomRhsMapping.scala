@@ -8,6 +8,6 @@ import scala.annotation.ConstantAnnotation
  */
 final case class CustomRhsMapping(
   idColumn: String,
-  nameColumn: String,
+  nameColumns: String,
   tableName: String
 ) extends ConstantAnnotation

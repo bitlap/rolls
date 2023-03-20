@@ -64,7 +64,9 @@ class TransformValDefPhase extends PluginPhase:
     lazy val custAnnotCls = requiredClass("bitlap.rhs.annotations.CustomRhsMapping")
     lazy val annotCls     = requiredClass("bitlap.rhs.annotations.RhsMapping")
 
-    report.debugwarn(s"Find annotations: ${tree.mods.annotations}, ${tree.rhs}", tree.sourcePos)
+    if (tree.mods.hasAnnotations) {
+      report.debugwarn(s"Find annotations: ${tree.mods.annotations}, ${tree.rhs}", tree.sourcePos)
+    }
 
     val (existsAnnot, nameArgs) = tree.mods.annotations.collectFirst {
       case Apply(Select(New(Ident(an)), _), Nil) if an.asSimpleName == annotCls.name.asSimpleName =>
@@ -76,13 +78,22 @@ class TransformValDefPhase extends PluginPhase:
       case _ => false -> Map.empty
     }.getOrElse(false -> Map.empty)
 
-    val _idColumn   = nameArgs.getOrElse("idColumn", "")
-    val _nameColumn = nameArgs.getOrElse("nameColumn", "")
-    val _tableName  = nameArgs.getOrElse("tableName", "")
+    val _idColumn    = nameArgs.getOrElse("idColumn", "")
+    val _nameColumns = nameArgs.getOrElse("nameColumns", "")
+    val _tableName   = nameArgs.getOrElse("tableName", "")
+
     tree.rhs match
       case Trees.Literal(Constant(original: String)) if existsAnnot =>
+        if (nameArgs.nonEmpty && (!_nameColumns.contains(".") || _nameColumns.split('.').length > 2)) {
+          report.error(s"Rhs mapping nameColumns format was invalid:${_nameColumns}", tree.sourcePos)
+        }
+
+        if (!original.contains(".") || original.split('.').length > 2) {
+          report.error(s"Rhs mapping rhs format was invalid:${_nameColumns}", tree.sourcePos)
+        }
+
         val httpUrl =
-          s"$reqUrl?value=${original}&idColumn=${_idColumn}&nameColumn=${_nameColumn}&tableName=${_tableName}"
+          s"$reqUrl?value=${original}&idColumn=${_idColumn}&nameColumns=${_nameColumns}&tableName=${_tableName}"
         val response = send(httpUrl)
         report.debugwarn(s"Rhs mapping transform with $httpUrl, response:$response", tree.sourcePos)
         if response == null || response.isEmpty then {
