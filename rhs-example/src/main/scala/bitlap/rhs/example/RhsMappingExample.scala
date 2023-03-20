@@ -1,8 +1,8 @@
-package bitlap.rhs.compiler.plugin.example
+package bitlap.rhs.example
 
 import bitlap.rhs.annotations.{ CustomRhsMapping, RhsMapping }
 
-object RhsMappingExample extends App {
+object RhsMappingExample extends App :
 
   @RhsMapping val re1 = "permission"
 
@@ -14,4 +14,4 @@ object RhsMappingExample extends App {
 
   println(re1)
   println(re2)
-}
+

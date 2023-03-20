@@ -1,6 +1,15 @@
 # rhs
 
-rhs uses standard compiler plugin to replace ValDel for constant type in compile-time.
+![CI][Badge-CI] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots]
+
+[Badge-CI]: https://github.com/bitlap/rhs/actions/workflows/ScalaCI.yml/badge.svg
+[Badge-Snapshots]: https://img.shields.io/nexus/s/org.bitlap/rhs_3?server=https%3A%2F%2Fs01.oss.sonatype.org
+[Link-Snapshots]: https://s01.oss.sonatype.org/content/repositories/snapshots/org/bitlap/rhs
+
+----
+
+rhs used standard compiler plugin to replace `rhs` of `ValDef` for constant type in compile-time.
+**rhs** uses a standard compiler plugin at compile time to replace the `rhs` of the constant type `ValDef` with specifying a different one.
 
 ## 1. add dependency
 

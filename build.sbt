@@ -82,11 +82,11 @@ lazy val `rhs-compiler-plugin` = (project in file("rhs-compiler-plugin"))
     )
   )
 
-lazy val `rhs-compiler-plugin-example` = (project in file("rhs-compiler-plugin-example"))
+lazy val `rhs-example` = (project in file("rhs-example"))
   .settings(
-    scalaVersion        := scala3Version,
+    commonSettings,
     publish / skip      := true,
-    name                := "rhs-compiler-plugin-example",
+    name                := "rhs-example",
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.0.0+2-5775c68e+20230320-2130-SNAPSHOT")
+    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.0.0+6-5032529d+20230320-2154-SNAPSHOT")
   ).dependsOn(`rhs-annotations`)
