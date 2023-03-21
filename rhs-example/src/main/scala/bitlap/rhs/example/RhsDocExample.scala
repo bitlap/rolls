@@ -28,11 +28,14 @@ final case class AuthPermissionPO(
 )
 
 final case class SubAuthPermissionPO(
-  tenantId: String,
   subsub: SubSubAuthPermissionPO
 )
 
 final case class SubSubAuthPermissionPO(
   id: String,
-  tenantId: Short
+  subsubsub: SubSubSubAuthPermissionPO
+)
+
+final case class SubSubSubAuthPermissionPO(
+  list: List[String]
 )
