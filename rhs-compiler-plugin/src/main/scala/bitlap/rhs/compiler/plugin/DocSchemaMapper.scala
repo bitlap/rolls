@@ -46,7 +46,6 @@ trait DocSchemaMapper:
         Unknown
 
   private def mapTypeDef(tree: tpd.Tree)(using ctx: Context): TypeSchema =
-
     tree match
       case tdef: TypeDef
           if tdef.isClassDef && (
