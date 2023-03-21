@@ -32,12 +32,14 @@
 
 Default implementation, `where` conditions can be many, but must be a one-to-one mapping.
 
-## 3. examples
+## 3. run mapping server before `sbt compile`
+- `RhsResolveHttpServer.start`
+
+## 4. examples
 
 ```scala
     object RhsMappingExample extends App :
         
-      RhsResolveHttpServer.start
       // If not found, continue using `rhs`, otherwise use mapping by sql.
       @RhsMapping val re1 = "menu.operate" // ast: mods val name: tpt = rhs
       
@@ -47,6 +49,5 @@ Default implementation, `where` conditions can be many, but must be a one-to-one
       println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
       println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
       
-      RhsResolveHttpServer.stop
 ```
 

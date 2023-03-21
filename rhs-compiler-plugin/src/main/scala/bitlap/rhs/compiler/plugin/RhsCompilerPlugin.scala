@@ -1,8 +1,6 @@
 package bitlap.rhs.compiler.plugin
 
-import dotty.tools.dotc.ast.Trees.*
-import dotty.tools.dotc.ast.tpd.ValDef
-import dotty.tools.dotc.ast.{ tpd, Trees }
+import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Decorators.*
@@ -12,9 +10,12 @@ import dotty.tools.dotc.plugins.{ PluginPhase, StandardPlugin }
 import dotty.tools.dotc.report
 import dotty.tools.dotc.semanticdb.AnnotatedType
 import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
+import jdk.internal.net.http.RequestPublishers.ByteArrayPublisher
 
+import java.io.{ BufferedOutputStream, ByteArrayOutputStream, ObjectOutputStream }
 import java.net.http.*
 import java.net.*
+import java.net.http.HttpRequest.BodyPublishers
 import java.sql.{ Connection, DriverManager }
 import java.time.Duration
 import scala.jdk.CollectionConverters.*
@@ -23,18 +24,18 @@ import scala.jdk.CollectionConverters.*
  *    梦境迷离
  *  @version 1.0,2023/3/20
  */
-class TransformValDef extends StandardPlugin:
-  val name: String                 = "transformValDef"
-  override val description: String = "transform ValDef by @RhsMapping or @CustomRhsMapping"
+class RhsCompilerPlugin extends StandardPlugin:
+  val name: String                 = "RhsCompilerPlugin"
+  override val description: String = "RhsCompilerPlugin"
 
   def init(options: List[String]): List[PluginPhase] =
-    new TransformValDefPhase :: Nil
-end TransformValDef
+    new RhsCompilerPluginPhase :: Nil
+end RhsCompilerPlugin
 
-class TransformValDefPhase extends PluginPhase:
+class RhsCompilerPluginPhase extends PluginPhase with DocSchemaMapper:
   import tpd.*
 
-  val phaseName = "transformValDef"
+  val phaseName = "RhsCompilerPlugin"
 
   override val runsAfter  = Set(Staging.name)
   override val runsBefore = Set(PickleQuotes.name)
@@ -47,9 +48,10 @@ class TransformValDefPhase extends PluginPhase:
     .proxy(ProxySelector.getDefault)
     .build()
 
-  private val reqUrl = "http://localhost:18000/rhs-mapping"
+  private val reqUrl    = "http://localhost:18000/rhs-mapping"
+  private val reqDocUrl = "http://localhost:18000/rhs-doc"
 
-  private def send(url: String): String =
+  private def sendRhsMapping(url: String): String =
     val request = HttpRequest.newBuilder
       .header("Content-Type", "application/json")
       .version(HttpClient.Version.HTTP_2)
@@ -59,6 +61,49 @@ class TransformValDefPhase extends PluginPhase:
       .build
     val response = client.send(request, HttpResponse.BodyHandlers.ofString)
     if response.statusCode == 200 then response.body else null
+
+  private def sendRhsDoc(url: String, body: HttpRequest.BodyPublisher): String =
+    val request = HttpRequest.newBuilder
+      .header("Content-Type", "application/json")
+      .version(HttpClient.Version.HTTP_2)
+      .uri(URI.create(url))
+      .POST(body)
+      .timeout(timeout)
+      .build
+    val response = client.send(request, HttpResponse.BodyHandlers.ofString)
+    if response.statusCode == 200 then response.body else null
+
+  private def existsAnnot(tree: tpd.TypeDef)(using ctx: Context): Boolean = {
+    lazy val annotCls = requiredClass("bitlap.rhs.annotations.Doc")
+    tree.mods.annotations.collectFirst {
+      case Apply(Select(New(Ident(an)), _), _) if an.asSimpleName == annotCls.name.asSimpleName =>
+        true
+      case _ => false
+    }.getOrElse(false)
+  }
+
+  override def transformTypeDef(tree: tpd.TypeDef)(using ctx: Context): tpd.Tree = {
+    tree match
+      case tdef @ TypeDef(name, rhs) if tdef.isClassDef && existsAnnot(tree) =>
+        val template     = rhs.asInstanceOf[Template]
+        val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
+        report.debugwarn(s"Find methodSchema: $methodSchema")
+
+        if (existsAnnot(tree)) {
+          val apiDoc = DocSchema(name.show, methodSchema)
+          report.debugwarn(s"Find apiDoc: $apiDoc")
+          val byteArr      = new ByteArrayOutputStream()
+          val outputStream = new ObjectOutputStream(byteArr)
+          outputStream.writeObject(apiDoc)
+          outputStream.flush()
+          val buffer = BodyPublishers.ofByteArray(byteArr.toByteArray)
+          sendRhsDoc(reqDocUrl, buffer)
+
+        }
+      case _ =>
+
+    super.transformTypeDef(tree)
+  }
 
   override def transformValDef(tree: tpd.ValDef)(using ctx: Context): tpd.Tree =
     lazy val custAnnotCls = requiredClass("bitlap.rhs.annotations.CustomRhsMapping")
@@ -83,7 +128,7 @@ class TransformValDefPhase extends PluginPhase:
     val _tableName   = nameArgs.getOrElse("tableName", "")
 
     tree.rhs match
-      case Trees.Literal(Constant(original: String)) if existsAnnot =>
+      case Literal(Constant(original: String)) if existsAnnot =>
         if (nameArgs.nonEmpty && (!_nameColumns.contains(".") || _nameColumns.split('.').length > 2)) {
           report.error(s"Rhs mapping nameColumns format was invalid:${_nameColumns}", tree.sourcePos)
         }
@@ -94,7 +139,7 @@ class TransformValDefPhase extends PluginPhase:
 
         val httpUrl =
           s"$reqUrl?value=${original}&idColumn=${_idColumn}&nameColumns=${_nameColumns}&tableName=${_tableName}"
-        val response = send(httpUrl)
+        val response = sendRhsMapping(httpUrl)
         report.debugwarn(s"Rhs mapping transform with $httpUrl, response:$response", tree.sourcePos)
         if response == null || response.isEmpty then {
           ValDef(tree.symbol.asTerm, tree.rhs)
@@ -104,4 +149,4 @@ class TransformValDefPhase extends PluginPhase:
           valdef
         }
       case t => tree
-end TransformValDefPhase
+end RhsCompilerPluginPhase

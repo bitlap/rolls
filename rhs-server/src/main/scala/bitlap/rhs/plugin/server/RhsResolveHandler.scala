@@ -30,26 +30,26 @@ final class RhsResolveHandler extends HttpHandler {
         .zip(value.split('.'))
         .toMap
         .map(kv => s"${kv._1}='${kv._2}'")
-        .mkString("and")
+        .mkString(" and ")
 
       println(s"items:${items.mkString(",")}, condAnd:$condAnd")
 
       val rs = ConfigUtils.conn.createStatement().executeQuery(s"select $id from $table where $condAnd")
 
-      val response = if (rs.next()) {
-        rs.getString(id)
-      } else ""
+      val response = (if (rs.next()) {
+                        rs.getString(id)
+                      } else Utils.Empty).getBytes()
 
-      exchange.sendResponseHeaders(200, 0)
+      exchange.sendResponseHeaders(Utils.OK, response.length)
       val os = exchange.getResponseBody
-      os.write(response.getBytes())
+      os.write(response)
       os.close()
     } catch {
       case e: Exception =>
         e.printStackTrace()
-        exchange.sendResponseHeaders(200, 0)
+        exchange.sendResponseHeaders(Utils.OK, 0)
         val os = exchange.getResponseBody
-        os.write("".getBytes())
+        os.write(Utils.Empty.getBytes())
         os.close()
     }
 }

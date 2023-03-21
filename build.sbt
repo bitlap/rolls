@@ -27,6 +27,7 @@ addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheckAll")
 
 lazy val scala3Version = "3.2.0"
+lazy val circeVersion  = "0.14.1"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 lazy val commonSettings =
@@ -50,7 +51,8 @@ lazy val `rhs` = (project in file("."))
   .aggregate(
     `rhs-compiler-plugin`,
     `rhs-annotations`,
-    `rhs-server`
+    `rhs-server`,
+    `rhs-example`
   )
   .settings(
     publish / skip := true,
@@ -70,8 +72,13 @@ lazy val `rhs-server` = (project in file("rhs-server"))
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % "42.6.0",
       "com.typesafe"   % "config"     % "1.4.2"
-    )
+    ) ++ Seq(
+      "io.circe" %% "circe-core",
+      "io.circe" %% "circe-generic",
+      "io.circe" %% "circe-parser"
+    ).map(_ % circeVersion)
   )
+  .dependsOn(`rhs-compiler-plugin`)
 
 lazy val `rhs-compiler-plugin` = (project in file("rhs-compiler-plugin"))
   .settings(
@@ -88,6 +95,6 @@ lazy val `rhs-example` = (project in file("rhs-example"))
     publish / skip      := true,
     name                := "rhs-example",
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.0.0+14-da391a86-SNAPSHOT")
+    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.0.0+15-7902fe30+20230321-1842-SNAPSHOT")
   )
-  .dependsOn(`rhs-annotations`, `rhs-server`)
+  .dependsOn(`rhs-annotations`)
