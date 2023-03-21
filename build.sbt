@@ -3,7 +3,7 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
-
+ThisBuild  / version := "0.1.0-SNAPSHOT"
 inThisBuild(
   List(
     organization           := "org.bitlap",
@@ -95,6 +95,6 @@ lazy val `rhs-example` = (project in file("rhs-example"))
     publish / skip      := true,
     name                := "rhs-example",
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.0.0+15-7902fe30+20230321-1842-SNAPSHOT")
+    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.1.0-SNAPSHOT")
   )
   .dependsOn(`rhs-annotations`)

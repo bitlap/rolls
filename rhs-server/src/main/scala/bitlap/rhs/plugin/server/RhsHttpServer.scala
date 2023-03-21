@@ -27,4 +27,6 @@ object RhsHttpServer extends App {
     println(s"started at port: ${ConfigUtils.port}")
     server.start()
   }
+
+  RhsHttpServer.start
 }
