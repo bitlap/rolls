@@ -24,9 +24,9 @@ final class ClassSchemaHandler extends HttpHandler {
       val schema: ClassSchema = Utils.readObject(exchange.getRequestBody)
       if (schema != null) {
         val json = ClassSchemaHandler.ClassSchemaEncoder(schema).deepDropNullValues.dropEmptyValues.noSpaces
-        println(s"Rhs Doc get object:\n$json")
+        println(s"Rhs get ClassSchema:\n$json")
       } else {
-        println(s"Rhs Doc cannot get object")
+        println(s"Rhs cannot get ClassSchema")
       }
 
       exchange.sendResponseHeaders(Utils.OK, 0)
