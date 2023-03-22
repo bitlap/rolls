@@ -5,6 +5,8 @@ import bitlap.rhs.annotations.*
 import java.time.Instant
 import scala.concurrent.Future
 
+/** MUST start RhsResolveHandler.scala
+ */
 final case class SimpleClassTest @ClassSchema() () {
 
   def testMethod(

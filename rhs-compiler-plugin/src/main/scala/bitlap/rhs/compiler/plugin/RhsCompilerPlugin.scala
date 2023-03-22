@@ -63,7 +63,7 @@ class RhsCompilerPluginPhase extends PluginPhase with ClassSchemaMapper:
         report.debugwarn(s"Find name:${tree.name}, methodSchema:$methodSchema")
         val classSchema = ClassSchema(tree.name.show, methodSchema)
         report.debugwarn(s"Find classSchema: $classSchema")
-        Utils.sendDocSchema(classSchema)
+        Utils.sendClassSchema(classSchema)
       } else {}
 
     super.transformTypeDef(tree)

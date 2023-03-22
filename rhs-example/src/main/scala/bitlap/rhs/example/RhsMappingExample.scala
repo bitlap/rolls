@@ -4,6 +4,8 @@ import bitlap.rhs.annotations.{ CustomRhsMapping, RhsMapping }
 
 import scala.concurrent.Future
 
+/** MUST start RhsResolveHandler.scala
+ */
 object RhsMappingExample extends App:
 
   // If not found, continue using `rhs`, otherwise use mapping by sql.
