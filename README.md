@@ -10,7 +10,7 @@
 
 - **@RhsMapping** on `val`
   - Replace the `rhs` of the constant `ValDef` with specifying one
-  - MUST start ResolveHandler.scala
+  - MUST start `ResolveHandler.scala`
 - **@ClassSchema** on case classes (must be primary constructor) or class
   - Generate a schema for all public methods and will **exclude** methods of product
   - Write binary data to `/tmp/.compiler/classSchema_%s.txt`，`%s` is a class short name
