@@ -1,8 +1,9 @@
 package bitlap.rhs.plugin.server
 
-import bitlap.rhs.compiler.plugin.DocSchema
+import bitlap.rhs.compiler.plugin.ClassSchema
 
 import java.io.*
+import scala.util.Using
 
 /** @author
  *    梦境迷离
@@ -13,20 +14,9 @@ object Utils {
   final val OK    = 200
   final val Empty = ""
 
-  def readObject(inputStream: InputStream): DocSchema =
-    var objectInputStream: ObjectInputStream = null
-    try {
-      objectInputStream = new ObjectInputStream(inputStream)
-      objectInputStream.readObject().asInstanceOf[DocSchema]
-    } catch {
-      case e: Exception =>
-        e.printStackTrace()
-        null
-    } finally
-      try
-        if (objectInputStream != null) objectInputStream.close()
-      catch {
-        case ignore: Exception =>
-      }
+  def readObject(inputStream: InputStream): ClassSchema =
+    Using.resource(new ObjectInputStream(inputStream)) { objectInputStream =>
+      objectInputStream.readObject().asInstanceOf[ClassSchema]
+    }
 
 }

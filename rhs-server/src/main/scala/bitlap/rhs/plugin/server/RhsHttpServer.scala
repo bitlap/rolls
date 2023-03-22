@@ -13,7 +13,7 @@ object RhsHttpServer extends App {
   private lazy val server = HttpServer.create(new InetSocketAddress(ConfigUtils.port), 0)
 
   server.createContext("/rhs-mapping", new RhsResolveHandler())
-  server.createContext("/rhs-doc", new RhsDocHandler)
+  server.createContext("/rhs-doc", new ClassSchemaHandler)
 
   def stop = server.stop(3)
 

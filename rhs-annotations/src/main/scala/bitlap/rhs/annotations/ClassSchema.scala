@@ -6,4 +6,4 @@ import scala.annotation.StaticAnnotation
  *    梦境迷离
  *  @version 1.0,2023/3/21
  */
-final case class Doc() extends StaticAnnotation
+final case class ClassSchema() extends StaticAnnotation

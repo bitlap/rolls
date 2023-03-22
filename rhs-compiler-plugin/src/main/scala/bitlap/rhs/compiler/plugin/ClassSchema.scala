@@ -6,20 +6,20 @@ package bitlap.rhs.compiler.plugin
  */
 sealed trait Schema
 
-case class DocSchema(
+final case class ClassSchema(
   className: String,
   methods: List[MethodSchema]
 ) extends Schema
 
-case class MethodSchema(
-  name: String,
+final case class MethodSchema(
+  methodName: String,
   params: List[TypeSchema],
   resultType: TypeSchema
 ) extends Schema
 
-case class TypeSchema(
+final case class TypeSchema(
   typeName: String,
   fields: List[TypeSchema] = List.empty,
-  name: Option[String] = None,
-  generic: Option[List[TypeSchema]] = None
+  fieldName: Option[String] = None,
+  genericType: Option[List[TypeSchema]] = None
 ) extends Schema

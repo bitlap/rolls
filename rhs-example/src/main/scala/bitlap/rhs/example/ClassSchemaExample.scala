@@ -5,8 +5,38 @@ import bitlap.rhs.annotations.*
 import java.time.Instant
 import scala.concurrent.Future
 
-@Doc
-class Test {
+final case class SimpleClassTest @ClassSchema() () {
+
+  def testMethod(
+    listField: List[SubSubSubAuthPermissionPO],
+    stringField: String,
+    optField: Option[SubSubSubAuthPermissionPO],
+    NestedObjectField: SubSubSubAuthPermissionPO,
+    eitherField: Either[String, SubSubSubAuthPermissionPO]
+  ): SubSubSubAuthPermissionPO = ???
+
+}
+
+final case class CaseClassTest @ClassSchema() () {
+
+  def testMethod1(
+    listField: List[AuthPermissionPO],
+    stringField: String,
+    longOptField: Option[Long],
+    NestedObjectField: SubAuthPermissionPO,
+    eitherField: Either[String, AuthPermissionPO],
+    simpleEitherField: Either[Throwable, String]
+  ): Seq[AuthPermissionPO] = ???
+
+  def testMethod2(): Either[String, AuthPermissionPO] = ???
+  def testMethod3(): Either[Throwable, String]        = ???
+  def testMethod4(): AuthPermissionPO                 = ???
+  def testMethod5(): Map[String, AuthPermissionPO]    = ???
+
+}
+
+@ClassSchema
+class ClassTest {
 
   def testMethod1(
     listField: List[AuthPermissionPO],

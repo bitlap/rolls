@@ -8,46 +8,144 @@
 
 ----
 
-**rhs** uses a standard compiler plugin at compile time to replace the `rhs` of the constant type `ValDef` with specifying a different one.
+> Need to use a http sever to store data
 
-## 1. add dependency
+- **@RhsMapping** on `val`
+  - Replace the `rhs` of the constant `ValDef` with specifying one
+- **@ClassSchema** on case classes (must be primary constructor) or class
+  - Generate a schema for all public methods and will **exclude** methods of product
 
 ```scala
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % <Version>)
+    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % <Version>),
+    libraryDependencies += "org.bitlap" %% "rhs-annotations" % "0.1.0-SNAPSHOT"
 ```
 
-## 2. add config
 
-> It means: mapping resource to id by sql: `select id from schema.table where resource = ???"` // Will only take one
+## @ClassSchema
+
+Example:
 ```scala
-    rhs-mapping {
-      url = "jdbc:postgresql://localhost/db?"
-      tableName = "schema.table"
-      nameColumns = "menu.operate"
-      port = 18000
-      idColumn = "id"
+final case class SimpleClassTest @ClassSchema() () {
+
+  def testMethod(
+    listField: List[SubSubSubAuthPermissionPO],
+    stringField: String,
+    longOptField: Option[SubSubSubAuthPermissionPO],
+    NestedObjectField: SubSubSubAuthPermissionPO,
+    eitherField: Either[String, SubSubSubAuthPermissionPO]
+  ): SubSubSubAuthPermissionPO = ???
+
+}
+final case class SubSubSubAuthPermissionPO(list: List[String])
+```
+
+Schema Json: 
+```json
+{
+  "className":"SimpleClassTest",
+  "methods":[
+    {
+      "methodName":"testMethod",
+      "params":[
+        {
+          "typeName":"List",
+          "fieldName":"listField",
+          "genericType":[
+            {
+              "typeName":"SubSubSubAuthPermissionPO",
+              "fields":[
+                {
+                  "typeName":"List",
+                  "fieldName":"list",
+                  "genericType":[
+                    {
+                      "typeName":"String"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "typeName":"String",
+          "fieldName":"stringField"
+        },
+        {
+          "typeName":"Option",
+          "fieldName":"optField",
+          "genericType":[
+            {
+              "typeName":"SubSubSubAuthPermissionPO",
+              "fields":[
+                {
+                  "typeName":"List",
+                  "fieldName":"list",
+                  "genericType":[
+                    {
+                      "typeName":"String"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "typeName":"SubSubSubAuthPermissionPO",
+          "fields":[
+            {
+              "typeName":"List",
+              "fieldName":"list",
+              "genericType":[
+                {
+                  "typeName":"String"
+                }
+              ]
+            }
+          ],
+          "fieldName":"NestedObjectField"
+        },
+        {
+          "typeName":"Either",
+          "fieldName":"eitherField",
+          "genericType":[
+            {
+              "typeName":"String"
+            },
+            {
+              "typeName":"SubSubSubAuthPermissionPO",
+              "fields":[
+                {
+                  "typeName":"List",
+                  "fieldName":"list",
+                  "genericType":[
+                    {
+                      "typeName":"String"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "resultType":{
+        "typeName":"SubSubSubAuthPermissionPO",
+        "fields":[
+          {
+            "typeName":"List",
+            "fieldName":"list",
+            "genericType":[
+              {
+                "typeName":"String"
+              }
+            ]
+          }
+        ]
+      }
     }
+  ]
+}
 ```
-
-Default implementation, `where` conditions can be many, but must be a one-to-one mapping.
-
-## 3. run mapping server before `sbt compile`
-- `RhsResolveHttpServer.start`
-
-## 4. examples
-
-```scala
-    object RhsMappingExample extends App :
-        
-      // If not found, continue using `rhs`, otherwise use mapping by sql.
-      @RhsMapping val re1 = "menu.operate" // ast: mods val name: tpt = rhs
-      
-      @CustomRhsMapping(idColumn = "id", nameColumns = "resource.action", tableName = "schema.table") val re2 =
-        "menu.operate"
-      
-      println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
-      println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
-      
-```
-

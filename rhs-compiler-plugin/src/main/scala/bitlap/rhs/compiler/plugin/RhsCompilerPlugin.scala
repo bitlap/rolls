@@ -7,6 +7,7 @@ import dotty.tools.dotc.core.Decorators.*
 import dotty.tools.dotc.core.StdNames.*
 import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.plugins.{ PluginPhase, StandardPlugin }
+import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
 import dotty.tools.dotc.semanticdb.AnnotatedType
 import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
@@ -19,6 +20,7 @@ import java.net.http.HttpRequest.BodyPublishers
 import java.sql.{ Connection, DriverManager }
 import java.time.Duration
 import scala.jdk.CollectionConverters.*
+import scala.util.Using
 
 /** @author
  *    梦境迷离
@@ -32,75 +34,37 @@ class RhsCompilerPlugin extends StandardPlugin:
     new RhsCompilerPluginPhase :: Nil
 end RhsCompilerPlugin
 
-class RhsCompilerPluginPhase extends PluginPhase with DocSchemaMapper:
+class RhsCompilerPluginPhase extends PluginPhase with ClassSchemaMapper:
   import tpd.*
 
   val phaseName = "RhsCompilerPlugin"
 
   override val runsAfter  = Set(Staging.name)
   override val runsBefore = Set(PickleQuotes.name)
-  private val timeout     = Duration.ofSeconds(5)
-  private lazy val client = HttpClient
-    .newBuilder()
-    .version(HttpClient.Version.HTTP_2)
-    .connectTimeout(timeout)
-    .followRedirects(HttpClient.Redirect.NEVER)
-    .proxy(ProxySelector.getDefault)
-    .build()
-
-  private val reqUrl    = "http://localhost:18000/rhs-mapping"
-  private val reqDocUrl = "http://localhost:18000/rhs-doc"
-
-  private def sendRhsMapping(url: String): String =
-    val request = HttpRequest.newBuilder
-      .header("Content-Type", "application/json")
-      .version(HttpClient.Version.HTTP_2)
-      .uri(URI.create(url))
-      .GET
-      .timeout(timeout)
-      .build
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString)
-    if response.statusCode == 200 then response.body else null
-
-  private def sendRhsDoc(url: String, body: HttpRequest.BodyPublisher): String =
-    val request = HttpRequest.newBuilder
-      .header("Content-Type", "application/json")
-      .version(HttpClient.Version.HTTP_2)
-      .uri(URI.create(url))
-      .POST(body)
-      .timeout(timeout)
-      .build
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString)
-    if response.statusCode == 200 then response.body else null
 
   private def existsAnnot(tree: tpd.TypeDef)(using ctx: Context): Boolean = {
-    lazy val annotCls = requiredClass("bitlap.rhs.annotations.Doc")
-    tree.mods.annotations.collectFirst {
+    lazy val annotCls                = requiredClass("bitlap.rhs.annotations.ClassSchema")
+    lazy val existsAnnotOnClassContr = tree.tpe.typeSymbol.primaryConstructor.annotations.exists(_.symbol == annotCls)
+    lazy val exists = tree.mods.annotations.collectFirst {
       case Apply(Select(New(Ident(an)), _), _) if an.asSimpleName == annotCls.name.asSimpleName =>
         true
       case _ => false
     }.getOrElse(false)
+
+    report.debugwarn(s"ExistsAnnot exists:$exists, existsAnnotOnClassContr:$existsAnnotOnClassContr")
+    exists || existsAnnotOnClassContr
   }
 
   override def transformTypeDef(tree: tpd.TypeDef)(using ctx: Context): tpd.Tree = {
-    tree match
-      case tdef @ TypeDef(name, rhs) if tdef.isClassDef && existsAnnot(tree) =>
-        val template     = rhs.asInstanceOf[Template]
+    if tree.isClassDef then
+      val template = tree.rhs.asInstanceOf[Template]
+      if (existsAnnot(tree)) {
         val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
-        report.debugwarn(s"Find methodSchema: $methodSchema")
-
-        if (existsAnnot(tree)) {
-          val apiDoc = DocSchema(name.show, methodSchema)
-          report.debugwarn(s"Find apiDoc: $apiDoc")
-          val byteArr      = new ByteArrayOutputStream()
-          val outputStream = new ObjectOutputStream(byteArr)
-          outputStream.writeObject(apiDoc)
-          outputStream.flush()
-          val buffer = BodyPublishers.ofByteArray(byteArr.toByteArray)
-          sendRhsDoc(reqDocUrl, buffer)
-
-        }
-      case _ =>
+        report.debugwarn(s"Find name:${tree.name}, methodSchema:$methodSchema")
+        val classSchema = ClassSchema(tree.name.show, methodSchema)
+        report.debugwarn(s"Find classSchema: $classSchema")
+        Utils.sendDocSchema(classSchema)
+      } else {}
 
     super.transformTypeDef(tree)
   }
@@ -138,8 +102,8 @@ class RhsCompilerPluginPhase extends PluginPhase with DocSchemaMapper:
         }
 
         val httpUrl =
-          s"$reqUrl?value=${original}&idColumn=${_idColumn}&nameColumns=${_nameColumns}&tableName=${_tableName}"
-        val response = sendRhsMapping(httpUrl)
+          s"${Utils.reqUrl}?value=${original}&idColumn=${_idColumn}&nameColumns=${_nameColumns}&tableName=${_tableName}"
+        val response = Utils.sendRhsMapping(httpUrl)
         report.debugwarn(s"Rhs mapping transform with $httpUrl, response:$response", tree.sourcePos)
         if response == null || response.isEmpty then {
           ValDef(tree.symbol.asTerm, tree.rhs)
