@@ -8,7 +8,7 @@
 
 ----
 
-> Need to use a http sever to store data
+> Start http sever `RhsHttpServer.scala` to store data on machine where compiler scala codes 
 
 - **@RhsMapping** on `val`
   - Replace the `rhs` of the constant `ValDef` with specifying one
