@@ -16,6 +16,7 @@
   - Write binary data to `/tmp/.compiler/classSchema_%s.txt`，`%s` is a class short name
   - Start `ResolveHandler.scala` to query class schema
 
+## config
 ```scala
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % <Version>),
@@ -23,7 +24,7 @@
 ```
 
 
-## @ClassSchema
+## Use @ClassSchema annotation
 
 Example:
 ```scala
