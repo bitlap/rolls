@@ -22,7 +22,7 @@ final class RhsDocHandler extends HttpHandler {
   def handle(exchange: HttpExchange): Unit =
     try {
       val schema: DocSchema = Utils.readObject(exchange.getRequestBody)
-      val json              = RhsDocHandler.DocSchemaEncoder(schema).deepDropNullValues.dropEmptyValues.spaces2
+      val json              = RhsDocHandler.DocSchemaEncoder(schema).deepDropNullValues.dropEmptyValues.noSpaces
       println(s"Rhs Doc get object:\n$json")
 
       exchange.sendResponseHeaders(Utils.OK, 0)
