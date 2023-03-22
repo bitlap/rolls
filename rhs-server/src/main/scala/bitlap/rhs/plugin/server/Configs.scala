@@ -8,7 +8,7 @@ import java.sql.{ Connection, DriverManager }
  *    梦境迷离
  *  @version 1.0,2023/3/20
  */
-object ConfigUtils {
+object Configs {
 
   private lazy val config = ConfigFactory.load()
 

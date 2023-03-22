@@ -101,3 +101,13 @@ lazy val `rhs-example` = (project in file("rhs-example"))
 //    )
   )
   .dependsOn(`rhs-annotations`)
+
+lazy val `rhs-mapping-example` = (project in file("rhs-mapping-example"))
+  .settings(
+    commonSettings,
+    publish / skip      := true,
+    name                := "rhs-mapping-example",
+    autoCompilerPlugins := true,
+    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.1.0-SNAPSHOT")
+  )
+  .dependsOn(`rhs-annotations`)

@@ -1,29 +1,22 @@
 package bitlap.rhs.plugin.server
 
+import bitlap.rhs.compiler.plugin.Utils
 import com.sun.net.httpserver.*
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/3/20
  */
-final class RhsResolveHandler extends HttpHandler {
+final class ResolveHandler extends HttpHandler {
 
   def handle(exchange: HttpExchange): Unit =
     try {
-      val items = exchange.getRequestURI.getQuery.split("&")
-      val kvs = items.map { kv =>
-        kv.split("=")
-      }.map(a => if (a.length == 2) Option(a(0) -> a(1)) else None)
-        .collect { case Some(value) =>
-          value
-        }
-        .toMap
-
+      val kvs   = getParamsFromQuery(exchange)
       val value = kvs.getOrElse("value", "")
-      val table = kvs.get("tableName").fold(ConfigUtils.tableName)(t => if (t.isEmpty) ConfigUtils.tableName else t)
+      val table = kvs.get("tableName").fold(Configs.tableName)(t => if (t.isEmpty) Configs.tableName else t)
       val columns =
-        kvs.get("nameColumns").fold(ConfigUtils.nameColumns)(t => if (t.isEmpty) ConfigUtils.nameColumns else t)
-      val id = kvs.get("idColumn").fold(ConfigUtils.idColumn)(t => if (t.isEmpty) ConfigUtils.idColumn else t)
+        kvs.get("nameColumns").fold(Configs.nameColumns)(t => if (t.isEmpty) Configs.nameColumns else t)
+      val id = kvs.get("idColumn").fold(Configs.idColumn)(t => if (t.isEmpty) Configs.idColumn else t)
 
       val condAnd = columns
         .split('.')
@@ -32,9 +25,9 @@ final class RhsResolveHandler extends HttpHandler {
         .map(kv => s"${kv._1}='${kv._2}'")
         .mkString(" and ")
 
-      println(s"items:${items.mkString(",")}, condAnd:$condAnd")
+      println(s"condAnd:$condAnd")
 
-      val rs = ConfigUtils.conn.createStatement().executeQuery(s"select $id from $table where $condAnd")
+      val rs = Configs.conn.createStatement().executeQuery(s"select $id from $table where $condAnd")
 
       val response = (if (rs.next()) {
                         rs.getString(id)
@@ -43,6 +36,7 @@ final class RhsResolveHandler extends HttpHandler {
       exchange.sendResponseHeaders(Utils.OK, response.length)
       val os = exchange.getResponseBody
       os.write(response)
+      os.flush()
       os.close()
     } catch {
       case e: Exception =>
@@ -50,6 +44,7 @@ final class RhsResolveHandler extends HttpHandler {
         exchange.sendResponseHeaders(Utils.OK, 0)
         val os = exchange.getResponseBody
         os.write(Utils.Empty.getBytes())
+        os.flush()
         os.close()
     }
 }

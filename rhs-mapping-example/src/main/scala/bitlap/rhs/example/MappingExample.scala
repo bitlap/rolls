@@ -4,9 +4,9 @@ import bitlap.rhs.annotations.{ CustomRhsMapping, RhsMapping }
 
 import scala.concurrent.Future
 
-/** MUST start RhsResolveHandler.scala
+/** MUST start ResolveHandler.scala
  */
-object RhsMappingExample extends App:
+object MappingExample extends App:
 
   // If not found, continue using `rhs`, otherwise use mapping by sql.
   @RhsMapping val re1 = "menu.operate" // ast: mods val name: tpt = rhs
@@ -17,4 +17,4 @@ object RhsMappingExample extends App:
   println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
   println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
 
-end RhsMappingExample
+end MappingExample

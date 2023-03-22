@@ -8,12 +8,13 @@
 
 ----
 
-> Start http sever `RhsHttpServer.scala` to store data on machine where compiler scala codes 
-
 - **@RhsMapping** on `val`
   - Replace the `rhs` of the constant `ValDef` with specifying one
+  - MUST start ResolveHandler.scala
 - **@ClassSchema** on case classes (must be primary constructor) or class
   - Generate a schema for all public methods and will **exclude** methods of product
+  - Write binary data to `/tmp/.compiler/classSchema_%s.txt`，`%s` is a class short name
+  - Start `ResolveHandler.scala` to query class schema
 
 ```scala
     autoCompilerPlugins := true,
@@ -40,6 +41,8 @@ final case class SimpleClassTest @ClassSchema() () {
 final case class SubSubSubAuthPermissionPO(list: List[String])
 ```
 
+> curl http://localhost:18000/rhs-schema?className=SimpleClassTest
+ 
 Schema Json: 
 ```json
 {
