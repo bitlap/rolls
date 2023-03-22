@@ -17,10 +17,10 @@
   - Start `ResolveHandler.scala` to query class schema
 
 ## config
-```scala
-    autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % <Version>),
-    libraryDependencies += "org.bitlap" %% "rhs-annotations" % "0.1.0-SNAPSHOT"
+```
+autoCompilerPlugins := true,
+addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % <Version>),
+libraryDependencies += "org.bitlap" %% "rhs-annotations" % "0.1.0-SNAPSHOT"
 ```
 
 
