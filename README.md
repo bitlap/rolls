@@ -19,7 +19,7 @@
 ## config
 ```
 autoCompilerPlugins := true,
-addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % <Version>),
+addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.1.0-SNAPSHOT"),
 libraryDependencies += "org.bitlap" %% "rhs-annotations" % "0.1.0-SNAPSHOT"
 ```
 
