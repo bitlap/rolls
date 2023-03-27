@@ -10,11 +10,11 @@
 
 - **@RhsMapping** on `val`
   - Replace the `rhs` of the constant `ValDef` with specifying one
-  - MUST start `ResolveHandler.scala`
+  - Must start `HttpServer.scala`
 - **@ClassSchema** on case classes (must be primary constructor) or class
   - Generate a schema for all public methods and will **exclude** methods of product
   - Write binary data to `/tmp/.compiler/classSchema_%s.txt`，`%s` is a class short name
-  - Start `ResolveHandler.scala` to query class schema
+  - Start `HttpServer.scala` to query class schema
 
 ## config
 ```
@@ -22,7 +22,6 @@ autoCompilerPlugins := true,
 addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % <Version>),
 libraryDependencies += "org.bitlap" %% "rhs-annotations" % "0.1.0-SNAPSHOT"
 ```
-
 
 ## Use @ClassSchema annotation
 
