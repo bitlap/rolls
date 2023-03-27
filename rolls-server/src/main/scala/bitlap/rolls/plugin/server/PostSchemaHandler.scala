@@ -1,4 +1,4 @@
-package bitlap.rhs.plugin.server
+package bitlap.rolls.plugin.server
 
 import bitlap.rolls.compiler.plugin.{ ClassSchema, MethodSchema, TypeSchema, Utils }
 import com.sun.net.httpserver.*

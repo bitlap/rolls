@@ -1,4 +1,4 @@
-package bitlap.rhs.plugin.server
+package bitlap.rolls.plugin.server
 
 import com.sun.net.httpserver.{ HttpExchange, HttpHandler, HttpServer as NHttpServer }
 
