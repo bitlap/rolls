@@ -4,7 +4,7 @@ import bitlap.rhs.annotations.{ CustomRhsMapping, RhsMapping }
 
 import scala.concurrent.Future
 
-/** MUST start ResolveHandler.scala
+/** Must start HttpServer.scala
  */
 object MappingExample extends App:
 
