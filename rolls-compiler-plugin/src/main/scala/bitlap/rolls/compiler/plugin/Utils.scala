@@ -6,6 +6,7 @@ import java.net.http.{ HttpClient, HttpRequest, HttpResponse }
 import java.net.http.HttpRequest.BodyPublishers
 import java.nio.file.{ Files, OpenOption, Paths, StandardOpenOption }
 import java.time.Duration
+import scala.annotation.targetName
 import scala.util.Using
 
 /** @author
@@ -17,9 +18,10 @@ object Utils {
   final val OK    = 200
   final val Empty = ""
 
-  final val ContentType        = "Content-Type"
+  final val ContentType = "Content-Type"
+  @targetName("applicationJson")
   final val `application/json` = "application/json"
-  final val folder             = "/tmp/.compiler"
+  private final val folder     = "/tmp/.compiler"
   private val fileName         = s"$folder/classSchema_%s.txt"
   private val timeout          = Duration.ofSeconds(5)
   private lazy val client = HttpClient
