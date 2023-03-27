@@ -14,26 +14,6 @@ class RollsCompilerPlugin extends StandardPlugin:
   override val description: String = "Rolls Compiler Plugin"
 
   def init(options: List[String]): List[PluginPhase] =
-    new RollsCompilerPluginPhase :: Nil
+    new ClassSchemaPhase :: new RhsMappingPhase :: Nil
+
 end RollsCompilerPlugin
-
-class RollsCompilerPluginPhase extends PluginPhase:
-
-  val phaseName = "RollsCompilerPluginPhase"
-
-  override val runsAfter  = Set(Staging.name)
-  override val runsBefore = Set(PickleQuotes.name)
-
-  override def transformTypeDef(tree: tpd.TypeDef)(using ctx: Context): tpd.Tree =
-    TypeDefHandler.handlers.collectFirst {
-      case c if c.existsAnnot(tree) => c.handle(tree)
-    }.getOrElse(tree)
-  end transformTypeDef
-
-  override def transformValDef(tree: tpd.ValDef)(using Context): tpd.Tree =
-    ValDefHandler.handlers.collectFirst {
-      case c if c.existsAnnot(tree) => c.handle(tree)
-    }.getOrElse(tree)
-  end transformValDef
-
-end RollsCompilerPluginPhase

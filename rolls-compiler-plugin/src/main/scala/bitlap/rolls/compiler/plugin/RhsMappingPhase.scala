@@ -1,21 +1,31 @@
-package bitlap.rolls.compiler.plugin.handler
+package bitlap.rolls.compiler.plugin
 
-import bitlap.rolls.compiler.plugin.{Utils, ValDefHandler}
-import dotty.tools.dotc.ast.tpd.ValDef
-import dotty.tools.dotc.core.Contexts.Context
-import dotty.tools.dotc.ast.{Trees, tpd}
+import bitlap.rolls.compiler.plugin.Utils
 import dotty.tools.dotc.ast.tpd.*
+import dotty.tools.dotc.ast.{ tpd, Trees }
 import dotty.tools.dotc.core.Constants.Constant
+import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Symbols.*
+import dotty.tools.dotc.plugins.PluginPhase
 import dotty.tools.dotc.report
+import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/3/27
  */
-final class RhsMappingValDefHandler extends ValDefHandler {
+final class RhsMappingPhase extends PluginPhase with PluginPhaseFilter[tpd.ValDef] {
 
-  override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.RhsMapping","bitlap.rolls.annotations.CustomRhsMapping")
+  override val phaseName               = "RhsMappingPhase"
+  override val runsAfter: Set[String]  = Set(Staging.name)
+  override val runsBefore: Set[String] = Set(PickleQuotes.name)
+
+  override def transformValDef(tree: tpd.ValDef)(using Context): tpd.Tree =
+    if (existsAnnot(tree)) handle(tree) else tree
+  end transformValDef
+
+  override val annotationFullNames: List[String] =
+    List("bitlap.rolls.annotations.RhsMapping", "bitlap.rolls.annotations.CustomRhsMapping")
 
   override def existsAnnot(tree: ValDef)(using ctx: Context): Boolean = {
     val annotCls = annotationFullNames.map(requiredClass(_))
@@ -34,15 +44,15 @@ final class RhsMappingValDefHandler extends ValDefHandler {
       case Apply(Select(New(Ident(an)), _), Nil) if an.asSimpleName == annotCls(0).name.asSimpleName =>
         Map()
       case Apply(Select(New(Ident(an)), _), listNameArgs) if an.asSimpleName == annotCls(1).name.asSimpleName =>
-        listNameArgs.collect {
-          case NamedArg(n, Literal(Constant(v: String))) => n.asSimpleName.toString -> v
+        listNameArgs.collect { case NamedArg(n, Literal(Constant(v: String))) =>
+          n.asSimpleName.toString -> v
         }.toMap
-      case _ =>  Map.empty
+      case _ => Map.empty
     }.getOrElse(Map.empty)
 
-    val _idColumn = nameArgs.getOrElse("idColumn", "")
+    val _idColumn    = nameArgs.getOrElse("idColumn", "")
     val _nameColumns = nameArgs.getOrElse("nameColumns", "")
-    val _tableName = nameArgs.getOrElse("tableName", "")
+    val _tableName   = nameArgs.getOrElse("tableName", "")
 
     tree.rhs match
       case Literal(Constant(original: String)) =>

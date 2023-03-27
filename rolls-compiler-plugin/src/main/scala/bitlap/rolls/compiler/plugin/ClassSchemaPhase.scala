@@ -1,20 +1,31 @@
-package bitlap.rolls.compiler.plugin.handler
+package bitlap.rolls.compiler.plugin
 
 import bitlap.rolls.compiler.plugin.*
 import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.ast.tpd.*
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Flags.*
-import dotty.tools.dotc.core.StdNames.*
 import dotty.tools.dotc.core.Symbols.*
+import dotty.tools.dotc.plugins.PluginPhase
 import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
+import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/3/21
  */
-final class ClassSchemaTypeDefHandler extends TypeDefHandler:
+final class ClassSchemaPhase extends PluginPhase with PluginPhaseFilter[tpd.TypeDef]:
+
+  override val phaseName               = "ClassSchemaPhase"
+  override val runsAfter: Set[String]  = Set(Staging.name)
+  override val runsBefore: Set[String] = Set(PickleQuotes.name)
+
+  override def transformTypeDef(tree: tpd.TypeDef)(using ctx: Context): tpd.Tree =
+    if (existsAnnot(tree)) handle(tree) else tree
+  end transformTypeDef
+
+  private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
 
   private final val productMethods = Seq(
     "productPrefix",
@@ -30,8 +41,6 @@ final class ClassSchemaTypeDefHandler extends TypeDefHandler:
 
   override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.ClassSchema")
 
-  private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
-
   override def existsAnnot(tree: TypeDef)(using ctx: Context): Boolean = {
     lazy val annotCls = annotationFullNames.map(requiredClass(_))
     lazy val existsAnnotOnClassContr =
@@ -46,7 +55,7 @@ final class ClassSchemaTypeDefHandler extends TypeDefHandler:
     exists || existsAnnotOnClassContr
   }
 
-  def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef = {
+  override def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef = {
     if tree.isClassDef then
       val template     = tree.rhs.asInstanceOf[Template]
       val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
