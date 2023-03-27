@@ -1,60 +1,22 @@
-package bitlap.rolls.compiler.plugin
+package bitlap.rolls.compiler.plugin.handler
 
+import bitlap.rolls.compiler.plugin.*
 import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.ast.tpd.*
 import dotty.tools.dotc.core.Contexts.Context
-import dotty.tools.dotc.report
-import dotty.tools.dotc.core.Constants.Constant
-import dotty.tools.dotc.core.Contexts.Context
-import dotty.tools.dotc.core.Decorators.*
-import dotty.tools.dotc.core.Denotations.*
 import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.StdNames.*
 import dotty.tools.dotc.core.Symbols.*
-import dotty.tools.dotc.core.Types.ThisType
-import dotty.tools.dotc.plugins.{ PluginPhase, StandardPlugin }
 import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
-import dotty.tools.dotc.semanticdb.AnnotatedType
-import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
-import dotty.tools.dotc.typer.ForceDegree
-import dotty.tools.dotc.typer.Inferencing.isFullyDefined
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/3/21
  */
-trait ClassSchemaHandler:
+final class ClassSchemaTypeDefHandler extends TypeDefHandler:
 
-  private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
-
-  private def existsAnnot(tree: TypeDef)(using ctx: Context): Boolean = {
-    lazy val annotCls                = requiredClass("bitlap.rolls.annotations.ClassSchema")
-    lazy val existsAnnotOnClassContr = tree.tpe.typeSymbol.primaryConstructor.annotations.exists(_.symbol == annotCls)
-    lazy val exists = tree.mods.annotations.collectFirst {
-      case Apply(Select(New(Ident(an)), _), _) if an.asSimpleName == annotCls.name.asSimpleName =>
-        true
-      case _ => false
-    }.getOrElse(false)
-
-    report.debugwarn(s"ExistsAnnot exists:$exists, existsAnnotOnClassContr:$existsAnnotOnClassContr")
-    exists || existsAnnotOnClassContr
-  }
-
-  def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef = {
-    if tree.isClassDef then
-      val template = tree.rhs.asInstanceOf[Template]
-      if (existsAnnot(tree)) {
-        val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
-        report.debugwarn(s"Find name:${tree.name}, methodSchema:$methodSchema")
-        val classSchema = ClassSchema(tree.name.show, methodSchema)
-        report.debugwarn(s"Find classSchema: $classSchema")
-        Utils.sendClassSchema(classSchema)
-      } else {}
-    tree
-  }
-
-  final val productMethods = Seq(
+  private final val productMethods = Seq(
     "productPrefix",
     "productElement",
     "productElementName",
@@ -65,6 +27,35 @@ trait ClassSchemaHandler:
     "hashCode",
     "copy"
   )
+
+  override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.ClassSchema")
+
+  private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
+
+  override def existsAnnot(tree: TypeDef)(using ctx: Context): Boolean = {
+    lazy val annotCls = annotationFullNames.map(requiredClass(_))
+    lazy val existsAnnotOnClassContr =
+      tree.tpe.typeSymbol.primaryConstructor.annotations.exists(p => annotCls.contains(p.symbol))
+    lazy val exists = tree.mods.annotations.collectFirst {
+      case Apply(Select(New(Ident(an)), _), _) if annotCls.exists(_.name.asSimpleName == an.asSimpleName) =>
+        true
+      case _ => false
+    }.getOrElse(false)
+
+    report.debugwarn(s"ExistsAnnot exists:$exists, existsAnnotOnClassContr:$existsAnnotOnClassContr")
+    exists || existsAnnotOnClassContr
+  }
+
+  def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef = {
+    if tree.isClassDef then
+      val template     = tree.rhs.asInstanceOf[Template]
+      val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
+      report.debugwarn(s"Find name:${tree.name}, methodSchema:$methodSchema")
+      val classSchema = ClassSchema(tree.name.show, methodSchema)
+      report.debugwarn(s"Find classSchema: $classSchema")
+      Utils.sendClassSchema(classSchema)
+    tree
+  }
 
   def mapDefDef(tree: tpd.Tree)(using ctx: Context): Option[MethodSchema] =
     tree match

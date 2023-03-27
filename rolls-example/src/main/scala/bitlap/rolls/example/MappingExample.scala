@@ -1,6 +1,6 @@
 package bitlap.rolls.example
 
-import bitlap.rolls.annotations.{ CustomRhsMapping, RhsMapping }
+import bitlap.rolls.annotations.{CustomRhsMapping, RhsMapping}
 
 import scala.concurrent.Future
 

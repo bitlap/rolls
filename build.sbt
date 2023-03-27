@@ -100,13 +100,3 @@ lazy val `rolls-example` = (project in file("rolls-example"))
 //    )
   )
   .dependsOn(`rolls-annotations`)
-
-lazy val `rolls-mapping-example` = (project in file("rolls-mapping-example"))
-  .settings(
-    commonSettings,
-    publish / skip      := true,
-    name                := "rolls-mapping-example",
-    autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT")
-  )
-  .dependsOn(`rolls-annotations`)
