@@ -47,28 +47,27 @@ lazy val commonSettings =
     )
   )
 
-lazy val `rhs` = (project in file("."))
+lazy val `rolls` = (project in file("."))
   .aggregate(
-    `rhs-compiler-plugin`,
-    `rhs-annotations`,
-    `rhs-server`,
-    `rhs-example`
+    `rolls-compiler-plugin`,
+    `rolls-annotations`,
+    `rolls-server`
   )
   .settings(
     publish / skip := true,
     commonSettings
   )
 
-lazy val `rhs-annotations` = (project in file("rhs-annotations"))
+lazy val `rolls-annotations` = (project in file("rolls-annotations"))
   .settings(
     commonSettings,
-    name := "rhs-annotations"
+    name := "rolls-annotations"
   )
 
-lazy val `rhs-server` = (project in file("rhs-server"))
+lazy val `rolls-server` = (project in file("rolls-server"))
   .settings(
     commonSettings,
-    name := "rhs-server",
+    name := "rolls-server",
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % "42.6.0",
       "com.typesafe"   % "config"     % "1.4.2"
@@ -78,36 +77,36 @@ lazy val `rhs-server` = (project in file("rhs-server"))
       "io.circe" %% "circe-parser"
     ).map(_ % circeVersion)
   )
-  .dependsOn(`rhs-compiler-plugin`)
+  .dependsOn(`rolls-compiler-plugin`)
 
-lazy val `rhs-compiler-plugin` = (project in file("rhs-compiler-plugin"))
+lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
   .settings(
     commonSettings,
-    name := "rhs-compiler-plugin",
+    name := "rolls-compiler-plugin",
     libraryDependencies ++= List(
       "org.scala-lang" %% "scala3-compiler" % scala3Version
     )
   )
 
-lazy val `rhs-example` = (project in file("rhs-example"))
+lazy val `rolls-example` = (project in file("rolls-example"))
   .settings(
     commonSettings,
     publish / skip      := true,
-    name                := "rhs-example",
+    name                := "rolls-example",
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.1.0-SNAPSHOT")
+    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT")
 //    libraryDependencies ++= List(
-//      "org.bitlap" %% "rhs-annotations" % "0.1.0-SNAPSHOT"
+//      "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
 //    )
   )
-  .dependsOn(`rhs-annotations`)
+  .dependsOn(`rolls-annotations`)
 
-lazy val `rhs-mapping-example` = (project in file("rhs-mapping-example"))
+lazy val `rolls-mapping-example` = (project in file("rolls-mapping-example"))
   .settings(
     commonSettings,
     publish / skip      := true,
-    name                := "rhs-mapping-example",
+    name                := "rolls-mapping-example",
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.1.0-SNAPSHOT")
+    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT")
   )
-  .dependsOn(`rhs-annotations`)
+  .dependsOn(`rolls-annotations`)

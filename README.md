@@ -1,10 +1,10 @@
-# rhs
+# rolls
 
 ![CI][Badge-CI] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots]
 
-[Badge-CI]: https://github.com/bitlap/rhs/actions/workflows/ScalaCI.yml/badge.svg
-[Badge-Snapshots]: https://img.shields.io/nexus/s/org.bitlap/rhs-compiler-plugin_3?server=https%3A%2F%2Fs01.oss.sonatype.org
-[Link-Snapshots]: https://s01.oss.sonatype.org/content/repositories/snapshots/org/bitlap/rhs-compiler-plugin_3
+[Badge-CI]: https://github.com/bitlap/rolls/actions/workflows/ScalaCI.yml/badge.svg
+[Badge-Snapshots]: https://img.shields.io/nexus/s/org.bitlap/rolls-compiler-plugin_3?server=https%3A%2F%2Fs01.oss.sonatype.org
+[Link-Snapshots]: https://s01.oss.sonatype.org/content/repositories/snapshots/org/bitlap/rolls-compiler-plugin_3
 
 ----
 
@@ -19,8 +19,8 @@
 ## config
 ```
 autoCompilerPlugins := true,
-addCompilerPlugin("org.bitlap" %% "rhs-compiler-plugin" % "0.1.0-SNAPSHOT"),
-libraryDependencies += "org.bitlap" %% "rhs-annotations" % "0.1.0-SNAPSHOT"
+addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT"),
+libraryDependencies += "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
 ```
 
 ## Use @ClassSchema annotation
@@ -41,7 +41,7 @@ final case class SimpleClassTest @ClassSchema() () {
 final case class SubSubSubAuthPermissionPO(list: List[String])
 ```
 
-> curl http://localhost:18000/rhs-schema?className=SimpleClassTest
+> curl http://localhost:18000/rolls-schema?className=SimpleClassTest
  
 Schema Json: 
 ```json
