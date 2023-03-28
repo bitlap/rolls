@@ -4,6 +4,6 @@ import scala.annotation.StaticAnnotation
 
 /** @author
  *    梦境迷离
- *  @version 1.0,2023/3/21
+ *  @version 1.0,2023/3/28
  */
-final case class ClassSchema() extends StaticAnnotation
+final case class toString() extends StaticAnnotation

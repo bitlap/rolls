@@ -6,4 +6,4 @@ import scala.annotation.{ ConstantAnnotation, StaticAnnotation }
  *    梦境迷离
  *  @version 1.0,2023/3/20
  */
-final case class RhsMapping() extends StaticAnnotation
+final case class rhsMapping() extends StaticAnnotation

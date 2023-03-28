@@ -16,7 +16,7 @@ import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
  *    梦境迷离
  *  @version 1.0,2023/3/21
  */
-final class ClassSchemaPhase extends PluginPhase with PluginPhaseFilter[tpd.TypeDef]:
+final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
 
   override val phaseName               = "ClassSchemaPhase"
   override val runsAfter: Set[String]  = Set(Staging.name)
@@ -28,33 +28,7 @@ final class ClassSchemaPhase extends PluginPhase with PluginPhaseFilter[tpd.Type
 
   private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
 
-  private final val productMethods = Seq(
-    "productPrefix",
-    "productElement",
-    "productElementName",
-    "productArity",
-    "equals",
-    "canEqual",
-    "toString",
-    "hashCode",
-    "copy"
-  )
-
-  override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.ClassSchema")
-
-  override def existsAnnot(tree: TypeDef)(using ctx: Context): Boolean = {
-    lazy val annotCls = annotationFullNames.map(requiredClass(_))
-    lazy val existsAnnotOnClassContr =
-      tree.tpe.typeSymbol.primaryConstructor.annotations.exists(p => annotCls.contains(p.symbol))
-    lazy val exists = tree.mods.annotations.collectFirst {
-      case Apply(Select(New(Ident(an)), _), _) if annotCls.exists(_.name.asSimpleName == an.asSimpleName) =>
-        true
-      case _ => false
-    }.getOrElse(false)
-
-    report.debugwarn(s"ExistsAnnot exists:$exists, existsAnnotOnClassContr:$existsAnnotOnClassContr")
-    exists || existsAnnotOnClassContr
-  }
+  override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.classSchema")
 
   override def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef = {
     if tree.isClassDef then
@@ -71,7 +45,8 @@ final class ClassSchemaPhase extends PluginPhase with PluginPhaseFilter[tpd.Type
     tree match
       case dd: DefDef =>
         if !dd.mods.isOneOf(Local | Protected | Private | Abstract | Synthetic | ParamAccessor | Implicit) &&
-          !productMethods.contains(dd.name.show)
+          !defn.syntheticCoreMethods.map(_.name).contains(dd.name) &&
+          !defn.caseClassSynthesized.map(_.name).contains(dd.name)
         then
           Some(
             MethodSchema(
@@ -81,7 +56,7 @@ final class ClassSchemaPhase extends PluginPhase with PluginPhaseFilter[tpd.Type
             )
           )
         else {
-          report.debugwarn(s"DefDef: ${dd.name.show}, mods:${dd.mods},${productMethods.contains(dd.name.show)}")
+          report.debugwarn(s"DefDef: ${dd.name.show}, mods:${dd.mods}")
           None
         }
       case _ => None
@@ -142,7 +117,7 @@ final class ClassSchemaPhase extends PluginPhase with PluginPhaseFilter[tpd.Type
   private def mapIdent(tree: tpd.Ident)(using ctx: Context): TypeSchema =
     tree match
       case it: Ident
-          if it.tpe.typeSymbol.isPrimitiveValueClass || it.tpe <:< ctx.definitions.StringType || it.tpe <:< ctx.definitions.SingletonType =>
+          if it.tpe.typeSymbol.isPrimitiveValueClass || it.tpe <:< defn.StringType || it.tpe <:< defn.SingletonType =>
         TypeSchema(typeName = it.name.show)
       case it: Ident =>
         val fields = tree.tpe.fields.map { field =>

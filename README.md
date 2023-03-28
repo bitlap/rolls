@@ -8,10 +8,10 @@
 
 ----
 
-- **@RhsMapping** on `val`
+- **@rhsMapping** on `val`
   - Replace the `rhs` of the constant `ValDef` with specifying one
   - Must start `HttpServer.scala`
-- **@ClassSchema** on case classes (must be primary constructor) or class
+- **@classSchema** on case classes (must be primary constructor) or class
   - Generate a schema for all public methods and will **exclude** methods of product
   - Write binary data to `/tmp/.compiler/classSchema_%s.txt`，`%s` is a class short name
   - Start `HttpServer.scala` to query class schema
@@ -27,7 +27,7 @@ libraryDependencies += "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
 
 Example:
 ```scala
-final case class SimpleClassTest @ClassSchema() () {
+final case class SimpleClassTest @classSchema() () {
 
   def testMethod(
     listField: List[SubSubSubAuthPermissionPO],

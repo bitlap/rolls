@@ -25,7 +25,7 @@ final class RhsMappingPhase extends PluginPhase with PluginPhaseFilter[tpd.ValDe
   end transformValDef
 
   override val annotationFullNames: List[String] =
-    List("bitlap.rolls.annotations.RhsMapping", "bitlap.rolls.annotations.CustomRhsMapping")
+    List("bitlap.rolls.annotations.rhsMapping", "bitlap.rolls.annotations.customRhsMapping")
 
   override def existsAnnot(tree: ValDef)(using ctx: Context): Boolean = {
     val annotCls = annotationFullNames.map(requiredClass(_))

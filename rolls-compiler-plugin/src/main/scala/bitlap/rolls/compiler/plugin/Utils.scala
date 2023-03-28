@@ -6,7 +6,7 @@ import java.net.http.{ HttpClient, HttpRequest, HttpResponse }
 import java.net.http.HttpRequest.BodyPublishers
 import java.nio.file.{ Files, OpenOption, Paths, StandardOpenOption }
 import java.time.Duration
-import scala.annotation.targetName
+import scala.annotation.{ targetName, threadUnsafe }
 import scala.util.Using
 
 /** @author
@@ -90,5 +90,4 @@ object Utils {
     ) { objectInputStream =>
       objectInputStream.readObject().asInstanceOf[ClassSchema]
     }
-
 }
