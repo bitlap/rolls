@@ -34,6 +34,8 @@ final case class CaseClassTest @ClassSchema() () {
   def testMethod3(): Either[Throwable, String]        = ???
   def testMethod4(): AuthPermissionPO                 = ???
   def testMethod5(): Map[String, AuthPermissionPO]    = ???
+  def testMethod6(): Array[AuthPermissionPO]    = ???
+  def testMethod7(): Array[String]    = ???
 
 }
 
