@@ -1,5 +1,6 @@
 package bitlap.rolls.annotations
 
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
@@ -10,6 +11,7 @@ object Utils {
     .builder()
     .addModule(DefaultScalaModule)
     .addModule(new JavaTimeModule)
+    .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
     .build()
 
   def toString_(p: Any): String =
