@@ -6,4 +6,4 @@ import scala.annotation.StaticAnnotation
  *    梦境迷离
  *  @version 1.0,2023/3/28
  */
-final case class toString() extends StaticAnnotation
+final case class prettyToString() extends StaticAnnotation

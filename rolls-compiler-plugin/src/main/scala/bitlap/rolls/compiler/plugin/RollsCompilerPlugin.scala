@@ -16,6 +16,6 @@ class RollsCompilerPlugin extends StandardPlugin:
   override val description: String = "Rolls Compiler Plugin"
 
   def init(options: List[String]): List[PluginPhase] =
-    new ClassSchemaPhase :: new RhsMappingPhase :: new ToStringPhase :: Nil
+    new ClassSchemaPhase :: new RhsMappingPhase :: new PrettyToStringPhase :: Nil
 
 end RollsCompilerPlugin

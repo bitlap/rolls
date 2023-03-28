@@ -25,10 +25,10 @@ import scala.annotation.threadUnsafe
  *    梦境迷离
  *  @version 1.0,2023/3/28
  */
-final class ToStringPhase extends PluginPhase with TypeDefPluginPhaseFilter with IdentityDenotTransformer:
+final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilter with IdentityDenotTransformer:
   thisPhase =>
 
-  override val phaseName               = "ToStringPhase"
+  override val phaseName               = "PrettyToStringPhase"
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
@@ -36,7 +36,7 @@ final class ToStringPhase extends PluginPhase with TypeDefPluginPhaseFilter with
     if (existsAnnot(tree)) handle(tree) else tree
   end transformTypeDef
 
-  override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.toString")
+  override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.prettyToString")
 
   private lazy val methodName: Context ?=> Name = StdNames.nme.toString_.asSimpleName
 

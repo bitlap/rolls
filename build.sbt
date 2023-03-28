@@ -26,8 +26,9 @@ inThisBuild(
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheckAll")
 
-lazy val scala3Version = "3.2.0"
-lazy val circeVersion  = "0.14.1"
+lazy val scala3Version  = "3.2.0"
+lazy val circeVersion   = "0.14.1"
+lazy val jacksonVersion = "2.14.1"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 lazy val commonSettings =
@@ -61,7 +62,12 @@ lazy val `rolls` = (project in file("."))
 lazy val `rolls-annotations` = (project in file("rolls-annotations"))
   .settings(
     commonSettings,
-    name := "rolls-annotations"
+    name := "rolls-annotations",
+    libraryDependencies ++= Seq(
+      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion,
+      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion
+    )
   )
 
 lazy val `rolls-server` = (project in file("rolls-server"))

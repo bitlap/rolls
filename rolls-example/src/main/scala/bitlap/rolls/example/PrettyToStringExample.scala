@@ -1,6 +1,6 @@
 package bitlap.rolls.example
 
-import bitlap.rolls.annotations.toString
+import bitlap.rolls.annotations.prettyToString
 
 import java.time.Instant
 
@@ -8,9 +8,9 @@ import java.time.Instant
  *    梦境迷离
  *  @version 1.0,2023/3/28
  */
-object ToStringExample extends App {
+object PrettyToStringExample extends App {
 
-  final case class CaseClass @toString() (
+  final case class CaseClass @prettyToString() (
     id: String,
     tenantId: Map[String, String],
     resourceActions: List[String],
