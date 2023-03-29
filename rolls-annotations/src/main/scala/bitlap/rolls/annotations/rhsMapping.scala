@@ -1,6 +1,6 @@
 package bitlap.rolls.annotations
 
-import scala.annotation.{ ConstantAnnotation, StaticAnnotation }
+import scala.annotation.StaticAnnotation
 
 /** @author
  *    梦境迷离

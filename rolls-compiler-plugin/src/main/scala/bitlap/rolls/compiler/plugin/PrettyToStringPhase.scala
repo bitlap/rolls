@@ -50,11 +50,30 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
   override def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef =
     val clazz    = tree.symbol.asClass
     val template = tree.rhs.asInstanceOf[Template]
+    val annots   = tree.mods.annotations ++ getContrAnnotations(tree)
+    val annotCls = getDeclarationAnnots
+    val standard = annots.collectFirst {
+      case Apply(Select(New(Ident(an)), _), Nil) if an.asSimpleName == annotCls.head.name.asSimpleName =>
+        debug(s"standard ${tree.name.show}", EmptyTree)
+        false
+      case Apply(Select(New(Ident(an)), _), List(Literal(Constant(standard: Boolean))))
+          if an.asSimpleName == annotCls.head.name.asSimpleName =>
+        standard
+      case Apply(Select(New(Ident(an)), _), List(NamedArg(_, Literal(Constant(standard: Boolean)))))
+          if an.asSimpleName == annotCls.head.name.asSimpleName =>
+        standard
+      case o =>
+        debug(s"standard ${tree.name.show}:$o", EmptyTree)
+        false
+    }.getOrElse(false)
+
+    debug(s"standard ${tree.name.show} ${annots.head}", EmptyTree)
+
     if template.body.exists(filterDefDef) then
       val newBody = template.body.map { member =>
         member match
           case d: DefDef if d.name == methodName =>
-            mapDefDef(tree, d.symbol.asTerm)
+            mapDefDef(standard, tree, d.symbol.asTerm)
           case o => o
       }
       val ret = tpd.ClassDefWithParents(clazz, template.constr, template.parents, newBody)
@@ -77,18 +96,18 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
         template.constr,
         template.parents,
         template.body ::: List(
-          mapDefDef(tree, meth)
+          mapDefDef(standard, tree, meth)
         )
       )
       debug(s"Add ${tree.name.show} toString", ret)
       ret
 
-  private def mapDefDef(tree: TypeDef, ts: Symbol)(using ctx: Context): tpd.DefDef =
+  private def mapDefDef(standard: Boolean, tree: TypeDef, ts: Symbol)(using ctx: Context): tpd.DefDef =
     val clazz = tree.symbol.asClass
     if (isProduct(clazz)) {
       val body = ref(UtilsClass.requiredMethod(toStringMethodName))
         .withSpan(ctx.owner.span.focus)
-        .appliedTo(This(clazz))
+        .appliedToArgs(const(standard) :: const(tree.name.show) :: This(clazz) :: Nil)
       debug(s"${tree.name.show} generate toString for case class", DefDef(ts.asTerm, body))
       DefDef(ts.asTerm, body)
     } else {
@@ -109,7 +128,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
       val list = mkList(elements, TypeTree(defn.AnyType))
       val body = ref(UtilsClass.requiredMethod(toStringMethodName))
         .withSpan(ctx.owner.span.focus)
-        .appliedTo(list)
+        .appliedToArgs(const(standard) :: const(tree.name.show) :: list :: Nil)
 
       debug(s"${tree.name.show} generate toString for class", DefDef(ts.asTerm, body))
       DefDef(ts.asTerm, body)

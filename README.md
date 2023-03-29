@@ -16,7 +16,9 @@
   - Write binary data to `/tmp/.compiler/classSchema_%s.txt`，`%s` is a class short name
   - Start `HttpServer.scala` to query class schema
 - **@prettyToString** on case classes or classes
-  - Generate `toString` method as json string
+  - Generate `toString`, has one `standard` arg for config, default is `false`
+  - If `standard` is `true`,  `toString` get `Test(field1=value1,field2=value2)`
+  - If `standard` is `false`,  `toString` get `{"field1":"value1","field2":"value2"}`
 
 ## config
 ```

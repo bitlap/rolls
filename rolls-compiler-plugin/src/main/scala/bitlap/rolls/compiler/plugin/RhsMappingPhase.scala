@@ -39,7 +39,7 @@ final class RhsMappingPhase extends PluginPhase with PluginPhaseFilter[tpd.ValDe
   }
 
   override def handle(tree: ValDef)(using ctx: Context): ValDef = {
-    val annotCls = annotationFullNames.map(requiredClass(_))
+    val annotCls = getDeclarationAnnots
     val nameArgs = tree.mods.annotations.collectFirst {
       case Apply(Select(New(Ident(an)), _), Nil) if an.asSimpleName == annotCls(0).name.asSimpleName =>
         Map()
