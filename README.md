@@ -21,7 +21,7 @@
   - If `standard` is `false`,  `toString` get `{"field1":"value1","field2":"value2"}`
 
 ## config
-```
+``` sbt
 autoCompilerPlugins := true,
 addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT"),
 libraryDependencies += "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
@@ -32,7 +32,7 @@ libraryDependencies += "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
 <details>
 <summary>Example</summary>
 
-```
+``` scala
 // query result: curl http://localhost:18000/rolls-schema?className=SimpleClassTest
 final case class SimpleClassTest @classSchema() () {
   def testMethod(
@@ -52,7 +52,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 <details>
 <summary>Query Result</summary>
 
-```json
+``` json
 {
   "className":"SimpleClassTest",
   "methods":[
@@ -169,7 +169,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 <details>
 <summary>Example</summary>
 
-```scala
+``` scala
   @prettyToString
   final case class TestCaseClass1(
     id: String,
