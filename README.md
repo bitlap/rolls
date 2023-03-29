@@ -27,12 +27,14 @@ addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT"),
 libraryDependencies += "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
 ```
 
-## Use @ClassSchema annotation
+## @classSchema
 
-Example:
-```scala
+<details>
+<summary>Example</summary>
+
+```
+// query result: curl http://localhost:18000/rolls-schema?className=SimpleClassTest
 final case class SimpleClassTest @classSchema() () {
-
   def testMethod(
     listField: List[SubSubSubAuthPermissionPO],
     stringField: String,
@@ -40,14 +42,16 @@ final case class SimpleClassTest @classSchema() () {
     NestedObjectField: SubSubSubAuthPermissionPO,
     eitherField: Either[String, SubSubSubAuthPermissionPO]
   ): SubSubSubAuthPermissionPO = ???
-
 }
 final case class SubSubSubAuthPermissionPO(list: List[String])
 ```
 
-> curl http://localhost:18000/rolls-schema?className=SimpleClassTest
+</details>
  
-Schema Json: 
+
+<details>
+<summary>Query Result</summary>
+
 ```json
 {
   "className":"SimpleClassTest",
@@ -156,3 +160,45 @@ Schema Json:
   ]
 }
 ```
+
+</details>
+
+
+## @prettyToString
+
+<details>
+<summary>Example</summary>
+
+```scala
+  @prettyToString
+  final case class TestCaseClass1(
+    id: String,
+    tenantId: Map[String, String],
+    private val resourceActions: List[String],
+    deleted: Int = 99,
+    updateTime: Instant = Instant.now(),
+    subPermissions: List[String]
+  )
+  @prettyToString(true)
+  final class TestClass1(
+    id: String,
+    val tenantId: Map[String, String],
+    private val resourceActions: List[String],
+    deleted: Int = 99,
+    updateTime: Instant = Instant.now(),
+    subPermissions: List[String]
+  )
+```
+
+</details>
+
+<details>
+<summary>`toString` Result</summary>
+
+
+```
+  {"id":"iddd","tenantId":{},"deleted":98,"updateTime":1680085179.395021000,"subPermissions":[]}
+  TestClass1(tenantId=Map())
+```
+
+</details>
