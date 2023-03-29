@@ -15,7 +15,11 @@ object Utils {
     .build()
 
   def toString_(p: Any): String =
-    mapper.writeValueAsString(p)
+    p match
+      case _: List[?] =>
+        val map = p.asInstanceOf[List[(String, Any)]].toMap
+        mapper.writeValueAsString(map)
+      case _ => mapper.writeValueAsString(p)
 //    (p.productElementNames zip p.productIterator)
 //      .map(e => s"${e._1}=${e._2}")
 //      .mkString(p.productPrefix + "(", ",", ")")

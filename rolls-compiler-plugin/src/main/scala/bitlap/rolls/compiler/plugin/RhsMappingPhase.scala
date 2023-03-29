@@ -67,12 +67,12 @@ final class RhsMappingPhase extends PluginPhase with PluginPhaseFilter[tpd.ValDe
         val httpUrl =
           s"${Utils.reqUrl}?value=$original&idColumn=${_idColumn}&nameColumns=${_nameColumns}&tableName=${_tableName}"
         val response = Utils.sendRhsMapping(httpUrl)
-        report.debugwarn(s"Rhs mapping transform with $httpUrl, response:$response", tree.sourcePos)
+        debug(s"Rhs mapping transform with $httpUrl, response:$response", tree)
         if response == null || response.isEmpty then {
           ValDef(tree.symbol.asTerm, tree.rhs)
         } else {
-          val valdef = ValDef(tree.symbol.asTerm, Literal(Constant(response)))
-          report.debugwarn(s"Rhs mapping generate new ValDef:$valdef", tree.sourcePos)
+          val valdef = ValDef(tree.symbol.asTerm, const(response))
+          debug("Rhs mapping generate new ValDef", tree)
           valdef
         }
       case t => tree

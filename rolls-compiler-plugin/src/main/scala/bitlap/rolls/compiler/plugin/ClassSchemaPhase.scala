@@ -34,9 +34,7 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
     if tree.isClassDef then
       val template     = tree.rhs.asInstanceOf[Template]
       val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
-      report.debugwarn(s"Find name:${tree.name}, methodSchema:$methodSchema")
-      val classSchema = ClassSchema(tree.name.show, methodSchema)
-      report.debugwarn(s"Find classSchema: $classSchema")
+      val classSchema  = ClassSchema(tree.name.show, methodSchema)
       Utils.sendClassSchema(classSchema)
     tree
   }
@@ -56,19 +54,16 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
             )
           )
         else {
-          report.debugwarn(s"DefDef: ${dd.name.show}, mods:${dd.mods}")
           None
         }
       case _ => None
 
   private def mapSeqLiteral(tree: tpd.SeqLiteral)(using ctx: Context): TypeSchema =
-    report.debugwarn(s"SeqLiteral: $tree")
     TypeSchema(typeName = tree.show, fields = tree.elems.map(mapType))
 
   private def mapTypeDef(tree: tpd.TypeDef)(using ctx: Context): TypeSchema =
     tree match
       case tdef: TypeDef if tdef.isClassDef =>
-        report.debugwarn(s"Iterable: $tree")
         lazy val IterableType: Types.TypeRef = requiredClassRef("scala.collection.Iterable")
         if tdef.tpe <:< IterableType
         then
@@ -98,18 +93,15 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
     mapType(typeTree).copy(genericType = Option(actualGeneric))
 
   private def mapValDef(name: String, tree: tpd.ValDef)(using ctx: Context): TypeSchema =
-    report.debugwarn(s"ValDef: $tree")
     mapType(tree.tpt).copy(fieldName = Some(name))
 
   private def mapAppliedTypeTree(tree: tpd.AppliedTypeTree)(using ctx: Context): TypeSchema =
-    report.debugwarn(s"AppliedType: $tree")
     TypeSchema(
       typeName = ctx.printer.nameString(tree.tpt.symbol),
       genericType = Option(tree.args.map(a => mapType(a)))
     )
 
   private def mapRefTree(tree: tpd.RefTree)(using ctx: Context): TypeSchema =
-    report.debugwarn(s"RefTree: $tree")
     tree match
       case t: Ident => mapIdent(t)
       case _        => Unknown
