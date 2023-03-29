@@ -39,8 +39,8 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
   private lazy val methodName: Context ?=> Name = StdNames.nme.toString_.asSimpleName
   private val toStringMethodName                = "toString_"
 
-  private lazy val UtilsClass: Context ?=> Symbol  = requiredModule("bitlap.rolls.annotations.RollsRuntime")
-  private lazy val Tuple2Class: Context ?=> Symbol = requiredModule("scala.Tuple2")
+  private lazy val RollsRuntimeClass: Context ?=> Symbol = requiredModule("bitlap.rolls.annotations.RollsRuntime")
+  private lazy val Tuple2Class: Context ?=> Symbol       = requiredModule("scala.Tuple2")
 
   private def filterDefDef(tree: tpd.Tree)(using ctx: Context): Boolean =
     tree match
@@ -54,7 +54,6 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
     val annotCls = getDeclarationAnnots
     val standard = annots.collectFirst {
       case Apply(Select(New(Ident(an)), _), Nil) if an.asSimpleName == annotCls.head.name.asSimpleName =>
-        debug(s"standard ${tree.name.show}", EmptyTree)
         false
       case Apply(Select(New(Ident(an)), _), List(Literal(Constant(standard: Boolean))))
           if an.asSimpleName == annotCls.head.name.asSimpleName =>
@@ -63,11 +62,9 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
           if an.asSimpleName == annotCls.head.name.asSimpleName =>
         standard
       case o =>
-        debug(s"standard ${tree.name.show}:$o", EmptyTree)
+        debug(s"standard ${tree.name.show} miss match $o", EmptyTree)
         false
     }.getOrElse(false)
-
-    debug(s"standard ${tree.name.show} ${annots.head}", EmptyTree)
 
     if template.body.exists(filterDefDef) then
       val newBody = template.body.map { member =>
@@ -105,7 +102,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
   private def mapDefDef(standard: Boolean, tree: TypeDef, ts: Symbol)(using ctx: Context): tpd.DefDef =
     val clazz = tree.symbol.asClass
     if (isProduct(clazz)) {
-      val body = ref(UtilsClass.requiredMethod(toStringMethodName))
+      val body = ref(RollsRuntimeClass.requiredMethod(toStringMethodName))
         .withSpan(ctx.owner.span.focus)
         .appliedToArgs(const(standard) :: const(tree.name.show) :: This(clazz) :: Nil)
       debug(s"${tree.name.show} generate toString for case class", DefDef(ts.asTerm, body))
@@ -126,7 +123,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
         .toList
 
       val list = mkList(elements, TypeTree(defn.AnyType))
-      val body = ref(UtilsClass.requiredMethod(toStringMethodName))
+      val body = ref(RollsRuntimeClass.requiredMethod(toStringMethodName))
         .withSpan(ctx.owner.span.focus)
         .appliedToArgs(const(standard) :: const(tree.name.show) :: list :: Nil)
 

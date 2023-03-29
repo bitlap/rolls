@@ -32,19 +32,19 @@ trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
 
   def getContrAnnotations(tree: TypeDef)(using ctx: Context): List[tpd.Tree] =
     if (tree.isClassDef && isProduct(tree.symbol.asClass))
-      val typeContrAnnos = tree.tpe.typeConstructor.typeSymbol.annotations
-      val contrAnnos     = tree.tpe.typeSymbol.primaryConstructor.annotations
-      debug(s"${tree.name.show} - typeContrAnnos:${typeContrAnnos.map(_.tree)} - contrAnnos:$contrAnnos", tree)
-      contrAnnos.map(f => FromSymbol.definitionFromSym(f.symbol)) ++ typeContrAnnos.map(_.tree)
+      val typeContrAnnots = tree.tpe.typeConstructor.typeSymbol.annotations
+      val contrAnnots     = tree.tpe.typeSymbol.primaryConstructor.annotations
+      debug(s"${tree.name.show} - typeContrAnnots:${typeContrAnnots.map(_.tree)} - contrAnnots:$contrAnnots", tree)
+      contrAnnots.map(f => FromSymbol.definitionFromSym(f.symbol)) ++ typeContrAnnots.map(_.tree)
     else tree.tpe.typeSymbol.primaryConstructor.annotations.map(f => FromSymbol.definitionFromSym(f.symbol))
 
   override def existsAnnot(tree: TypeDef)(using ctx: Context): Boolean = {
     lazy val declarAnnotCls = getDeclarationAnnots
-    val contrAnns           = getContrAnnotations(tree)
-    debug(s"${tree.name.show} - contrAnns:$contrAnns", EmptyTree)
-    lazy val exists = (contrAnns ++ tree.mods.annotations).collectFirst {
+    val contrAnnots         = getContrAnnotations(tree)
+    debug(s"${tree.name.show} - contrAnnots:$contrAnnots", EmptyTree)
+    lazy val exists = (contrAnnots ++ tree.mods.annotations).collectFirst {
       case Apply(Select(New(Ident(an)), _), args) if declarAnnotCls.exists(_.name.asSimpleName == an.asSimpleName) =>
-        debug(s"${tree.name.show} - args:$args", EmptyTree)
+        debug(s"${tree.name.show} - annot args:$args", EmptyTree)
         true
       case _ => false
     }.getOrElse(false)
