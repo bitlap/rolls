@@ -193,7 +193,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 </details>
 
 <details>
-<summary>`toString` Result</summary>
+<summary>toString Result</summary>
 
 
 ```
