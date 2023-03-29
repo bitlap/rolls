@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.github.pjfanning.EnumModule
 
-object Utils {
+object RollsRuntime {
 
   private final val mapper = JsonMapper
     .builder()
     .addModule(DefaultScalaModule)
+    .addModule(EnumModule)
     .addModule(new JavaTimeModule)
     .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
     .build()

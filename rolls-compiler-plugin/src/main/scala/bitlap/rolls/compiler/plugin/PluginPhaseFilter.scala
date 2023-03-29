@@ -5,7 +5,7 @@ import dotty.tools.dotc.ast.tpd.*
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Symbols
-import dotty.tools.dotc.core.Symbols.requiredClass
+import dotty.tools.dotc.core.Symbols.{ defn, requiredClass, ClassSymbol }
 import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
 
@@ -22,12 +22,20 @@ trait PluginPhaseFilter[T]:
 
   def handle(tree: T)(using ctx: Context): T
 
+  def isProduct(clazz: ClassSymbol)(using ctx: Context) = clazz.parentSyms.contains(defn.ProductClass)
+
 end PluginPhaseFilter
 
 trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
 
   private def getContrAnnotations(tree: TypeDef)(using ctx: Context): List[tpd.Tree] =
-    tree.tpe.typeSymbol.primaryConstructor.annotations.map(p => FromSymbol.definitionFromSym(p.symbol))
+    if (tree.isClassDef && isProduct(tree.symbol.asClass))
+      val typeContrAnnos = tree.tpe.typeConstructor.typeSymbol.annotations
+//      val contrAnnos     = tree.tpe.typeSymbol.primaryConstructor.annotations
+      debug(s"${tree.name.show} - typeContrAnnos:$typeContrAnnos - contrAnnos:$contrAnnos", tree)
+      typeContrAnnos.map(f => FromSymbol.definitionFromSym(f.symbol))
+//      (contrAnnos ++ typeContrAnnos).map(f => FromSymbol.definitionFromSym(f.symbol))
+    else tree.tpe.typeSymbol.primaryConstructor.annotations.map(f => FromSymbol.definitionFromSym(f.symbol))
 
   override def existsAnnot(tree: TypeDef)(using ctx: Context): Boolean = {
     lazy val annotCls    = annotationFullNames.map(requiredClass(_))
@@ -35,11 +43,10 @@ trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
     val contrAnnotExists = annotCls.forall(p => contrAnns.exists(_.symbol.name == p.name))
     lazy val exists = (tree.mods.annotations ++ contrAnns).collectFirst {
       case Apply(Select(New(Ident(an)), _), args) if annotCls.exists(_.name.asSimpleName == an.asSimpleName) =>
-        debug(s"ExistsAnnot ${tree.name.show} - $args", EmptyTree)
+        debug(s"${tree.name.show} - $args", EmptyTree)
         true
       case _ => false
     }.getOrElse(false)
 
-    debug(s"ExistsAnnot ${tree.name.show} - ${exists || contrAnnotExists}", tree)
     exists || contrAnnotExists
   }

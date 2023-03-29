@@ -33,13 +33,13 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
   override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.prettyToString")
 
   override def transformTypeDef(tree: tpd.TypeDef)(using ctx: Context): tpd.Tree =
-    if (existsAnnot(tree)) handle(tree) else tree
+    if (tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
   end transformTypeDef
 
   private lazy val methodName: Context ?=> Name = StdNames.nme.toString_.asSimpleName
   private val toStringMethodName                = "toString_"
 
-  private lazy val UtilsClass: Context ?=> Symbol  = requiredModule("bitlap.rolls.annotations.Utils")
+  private lazy val UtilsClass: Context ?=> Symbol  = requiredModule("bitlap.rolls.annotations.RollsRuntime")
   private lazy val Tuple2Class: Context ?=> Symbol = requiredModule("scala.Tuple2")
 
   private def filterDefDef(tree: tpd.Tree)(using ctx: Context): Boolean =
@@ -48,50 +48,48 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
       case _                                   => false
 
   override def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef =
-    if tree.isClassDef then
-      val clazz    = tree.symbol.asClass
-      val template = tree.rhs.asInstanceOf[Template]
-      if template.body.exists(filterDefDef) then
-        val newBody = template.body.map { member =>
-          member match
-            case d: DefDef if d.name == methodName =>
-              mapDefDef(tree, d.symbol.asTerm)
-            case o => o
-        }
-        val ret = tpd.ClassDefWithParents(clazz, template.constr, template.parents, newBody)
-        debug("Exists toString", ret)
-        ret
-      else
-        val meth: Symbol = newSymbol(
-          clazz,
-          methodName,
-          Synthetic | Method | Override,
-          MethodType(
-            Nil,
-            defn.StringType
-          ),
-          coord = clazz.coord
-        )
+    val clazz    = tree.symbol.asClass
+    val template = tree.rhs.asInstanceOf[Template]
+    if template.body.exists(filterDefDef) then
+      val newBody = template.body.map { member =>
+        member match
+          case d: DefDef if d.name == methodName =>
+            mapDefDef(tree, d.symbol.asTerm)
+          case o => o
+      }
+      val ret = tpd.ClassDefWithParents(clazz, template.constr, template.parents, newBody)
+      debug(s"Modify ${tree.name.show} toString", ret)
+      ret
+    else
+      val meth: Symbol = newSymbol(
+        clazz,
+        methodName,
+        Synthetic | Method | Override,
+        MethodType(
+          Nil,
+          defn.StringType
+        ),
+        coord = clazz.coord
+      )
 
-        val ret = tpd.ClassDefWithParents(
-          clazz,
-          template.constr,
-          template.parents,
-          template.body ::: List(
-            mapDefDef(tree, meth)
-          )
+      val ret = tpd.ClassDefWithParents(
+        clazz,
+        template.constr,
+        template.parents,
+        template.body ::: List(
+          mapDefDef(tree, meth)
         )
-        debug("Not exists toString", ret)
-        ret
-    else tree
+      )
+      debug(s"Add ${tree.name.show} toString", ret)
+      ret
 
   private def mapDefDef(tree: TypeDef, ts: Symbol)(using ctx: Context): tpd.DefDef =
     val clazz = tree.symbol.asClass
-    if (clazz.parentSyms.contains(defn.ProductClass)) {
+    if (isProduct(clazz)) {
       val body = ref(UtilsClass.requiredMethod(toStringMethodName))
         .withSpan(ctx.owner.span.focus)
         .appliedTo(This(clazz))
-      debug("ToString for case class", DefDef(ts.asTerm, body))
+      debug(s"${tree.name.show} generate toString for case class", DefDef(ts.asTerm, body))
       DefDef(ts.asTerm, body)
     } else {
       val elements = tree.tpe.fields
@@ -113,6 +111,6 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
         .withSpan(ctx.owner.span.focus)
         .appliedTo(list)
 
-      debug("ToString for class", DefDef(ts.asTerm, body))
+      debug(s"${tree.name.show} generate toString for class", DefDef(ts.asTerm, body))
       DefDef(ts.asTerm, body)
     }

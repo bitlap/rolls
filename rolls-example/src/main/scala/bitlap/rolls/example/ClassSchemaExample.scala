@@ -19,7 +19,8 @@ final case class SimpleClassTest @classSchema()() {
 
 }
 
-final case class CaseClassTest @classSchema()() {
+@classSchema()
+final case class CaseClassTest(){
 
   def testMethod1(
     listField: List[AuthPermissionPO],

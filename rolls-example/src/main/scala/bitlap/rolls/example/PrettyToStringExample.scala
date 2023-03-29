@@ -10,8 +10,17 @@ import java.time.Instant
  */
 object PrettyToStringExample extends App {
 
-  @prettyToString()
-  final case class TestCaseClass1  (
+  @prettyToString
+  final case class TestCaseClass1(
+    id: String,
+    tenantId: Map[String, String],
+    private val resourceActions: List[String],
+    deleted: Int = 99,
+    updateTime: Instant = Instant.now(),
+    subPermissions: List[String]
+  )
+
+  final case class TestCaseClass2 @prettyToString() (
     id: String,
     tenantId: Map[String, String],
     private val resourceActions: List[String],
@@ -40,18 +49,23 @@ object PrettyToStringExample extends App {
   )
 
   // {"id":"iddd","tenantId":{},"deleted":98,"updateTime":1680060447.245149000,"subPermissions":[]}
-  val test1 =
+  val testCaseClass1 =
     TestCaseClass1("iddd", Map.empty, List.empty, 98, Instant.now(), List.empty)
-  println(test1)
+  println(testCaseClass1)
+
+  // {"id":"iddd","tenantId":{},"deleted":98,"updateTime":1680068415.311346000,"subPermissions":[]}
+  val testCaseClass2 =
+    TestCaseClass2("iddd", Map.empty, List.empty, 98, Instant.now(), List.empty)
+  println(testCaseClass2.toString)
 
   // {"tenantId":{}}
-  val test2 =
+  val testClass1 =
     new TestClass1("iddd", Map.empty, List.empty, 98, Instant.now(), List.empty)
-  println(test2.toString)
+  println(testClass1.toString)
 
   // {"tenantId":{}}
-  val test3 =
+  val testClass2 =
     new TestClass2("iddd", Map.empty, List.empty, 98, Instant.now(), List.empty)
-  println(test3.toString)
+  println(testClass2.toString)
 
 }

@@ -11,11 +11,11 @@
 - **@rhsMapping** on `val`
   - Replace the `rhs` of the constant `ValDef` with specifying one
   - Must start `HttpServer.scala`
-- **@classSchema** on case classes (must be primary constructor) or classes
+- **@classSchema** on case classes or classes
   - Generate a schema for all public methods and **exclude** methods of product
   - Write binary data to `/tmp/.compiler/classSchema_%s.txt`，`%s` is a class short name
   - Start `HttpServer.scala` to query class schema
-- **@prettyToString** on case classes (must be primary constructor) or classes
+- **@prettyToString** on case classes or classes
   - Generate `toString` method as json string
 
 ## config
