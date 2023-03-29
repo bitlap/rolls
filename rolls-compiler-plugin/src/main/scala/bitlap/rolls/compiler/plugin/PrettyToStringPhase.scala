@@ -52,13 +52,13 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
       val clazz    = tree.symbol.asClass
       val template = tree.rhs.asInstanceOf[Template]
       if template.body.exists(filterDefDef) then
-        val newToString = template.body.map { member =>
+        val newBody = template.body.map { member =>
           member match
             case d: DefDef if d.name == methodName =>
               mapDefDef(tree, d.symbol.asTerm)
             case o => o
         }
-        val ret = tpd.ClassDefWithParents(clazz, template.constr, template.parents, newToString)
+        val ret = tpd.ClassDefWithParents(clazz, template.constr, template.parents, newBody)
         debug("Exists toString", ret)
         ret
       else
