@@ -10,7 +10,7 @@ on:
       - master
 
 jobs:
-  PublishPlugin:
+  LocalPublishPlugin:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -49,7 +49,7 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
-    needs: [ PublishPlugin ]
+    needs: [ LocalPublishPlugin ]
     strategy:
       matrix:
         java-version: [ 11 ]
