@@ -19,7 +19,7 @@ inThisBuild(
         email = "dreamylost@outlook.com",
         url = url("https://blog.dreamylost.cn")
       )
-    )
+    ),
   )
 )
 
@@ -51,7 +51,7 @@ lazy val `rolls` = (project in file("."))
   .aggregate(
     `rolls-compiler-plugin`,
     `rolls-annotations`,
-    `rolls-server`,
+    `rolls-server`
   )
   .settings(
     publish / skip := true,
