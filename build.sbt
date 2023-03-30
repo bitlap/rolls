@@ -20,6 +20,8 @@ inThisBuild(
         url = url("https://blog.dreamylost.cn")
       )
     )
+    // publish
+    // credentials += Credentials(Path.userHome / ".ivy2" / ".bitlap_sonatype_credentials")
   )
 )
 
