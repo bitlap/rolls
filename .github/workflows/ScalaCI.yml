@@ -44,7 +44,7 @@ jobs:
 
       - name: Run Test
         if: success() || failure()
-        run: sbt "coverageEnabled; rolls-tests/test; coverageReport"
+        run: sbt "coverageEnabled; rolls-tests/test; rolls-tests/coverageReport"
 
       - name: Upload test coverage report
         working-directory: ./rolls-tests
