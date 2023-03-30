@@ -12,6 +12,8 @@ import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
 import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
 
+import scala.annotation.threadUnsafe
+
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/3/21
@@ -22,15 +24,15 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
-  override def transformTypeDef(tree: tpd.TypeDef)(using ctx: Context): tpd.Tree =
+  override def transformTypeDef(tree: tpd.TypeDef)(using Context): tpd.Tree =
     if (existsAnnot(tree)) handle(tree) else tree
   end transformTypeDef
 
-  private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
+  @threadUnsafe private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
 
   override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.classSchema")
 
-  override def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef = {
+  override def handle(tree: TypeDef): Context ?=> tpd.TypeDef = {
     if tree.isClassDef then
       val template     = tree.rhs.asInstanceOf[Template]
       val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
@@ -39,7 +41,7 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
     tree
   }
 
-  def mapDefDef(tree: tpd.Tree)(using ctx: Context): Option[MethodSchema] =
+  def mapDefDef(tree: tpd.Tree): Context ?=> Option[MethodSchema] =
     tree match
       case dd: DefDef =>
         if !dd.mods.isOneOf(Local | Protected | Private | Abstract | Synthetic | ParamAccessor | Implicit) &&
@@ -58,10 +60,10 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
         }
       case _ => None
 
-  private def mapSeqLiteral(tree: tpd.SeqLiteral)(using ctx: Context): TypeSchema =
+  private def mapSeqLiteral(tree: tpd.SeqLiteral): Context ?=> TypeSchema =
     TypeSchema(typeName = tree.show, fields = tree.elems.map(mapType))
 
-  private def mapTypeDef(tree: tpd.TypeDef)(using ctx: Context): TypeSchema =
+  private def mapTypeDef(tree: tpd.TypeDef): Context ?=> TypeSchema =
     tree match
       case tdef: TypeDef if tdef.isClassDef =>
         lazy val IterableType: Types.TypeRef = requiredClassRef("scala.collection.Iterable")
@@ -79,7 +81,7 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
       case null =>
         Unknown
 
-  private def mapTemplate(tree: tpd.TypeDef)(using ctx: Context): TypeSchema = {
+  private def mapTemplate(tree: tpd.TypeDef): Context ?=> TypeSchema = {
     val ps = tree.rhs.asInstanceOf[Template].body.collect { case vd: ValDef => mapType(vd) }
     TypeSchema(
       typeName = tree.name.show,
@@ -87,12 +89,12 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
     )
   }
 
-  private def mapTypeTree(tree: tpd.TypeTree)(using ctx: Context): TypeSchema =
+  private def mapTypeTree(tree: tpd.TypeTree): Context ?=> TypeSchema =
     val actualGeneric = tree.tpe.argTypes.map(_.typeSymbol).map(FromSymbol.definitionFromSym).map(mapType)
     val typeTree      = FromSymbol.definitionFromSym(tree.tpe.typeSymbol)
     mapType(typeTree).copy(genericType = Option(actualGeneric))
 
-  private def mapValDef(name: String, tree: tpd.ValDef)(using ctx: Context): TypeSchema =
+  private def mapValDef(name: String, tree: tpd.ValDef): Context ?=> TypeSchema =
     mapType(tree.tpt).copy(fieldName = Some(name))
 
   private def mapAppliedTypeTree(tree: tpd.AppliedTypeTree)(using ctx: Context): TypeSchema =
@@ -101,12 +103,12 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
       genericType = Option(tree.args.map(a => mapType(a)))
     )
 
-  private def mapRefTree(tree: tpd.RefTree)(using ctx: Context): TypeSchema =
+  private def mapRefTree(tree: tpd.RefTree): Context ?=> TypeSchema =
     tree match
       case t: Ident => mapIdent(t)
       case _        => Unknown
 
-  private def mapIdent(tree: tpd.Ident)(using ctx: Context): TypeSchema =
+  private def mapIdent(tree: tpd.Ident): Context ?=> TypeSchema =
     tree match
       case it: Ident
           if it.tpe.typeSymbol.isPrimitiveValueClass || it.tpe <:< defn.StringType || it.tpe <:< defn.SingletonType =>
@@ -122,7 +124,7 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
       case null =>
         Unknown
 
-  private def mapType(tree: tpd.Tree)(using ctx: Context): TypeSchema =
+  private def mapType(tree: tpd.Tree): Context ?=> TypeSchema =
     tree match
       case s: SeqLiteral      => mapSeqLiteral(s)
       case a: AppliedTypeTree => mapAppliedTypeTree(a)

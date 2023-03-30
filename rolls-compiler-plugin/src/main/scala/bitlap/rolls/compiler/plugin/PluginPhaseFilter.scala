@@ -18,19 +18,19 @@ trait PluginPhaseFilter[T]:
 
   def const(any: Any): Context ?=> tpd.Tree = Literal(Constant(any))
 
-  def existsAnnot(tree: T)(using ctx: Context): Boolean
+  def existsAnnot(tree: T): Context ?=> Boolean
 
-  def handle(tree: T)(using ctx: Context): T
+  def handle(tree: T): Context ?=> T
 
-  def isProduct(clazz: ClassSymbol)(using ctx: Context) = clazz.parentSyms.contains(defn.ProductClass)
+  def isProduct(clazz: ClassSymbol): Context ?=> Boolean = clazz.parentSyms.contains(defn.ProductClass)
 
-  def getDeclarationAnnots(using ctx: Context): List[ClassSymbol] = annotationFullNames.map(requiredClass(_))
+  def getDeclarationAnnots: Context ?=> List[ClassSymbol] = annotationFullNames.map(requiredClass(_))
 
 end PluginPhaseFilter
 
 trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
 
-  def getContrAnnotations(tree: TypeDef)(using ctx: Context): List[tpd.Tree] =
+  def getContrAnnotations(tree: TypeDef): Context ?=> List[tpd.Tree] =
     if (tree.isClassDef && isProduct(tree.symbol.asClass))
       val typeContrAnnots = tree.tpe.typeConstructor.typeSymbol.annotations
       val contrAnnots     = tree.tpe.typeSymbol.primaryConstructor.annotations
@@ -38,7 +38,7 @@ trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
       contrAnnots.map(f => FromSymbol.definitionFromSym(f.symbol)) ++ typeContrAnnots.map(_.tree)
     else tree.tpe.typeSymbol.primaryConstructor.annotations.map(f => FromSymbol.definitionFromSym(f.symbol))
 
-  override def existsAnnot(tree: TypeDef)(using ctx: Context): Boolean = {
+  override def existsAnnot(tree: TypeDef): Context ?=> Boolean = {
     lazy val declarAnnotCls = getDeclarationAnnots
     val contrAnnots         = getContrAnnotations(tree)
     debug(s"${tree.name.show} - contrAnnots:$contrAnnots", EmptyTree)

@@ -7,7 +7,8 @@ import scala.concurrent.Future
 
 /** Start HttpServer.scala to query class schema
  */
-final case class SimpleClassTest @classSchema()() {
+@classSchema
+final case class SimpleClassTest () {
 
   def testMethod(
     listField: List[SubSubSubAuthPermissionPO],
@@ -19,7 +20,7 @@ final case class SimpleClassTest @classSchema()() {
 
 }
 
-@classSchema()
+@classSchema
 final case class CaseClassTest(){
 
   def testMethod1(

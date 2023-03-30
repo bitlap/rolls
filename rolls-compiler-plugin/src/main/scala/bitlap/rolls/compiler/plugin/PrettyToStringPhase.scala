@@ -1,22 +1,18 @@
 package bitlap.rolls.compiler.plugin
 
 import bitlap.rolls.compiler.plugin.*
-import dotty.tools.dotc.ast.{ tpd, untpd, Trees }
+import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.ast.tpd.*
-import dotty.tools.dotc.core.Contexts.{ ctx, Context }
+import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.Names.*
 import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.*
 import dotty.tools.dotc.plugins.PluginPhase
-import dotty.tools.dotc.quoted.reflect.FromSymbol
-import dotty.tools.dotc.report
-import dotty.tools.dotc.transform.{ LambdaLift, PickleQuotes, Staging }
+import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.StdNames.nme
-import dotty.tools.dotc.core.SymDenotations.SymDenotation
 import dotty.tools.dotc.core.Types.MethodType
-import dotty.tools.dotc.util.Spans.NoCoord
 
 import scala.annotation.threadUnsafe
 
@@ -32,22 +28,24 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
 
   override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.prettyToString")
 
-  override def transformTypeDef(tree: tpd.TypeDef)(using ctx: Context): tpd.Tree =
+  override def transformTypeDef(tree: tpd.TypeDef)(using Context): tpd.Tree =
     if (tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
   end transformTypeDef
 
-  private lazy val methodName: Context ?=> Name = StdNames.nme.toString_.asSimpleName
-  private val toStringMethodName                = "toString_"
+  @threadUnsafe private lazy val methodName: Context ?=> Name = StdNames.nme.toString_.asSimpleName
+  private val toStringMethodName                              = "toString_"
 
-  private lazy val RollsRuntimeClass: Context ?=> Symbol = requiredModule("bitlap.rolls.annotations.RollsRuntime")
-  private lazy val Tuple2Class: Context ?=> Symbol       = requiredModule("scala.Tuple2")
+  @threadUnsafe private lazy val RollsRuntimeClass: Context ?=> Symbol = requiredModule(
+    "bitlap.rolls.annotations.RollsRuntime"
+  )
+  @threadUnsafe private lazy val Tuple2Class: Context ?=> Symbol = requiredModule("scala.Tuple2")
 
   private def filterDefDef(tree: tpd.Tree)(using ctx: Context): Boolean =
     tree match
       case dd: DefDef if dd.name == methodName => true
       case _                                   => false
 
-  override def handle(tree: TypeDef)(using ctx: Context): tpd.TypeDef =
+  override def handle(tree: TypeDef): Context ?=> tpd.TypeDef =
     val clazz    = tree.symbol.asClass
     val template = tree.rhs.asInstanceOf[Template]
     val annots   = tree.mods.annotations ++ getContrAnnotations(tree)
@@ -62,7 +60,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
           if an.asSimpleName == annotCls.head.name.asSimpleName =>
         standard
       case o =>
-        debug(s"standard ${tree.name.show} miss match $o", EmptyTree)
+        debug(s"standard ${tree.name.show} missing match $o", EmptyTree)
         false
     }.getOrElse(false)
 

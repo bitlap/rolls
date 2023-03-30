@@ -34,7 +34,8 @@ libraryDependencies += "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
 
 ``` scala
 // query result: curl http://localhost:18000/rolls-schema?className=SimpleClassTest
-final case class SimpleClassTest @classSchema() () {
+@classSchema
+final case class SimpleClassTest () {
   def testMethod(
     listField: List[SubSubSubAuthPermissionPO],
     stringField: String,
