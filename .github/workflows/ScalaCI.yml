@@ -24,7 +24,7 @@ jobs:
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
 
-      - name: Build and Publish to Local
+      - name: Publish Plugin to Local
         run: sbt "rolls-compiler-plugin/publishLocal"
   
   build:
