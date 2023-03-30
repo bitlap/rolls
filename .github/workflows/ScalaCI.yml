@@ -51,7 +51,6 @@ jobs:
         run: sbt coverageAggregate
 
       - name: Upload test coverage report
-        working-directory: ./rolls-tests
         if: success() || failure()
         run: bash <(curl -s https://codecov.io/bash)
   
