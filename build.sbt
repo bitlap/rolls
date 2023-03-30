@@ -52,7 +52,6 @@ lazy val `rolls` = (project in file("."))
     `rolls-compiler-plugin`,
     `rolls-annotations`,
     `rolls-server`,
-    `rolls-tests`
   )
   .settings(
     publish / skip := true,
