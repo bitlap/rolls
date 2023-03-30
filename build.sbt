@@ -19,7 +19,7 @@ inThisBuild(
         email = "dreamylost@outlook.com",
         url = url("https://blog.dreamylost.cn")
       )
-    ),
+    )
   )
 )
 
