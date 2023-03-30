@@ -28,7 +28,7 @@ jobs:
         run: sbt check
 
       - name: Build and Publish to Local
-        run: sbt +publishLocal
+        run: sbt "rolls-compiler-plugin/publishLocal"
   
   test:
     runs-on: ubuntu-latest
