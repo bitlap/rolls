@@ -10,6 +10,23 @@ on:
       - master
 
 jobs:
+  PublishPlugin:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 11 ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java-version }}
+      - name: Cache scala dependencies
+        uses: coursier/cache-action@v6
+
+      - name: Build and Publish to Local
+        run: sbt "rolls-compiler-plugin/publishLocal"
+  
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -24,14 +41,15 @@ jobs:
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
 
+      - name: Build
+        run: sbt compile
+
       - name: Checking Code style
         run: sbt check
-
-      - name: Build and Publish to Local
-        run: sbt "rolls-compiler-plugin/publishLocal"
   
   test:
     runs-on: ubuntu-latest
+    needs: [ PublishPlugin ]
     strategy:
       matrix:
         java-version: [ 11 ]
