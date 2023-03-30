@@ -43,12 +43,10 @@ jobs:
           java-version: ${{ matrix.java-version }}
 
       - name: Run Test
-        working-directory: ./rolls-tests
         if: success() || failure()
         run: sbt coverage test coverageReport
 
       - name: Aggregate coverage report
-        working-directory: ./rolls-tests
         if: success() || failure()
         run: sbt coverageAggregate
 
