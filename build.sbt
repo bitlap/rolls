@@ -3,7 +3,8 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
-ThisBuild / version := "0.1.1-SNAPSHOT"
+val pluginVersion = "0.1.1-SNAPSHOT"
+ThisBuild / version := pluginVersion
 inThisBuild(
   List(
     organization           := "org.bitlap",
@@ -99,7 +100,7 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
     publish / skip      := true,
     name                := "rolls-tests",
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.1-SNAPSHOT"),
+    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % pluginVersion),
     libraryDependencies ++= Seq(
       "org.scalatest"  %% "scalatest"  % "3.2.15" % Test,
       "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
