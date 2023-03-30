@@ -46,10 +46,6 @@ jobs:
         if: success() || failure()
         run: sbt "coverageEnabled; rolls-tests/test; coverageReport"
 
-      - name: Aggregate coverage report
-        if: success() || failure()
-        run: sbt coverageAggregate
-
       - name: Upload test coverage report
         if: success() || failure()
         run: bash <(curl -s https://codecov.io/bash)
