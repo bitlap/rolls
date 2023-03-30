@@ -53,7 +53,8 @@ lazy val `rolls` = (project in file("."))
   .aggregate(
     `rolls-compiler-plugin`,
     `rolls-annotations`,
-    `rolls-server`
+    `rolls-server`,
+    `rolls-tests`
   )
   .settings(
     publish / skip := true,
