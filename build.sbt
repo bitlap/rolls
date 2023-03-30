@@ -73,7 +73,8 @@ lazy val `rolls-annotations` = (project in file("rolls-annotations"))
 lazy val `rolls-server` = (project in file("rolls-server"))
   .settings(
     commonSettings,
-    name := "rolls-server",
+    publish / skip := true,
+    name           := "rolls-server",
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % "42.6.0",
       "com.typesafe"   % "config"     % "1.4.2"
@@ -106,5 +107,4 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
       "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
     )
   )
-  .dependsOn(`rolls-annotations`, `rolls-server`)
-// Users should not depend on `rolls-server` directly in the classpath, this is only used to test `rolls-compiler-plugin`
+  .dependsOn(`rolls-annotations`)

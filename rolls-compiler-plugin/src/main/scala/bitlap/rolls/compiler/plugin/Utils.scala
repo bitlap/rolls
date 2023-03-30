@@ -2,11 +2,11 @@ package bitlap.rolls.compiler.plugin
 
 import java.io.*
 import java.net.*
-import java.net.http.{ HttpClient, HttpRequest, HttpResponse }
+import java.net.http.*
 import java.net.http.HttpRequest.BodyPublishers
 import java.nio.file.*
 import java.time.Duration
-import scala.annotation.{ targetName, threadUnsafe }
+import scala.annotation.*
 import scala.util.Using
 
 /** @author
