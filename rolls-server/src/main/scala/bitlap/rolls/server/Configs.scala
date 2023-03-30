@@ -1,4 +1,4 @@
-package bitlap.rolls.plugin.server
+package bitlap.rolls.server
 
 import com.typesafe.config.ConfigFactory
 

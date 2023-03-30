@@ -1,6 +1,6 @@
-package bitlap.rolls.test
+package bitlap.rolls.tests
 
-import bitlap.rolls.annotations.{customRhsMapping, rhsMapping}
+import bitlap.rolls.annotations.*
 
 import scala.concurrent.Future
 
@@ -16,5 +16,6 @@ object MappingExample extends App:
 //
 //  println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
 //  println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
+
 
 end MappingExample

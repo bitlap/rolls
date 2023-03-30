@@ -1,4 +1,4 @@
-package bitlap.rolls.plugin.server
+package bitlap.rolls.server
 
 import com.sun.net.httpserver.{ HttpExchange, HttpHandler, HttpServer as NHttpServer }
 
@@ -10,6 +10,12 @@ import java.net.InetSocketAddress
  */
 object HttpServer extends App {
 
+  /** in sbt
+   *
+   *  > sbt
+   *
+   *  > rolls-server/runMain bitlap.rolls.server.HttpServer
+   */
   private lazy val server = NHttpServer.create(new InetSocketAddress(Configs.port), 0)
 
   server.createContext("/rolls-mapping", new ResolveHandler())

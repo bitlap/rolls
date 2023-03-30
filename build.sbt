@@ -106,4 +106,5 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
       "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
     )
   )
-  .dependsOn(`rolls-annotations`)
+  .dependsOn(`rolls-annotations`, `rolls-server`)
+// Users should not depend on `rolls-server` directly in the classpath, this is only used to test `rolls-compiler-plugin`

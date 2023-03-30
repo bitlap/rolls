@@ -1,10 +1,10 @@
 package bitlap.rolls.compiler.plugin
 
-import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, InputStream, ObjectInputStream, ObjectOutputStream }
-import java.net.{ ProxySelector, URI }
+import java.io.*
+import java.net.*
 import java.net.http.{ HttpClient, HttpRequest, HttpResponse }
 import java.net.http.HttpRequest.BodyPublishers
-import java.nio.file.{ Files, OpenOption, Paths, StandardOpenOption }
+import java.nio.file.*
 import java.time.Duration
 import scala.annotation.{ targetName, threadUnsafe }
 import scala.util.Using
@@ -46,7 +46,7 @@ object Utils {
     val response = client.send(request, HttpResponse.BodyHandlers.ofString)
     if response.statusCode == OK then response.body else Empty
 
-  private def sendRhsClassSchema(body: HttpRequest.BodyPublisher): String =
+  private def sendClassSchema(body: HttpRequest.BodyPublisher): String =
     val request = HttpRequest.newBuilder
       .header(ContentType, `application/json`)
       .version(HttpClient.Version.HTTP_2)
@@ -71,23 +71,36 @@ object Utils {
           f.delete()
         }
 
-        Files.createDirectories((Paths.get(folder)))
+        Files.createDirectories(Paths.get(folder))
         Files.createFile(file)
         Files.write(file, byteArr.toByteArray).getFileName.toUri.toString
 //        val buffer = BodyPublishers.ofByteArray(byteArr.toByteArray)
-//        sendRhsClassSchema(buffer)
+//        sendClassSchema(buffer)
       }
     }
 
   def readObject(inputStream: InputStream): ClassSchema =
-    Using.resource(new ObjectInputStream(inputStream)) { objectInputStream =>
+    Using.resource(new ObjectInputStreamWithCustomClassLoader(inputStream)) { objectInputStream =>
       objectInputStream.readObject().asInstanceOf[ClassSchema]
     }
 
   def readObject(className: String): ClassSchema =
     Using.resource(
-      new ObjectInputStream(new ByteArrayInputStream(Files.readAllBytes(Paths.get(fileName.format(className)))))
+      new ObjectInputStreamWithCustomClassLoader(
+        new ByteArrayInputStream(Files.readAllBytes(Paths.get(fileName.format(className))))
+      )
     ) { objectInputStream =>
       objectInputStream.readObject().asInstanceOf[ClassSchema]
     }
+
+  private class ObjectInputStreamWithCustomClassLoader(
+    inputStream: InputStream
+  ) extends ObjectInputStream(inputStream):
+    override def resolveClass(desc: java.io.ObjectStreamClass): Class[_] =
+      try
+        Class.forName(desc.getName, false, getClass.getClassLoader)
+      catch {
+        case ignore: ClassNotFoundException =>
+          super.resolveClass(desc)
+      }
 }

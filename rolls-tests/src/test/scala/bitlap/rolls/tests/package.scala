@@ -1,6 +1,7 @@
 package bitlap.rolls.tests
 
-import bitlap.rolls.annotations.prettyToString
+import bitlap.rolls.annotations.*
+import java.time.Instant
 
 /** @author
  *    梦境迷离
@@ -17,12 +18,12 @@ final case class TestCaseClassJson(
 
 @prettyToString(standard = false)
 final case class TestCaseClassJsonNamedArg(
-                                    id: String,
-                                    tenantId: Map[String, String],
-                                    private val resourceActions: List[String],
-                                    deleted: Long,
-                                    subPermissions: List[String]
-                                  )
+  id: String,
+  tenantId: Map[String, String],
+  private val resourceActions: List[String],
+  deleted: Long,
+  subPermissions: List[String]
+)
 
 @prettyToString(true)
 final case class TestCaseClassStandard(
@@ -67,4 +68,84 @@ final class TestClassJson(
   private val resourceActions: List[String],
   deleted: Long,
   subPermissions: List[String]
+)
+
+/** Start HttpServer.scala to query class schema
+ */
+@classSchema
+final case class SimpleClassTest() {
+
+  def testMethod(
+    listField: List[SubSubSubAuthPermissionPO],
+    stringField: String,
+    optField: Option[SubSubSubAuthPermissionPO],
+    NestedObjectField: SubSubSubAuthPermissionPO,
+    eitherField: Either[String, SubSubSubAuthPermissionPO]
+  ): SubSubSubAuthPermissionPO = ???
+
+}
+
+@classSchema
+final case class CaseClassTest() {
+
+  def testMethod1(
+    listField: List[AuthPermissionPO],
+    stringField: String,
+    longOptField: Option[Long],
+    NestedObjectField: SubAuthPermissionPO,
+    eitherField: Either[String, AuthPermissionPO],
+    simpleEitherField: Either[Throwable, String]
+  ): Seq[AuthPermissionPO] = ???
+
+  def testMethod2(): Either[String, AuthPermissionPO] = ???
+  def testMethod3(): Either[Throwable, String]        = ???
+  def testMethod4(): AuthPermissionPO                 = ???
+  def testMethod5(): Map[String, AuthPermissionPO]    = ???
+  def testMethod6(): Array[AuthPermissionPO]          = ???
+  def testMethod7(): Array[String]                    = ???
+
+}
+
+@classSchema
+class ClassTest {
+
+  def testMethod1(
+    listField: List[AuthPermissionPO],
+    stringField: String,
+    longField: Long,
+    NestedObjectField: SubAuthPermissionPO,
+    eitherField: Either[String, AuthPermissionPO],
+    simpleEitherField: Either[Throwable, String]
+  ): Seq[AuthPermissionPO] = ???
+
+  def testMethod2(): Either[String, AuthPermissionPO] = ???
+  def testMethod3(): Either[Throwable, String]        = ???
+  def testMethod4(): AuthPermissionPO                 = ???
+  def testMethod5(): Map[String, AuthPermissionPO]    = ???
+
+}
+
+final case class AuthPermissionPO(
+  id: String,
+  tenantId: Map[String, SubSubSubAuthPermissionPO],
+  resourceActions: List[String],
+  deleted: Int = 99,
+  updateTime: Instant = Instant.now(),
+  subPermissions: List[SubAuthPermissionPO],
+  subPermission: SubAuthPermissionPO
+)
+
+final case class SubAuthPermissionPO(
+  subsub: SubSubAuthPermissionPO,
+  subsubMap: Map[String, SubSubSubAuthPermissionPO],
+  subsubList: List[SubSubSubAuthPermissionPO]
+)
+
+final case class SubSubAuthPermissionPO(
+  id: String,
+  subsubsub: SubSubSubAuthPermissionPO
+)
+
+final case class SubSubSubAuthPermissionPO(
+  list: List[String]
 )
