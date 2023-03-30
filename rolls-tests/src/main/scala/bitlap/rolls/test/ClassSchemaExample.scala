@@ -1,4 +1,4 @@
-package bitlap.rolls.example
+package bitlap.rolls.test
 
 import bitlap.rolls.annotations.*
 

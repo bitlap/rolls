@@ -59,8 +59,8 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
       case Apply(Select(New(Ident(an)), _), List(NamedArg(_, Literal(Constant(standard: Boolean)))))
           if an.asSimpleName == annotCls.head.name.asSimpleName =>
         standard
-      case o =>
-        debug(s"standard ${tree.name.show} missing match $o", EmptyTree)
+      case Apply(Select(New(Ident(an)), _), List(Select(Ident(_), _)))
+          if an.asSimpleName == annotCls.head.name.asSimpleName =>
         false
     }.getOrElse(false)
 
@@ -72,7 +72,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
           case o => o
       }
       val ret = tpd.ClassDefWithParents(clazz, template.constr, template.parents, newBody)
-      debug(s"Modify ${tree.name.show} toString", ret)
+      debug(s"Modify ${tree.name.show} toString", EmptyTree)
       ret
     else
       val meth: Symbol = newSymbol(

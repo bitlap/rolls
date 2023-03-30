@@ -94,15 +94,16 @@ lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
     )
   )
 
-lazy val `rolls-example` = (project in file("rolls-example"))
+lazy val `rolls-tests` = (project in file("rolls-tests"))
   .settings(
     commonSettings,
     publish / skip      := true,
-    name                := "rolls-example",
+    name                := "rolls-tests",
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT")
-//    libraryDependencies ++= List(
-//      "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
-//    )
+    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT"),
+    libraryDependencies ++= Seq(
+      "org.scalatest"  %% "scalatest"  % "3.2.15" % Test,
+      "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
+    )
   )
   .dependsOn(`rolls-annotations`)

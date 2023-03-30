@@ -34,7 +34,6 @@ final class RhsMappingPhase extends PluginPhase with PluginPhaseFilter[tpd.ValDe
         true
       case Apply(Select(New(Ident(an)), _), _) if an.asSimpleName == annotCls(1).name.asSimpleName =>
         true
-      case _ => false
     }.getOrElse(false)
   }
 
@@ -47,7 +46,6 @@ final class RhsMappingPhase extends PluginPhase with PluginPhaseFilter[tpd.ValDe
         listNameArgs.collect { case NamedArg(n, Literal(Constant(v: String))) =>
           n.asSimpleName.toString -> v
         }.toMap
-      case _ => Map.empty
     }.getOrElse(Map.empty)
 
     val _idColumn    = nameArgs.getOrElse("idColumn", "")

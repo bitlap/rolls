@@ -34,20 +34,23 @@ trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
     if (tree.isClassDef && isProduct(tree.symbol.asClass))
       val typeContrAnnots = tree.tpe.typeConstructor.typeSymbol.annotations
       val contrAnnots     = tree.tpe.typeSymbol.primaryConstructor.annotations
-      debug(s"${tree.name.show} - typeContrAnnots:${typeContrAnnots.map(_.tree)} - contrAnnots:$contrAnnots", tree)
+      debug(
+        s"${tree.name.show} - getContrAnnotations - typeContrAnnots:${typeContrAnnots.map(_.tree)} - contrAnnots:$contrAnnots",
+        tree
+      )
       contrAnnots.map(f => FromSymbol.definitionFromSym(f.symbol)) ++ typeContrAnnots.map(_.tree)
     else tree.tpe.typeSymbol.primaryConstructor.annotations.map(f => FromSymbol.definitionFromSym(f.symbol))
 
   override def existsAnnot(tree: TypeDef): Context ?=> Boolean = {
     lazy val declarAnnotCls = getDeclarationAnnots
     val contrAnnots         = getContrAnnotations(tree)
-    debug(s"${tree.name.show} - contrAnnots:$contrAnnots", EmptyTree)
     lazy val exists = (contrAnnots ++ tree.mods.annotations).collectFirst {
       case Apply(Select(New(Ident(an)), _), args) if declarAnnotCls.exists(_.name.asSimpleName == an.asSimpleName) =>
         debug(s"${tree.name.show} - annot args:$args", EmptyTree)
         true
-      case _ => false
     }.getOrElse(false)
+
+    debug(s"${tree.name.show} - $exists - total contrAnnots:$contrAnnots", EmptyTree)
 
     exists
   }
