@@ -1,5 +1,6 @@
 package bitlap.rolls.annotations
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -8,9 +9,10 @@ import com.github.pjfanning.`enum`.EnumModule
 
 object RollsRuntime {
 
-  private final val mapper = JsonMapper
+  final val mapper = JsonMapper
     .builder()
     .addModule(DefaultScalaModule)
+    .serializationInclusion(JsonInclude.Include.NON_NULL)
     .addModule(EnumModule)
     .addModule(new JavaTimeModule)
     .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)

@@ -27,7 +27,6 @@ addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheckAll")
 
 lazy val scala3Version  = "3.2.0"
-lazy val circeVersion   = "0.14.1"
 lazy val jacksonVersion = "2.14.1"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -52,7 +51,8 @@ lazy val `rolls` = (project in file("."))
   .aggregate(
     `rolls-compiler-plugin`,
     `rolls-annotations`,
-    `rolls-server`
+    `rolls-server`,
+    `rolls-tests`
   )
   .settings(
     publish / skip := true,
@@ -78,13 +78,9 @@ lazy val `rolls-server` = (project in file("rolls-server"))
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % "42.6.0",
       "com.typesafe"   % "config"     % "1.4.2"
-    ) ++ Seq(
-      "io.circe" %% "circe-core",
-      "io.circe" %% "circe-generic",
-      "io.circe" %% "circe-parser"
-    ).map(_ % circeVersion)
+    )
   )
-  .dependsOn(`rolls-compiler-plugin`)
+  .dependsOn(`rolls-compiler-plugin`, `rolls-annotations`)
 
 lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
   .settings(

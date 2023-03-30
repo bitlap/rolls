@@ -1,6 +1,7 @@
 package bitlap.rolls.server
 
 import bitlap.rolls.compiler.plugin.ClassSchema
+import bitlap.rolls.annotations.RollsRuntime
 import com.sun.net.httpserver.HttpExchange
 
 /** @author
@@ -18,4 +19,4 @@ def getParamsFromQuery(exchange: HttpExchange): Map[String, String] = {
     .toMap
 }
 def schemaAsJson(schema: ClassSchema): String =
-  PostSchemaHandler.ClassSchemaEncoder(schema).deepDropNullValues.dropEmptyValues.noSpaces
+  RollsRuntime.mapper.writeValueAsString(schema)

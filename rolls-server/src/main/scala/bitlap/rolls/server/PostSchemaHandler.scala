@@ -2,21 +2,11 @@ package bitlap.rolls.server
 
 import bitlap.rolls.compiler.plugin.{ ClassSchema, MethodSchema, TypeSchema, Utils }
 import com.sun.net.httpserver.*
-import io.circe.{ Encoder, Json }
-import io.circe.generic.semiauto.deriveEncoder
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/3/20
  */
-object PostSchemaHandler {
-
-  given ClassSchemaEncoder: Encoder[ClassSchema]   = deriveEncoder[ClassSchema]
-  given TypeSchemaEncoder: Encoder[TypeSchema]     = deriveEncoder[TypeSchema]
-  given MethodSchemaEncoder: Encoder[MethodSchema] = deriveEncoder[MethodSchema]
-  given methodSchemaEncoder[T](using io.circe.Encoder[T]): Encoder[List[T]] = (items: List[T]) =>
-    if (items.nonEmpty) Encoder.encodeList.apply(items) else Json.Null
-}
 final class PostSchemaHandler extends HttpHandler {
 
   def handle(exchange: HttpExchange): Unit =

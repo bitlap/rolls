@@ -17,5 +17,4 @@ object MappingExample extends App:
 //  println(re1) // `select id from schema.table where resource = 'menu' and action = 'operate'`
 //  println(re2) // `select id from schema.table where resource = 'menu' and action = 'operate'`
 
-
 end MappingExample
