@@ -1,6 +1,6 @@
 ThisBuild / resolvers ++= Seq(
   Resolver.mavenLocal,
-  "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots/",
+  "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots",
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 val pluginVersion = "0.1.2-SNAPSHOT"
@@ -29,7 +29,7 @@ inThisBuild(
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheckAll")
 
-lazy val scala3Version  = "3.2.0"
+lazy val scala3Version  = "3.2.2"
 lazy val jacksonVersion = "2.14.1"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
@@ -47,6 +47,7 @@ lazy val commonSettings =
       "-deprecation",
       "-feature",
       "-Ydebug"
+//      "-Xshow-phases"
     )
   )
 
@@ -99,7 +100,10 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
     commonSettings,
     publish / skip := true,
     name           := "rolls-tests",
-    scalacOptions += "-P:RollsCompilerPlugin:/Users/liguobin/Projects/rolls/config.properties",
+    scalacOptions ++= Seq(
+//      "-P:RollsCompilerPlugin:/Users/liguobin/Projects/rolls/config.properties",
+      "-Xprint:parser,typer,posttyper,erasure"
+    ),
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % pluginVersion),
     libraryDependencies ++= Seq(

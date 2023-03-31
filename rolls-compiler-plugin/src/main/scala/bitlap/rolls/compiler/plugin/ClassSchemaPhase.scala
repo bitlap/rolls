@@ -17,7 +17,7 @@ import scala.annotation.threadUnsafe
  *    梦境迷离
  *  @version 1.0,2023/3/21
  */
-final class ClassSchemaPhase(setting: Setting) extends PluginPhase with TypeDefPluginPhaseFilter:
+final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with TypeDefPluginPhaseFilter:
 
   override val phaseName               = "ClassSchemaPhase"
   override val runsAfter: Set[String]  = Set(Staging.name)
@@ -33,7 +33,7 @@ final class ClassSchemaPhase(setting: Setting) extends PluginPhase with TypeDefP
 
   override def handle(tree: TypeDef): Context ?=> TypeDef = {
     if tree.isClassDef then
-      val template     = tree.rhs.asInstanceOf[Template]
+      val template     = templateBody(tree)
       val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
       val classSchema  = ClassSchema(tree.name.show, methodSchema)
       Utils.sendClassSchema(classSchema, setting.config)
@@ -81,7 +81,7 @@ final class ClassSchemaPhase(setting: Setting) extends PluginPhase with TypeDefP
         Unknown
 
   private def mapTemplate(tree: TypeDef): Context ?=> TypeSchema = {
-    val ps = tree.rhs.asInstanceOf[Template].body.collect { case vd: ValDef => mapType(vd) }
+    val ps = templateBody(tree).body.collect { case vd: ValDef => mapType(vd) }
     TypeSchema(
       typeName = tree.name.show,
       fields = if tree.tpe.typeSymbol.is(Abstract) then List.empty else ps

@@ -21,12 +21,13 @@
   - Generate `toString`, has one `standard` arg for config, default is `false`
   - If `standard` is `true`,  `toString` get `Test(field1=value1,field2=value2)`
   - If `standard` is `false`,  `toString` get `{"field1":"value1","field2":"value2"}`
+- config `config.properties`
 
 ## config
 ``` sbt
 autoCompilerPlugins := true
-addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT")
-libraryDependencies += "org.bitlap" %% "rolls-core" % "0.1.0-SNAPSHOT"
+addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.2-SNAPSHOT")
+libraryDependencies += "org.bitlap" %% "rolls-core" % "0.1.2-SNAPSHOT"
 ```
 
 ## @classSchema

@@ -18,7 +18,7 @@ import scala.annotation.threadUnsafe
  *    梦境迷离
  *  @version 1.0,2023/3/28
  */
-final class PrettyToStringPhase(setting: Setting) extends PluginPhase with TypeDefPluginPhaseFilter:
+final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with TypeDefPluginPhaseFilter:
 
   override val phaseName               = "PrettyToStringPhase"
   override val runsAfter: Set[String]  = Set(Staging.name)
@@ -45,7 +45,7 @@ final class PrettyToStringPhase(setting: Setting) extends PluginPhase with TypeD
 
   override def handle(tree: TypeDef): Context ?=> TypeDef =
     val clazz    = tree.symbol.asClass
-    val template = tree.rhs.asInstanceOf[Template]
+    val template = templateBody(tree)
     val annots   = tree.mods.annotations ++ getContrAnnotations(tree)
     val annotCls = getDeclarationAnnots
     val standard = annots.collectFirst {

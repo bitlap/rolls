@@ -30,6 +30,8 @@ trait PluginPhaseFilter[T]:
 
   def getDeclarationAnnots: Context ?=> List[ClassSymbol] = annotationFullNames.map(requiredClass(_))
 
+  def templateBody(tree: TypeDef): Context ?=> Template = tree.rhs.asInstanceOf[Template]
+
 end PluginPhaseFilter
 
 trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:

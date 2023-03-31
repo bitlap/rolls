@@ -16,7 +16,7 @@ import scala.io.Source
  *    梦境迷离
  *  @version 1.0,2023/3/31
  */
-final case class Config(
+final case class RollsConfig(
   classSchema: String = "bitlap.rolls.core.annotations.classSchema",
   prettyToString: String = "bitlap.rolls.core.annotations.prettyToString",
   rhsMapping: String = "bitlap.rolls.core.annotations.rhsMapping",
@@ -28,16 +28,16 @@ final case class Config(
   classSchemaQueryUri: String = "http://localhost:18000/rolls-schema",
   postClassSchemaToServer: Boolean = false
 )
-object Config:
-  lazy val default: Config = Config()
-end Config
+object RollsConfig:
+  lazy val default: RollsConfig = RollsConfig()
+end RollsConfig
 
-final class Setting(configFile: Option[String]) {
+final class RollsSetting(configFile: Option[String]) {
 
-  def config: Config = readConfig()
+  def config: RollsConfig = readConfig()
 
-  private def readConfig(): Config = {
-    val default = Config.default
+  private def readConfig(): RollsConfig = {
+    val default = RollsConfig.default
     configFile.map { file =>
       val bufferedSource = Source.fromFile(file)
       val config = bufferedSource.getLines.foldLeft(default) { (config, line) =>
@@ -55,7 +55,7 @@ final class Setting(configFile: Option[String]) {
             case "rhsMappingUri"           => config.copy(rhsMappingUri = parts(1).trim)
             case "classSchemaPostUri"      => config.copy(classSchemaPostUri = parts(1).trim)
             case "classSchemaQueryUri"     => config.copy(classSchemaQueryUri = parts(1).trim)
-            case "postClassSchemaToServer" => config.copy(postClassSchemaToServer = parts(1).trim)
+            case "postClassSchemaToServer" => config.copy(postClassSchemaToServer = parts(1).trim.toBoolean)
         }
       }
       bufferedSource.close()

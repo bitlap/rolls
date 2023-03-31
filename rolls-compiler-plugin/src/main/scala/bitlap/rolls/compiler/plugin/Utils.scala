@@ -42,7 +42,7 @@ object Utils {
     val response = client.send(request, HttpResponse.BodyHandlers.ofString)
     if response.statusCode == OK then response.body else Empty
 
-  private def sendClassSchema(body: HttpRequest.BodyPublisher, config: Config): String =
+  private def postClassSchema(body: HttpRequest.BodyPublisher, config: RollsConfig): String =
     val request = HttpRequest.newBuilder
       .header(ContentType, `application/json`)
       .version(HttpClient.Version.HTTP_2)
@@ -53,7 +53,7 @@ object Utils {
     val response = client.send(request, HttpResponse.BodyHandlers.ofString)
     if response.statusCode == OK then response.body else Empty
 
-  def sendClassSchema(classSchema: ClassSchema, config: Config): String =
+  def sendClassSchema(classSchema: ClassSchema, config: RollsConfig): Unit =
     Using.resource(new ByteArrayOutputStream()) { byteArr =>
       Using.resource(new ObjectOutputStream(byteArr)) { outputStream =>
         outputStream.writeObject(classSchema)
@@ -72,7 +72,7 @@ object Utils {
         Files.write(file, byteArr.toByteArray).getFileName.toUri.toString
         if (config.postClassSchemaToServer) {
           val buffer = BodyPublishers.ofByteArray(byteArr.toByteArray)
-          sendClassSchema(buffer)
+          postClassSchema(buffer, config)
         }
       }
     }
@@ -82,7 +82,7 @@ object Utils {
       objectInputStream.readObject().asInstanceOf[ClassSchema]
     }
 
-  def readObject(className: String, config: Config = Config.default): ClassSchema =
+  def readObject(className: String, config: RollsConfig = RollsConfig.default): ClassSchema =
     Using.resource(
       new ObjectInputStreamWithCustomClassLoader(
         new ByteArrayInputStream(
