@@ -25,12 +25,14 @@ object HttpServer extends App {
   def stop = server.stop(3)
 
   def start = {
-    println("""/\.__  /\        
-              |______)/|  |_)/  ______
-              |\_  __ \|  |  \ /  ___/
-              | |  | \/|   Y  \\___ \ 
-              | |__|   |___|  /____  >
-              |             \/     \/ """.stripMargin)
+    println("""
+              |              .__  .__          
+              |_______  ____ |  | |  |   ______
+              |\_  __ \/  _ \|  | |  |  /  ___/
+              | |  | \(  <_> )  |_|  |__\___ \ 
+              | |__|   \____/|____/____/____  >
+              |                             \/ 
+              |""".stripMargin)
     println(s"started at port: ${Configs.port}")
     server.start()
   }
