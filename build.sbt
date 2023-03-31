@@ -53,7 +53,7 @@ lazy val commonSettings =
 lazy val `rolls` = (project in file("."))
   .aggregate(
     `rolls-compiler-plugin`,
-    `rolls-annotations`,
+    `rolls-core`,
     `rolls-server`,
     `rolls-tests`
   )
@@ -62,10 +62,10 @@ lazy val `rolls` = (project in file("."))
     commonSettings
   )
 
-lazy val `rolls-annotations` = (project in file("rolls-annotations"))
+lazy val `rolls-core` = (project in file("rolls-core"))
   .settings(
     commonSettings,
-    name := "rolls-annotations",
+    name := "rolls-core",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion,
       "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion,
@@ -83,7 +83,7 @@ lazy val `rolls-server` = (project in file("rolls-server"))
       "com.typesafe"   % "config"     % "1.4.2"
     )
   )
-  .dependsOn(`rolls-compiler-plugin`, `rolls-annotations`)
+  .dependsOn(`rolls-compiler-plugin`, `rolls-core`)
 
 lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
   .settings(
@@ -106,4 +106,4 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
       "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
     )
   )
-  .dependsOn(`rolls-annotations`)
+  .dependsOn(`rolls-core`)

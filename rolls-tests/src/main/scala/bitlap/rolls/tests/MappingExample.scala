@@ -1,6 +1,6 @@
 package bitlap.rolls.tests
 
-import bitlap.rolls.annotations.*
+import bitlap.rolls.core.*
 
 import scala.concurrent.Future
 

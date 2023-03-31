@@ -26,7 +26,7 @@
 ``` sbt
 autoCompilerPlugins := true
 addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT")
-libraryDependencies += "org.bitlap" %% "rolls-annotations" % "0.1.0-SNAPSHOT"
+libraryDependencies += "org.bitlap" %% "rolls-core" % "0.1.0-SNAPSHOT"
 ```
 
 ## @classSchema

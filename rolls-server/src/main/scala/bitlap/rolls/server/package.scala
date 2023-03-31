@@ -1,7 +1,7 @@
 package bitlap.rolls.server
 
 import bitlap.rolls.compiler.plugin.ClassSchema
-import bitlap.rolls.annotations.RollsRuntime
+import bitlap.rolls.core.RollsRuntime
 import com.sun.net.httpserver.HttpExchange
 
 /** @author

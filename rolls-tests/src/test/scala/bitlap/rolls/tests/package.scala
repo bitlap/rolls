@@ -1,6 +1,8 @@
 package bitlap.rolls.tests
 
-import bitlap.rolls.annotations.*
+import bitlap.rolls.core.*
+import bitlap.rolls.core.annotations.{ classSchema, prettyToString }
+
 import java.time.Instant
 
 /** @author

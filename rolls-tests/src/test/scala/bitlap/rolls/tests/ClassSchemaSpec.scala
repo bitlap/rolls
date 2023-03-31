@@ -1,6 +1,6 @@
 package bitlap.rolls.tests
 
-import bitlap.rolls.annotations.prettyToString
+import bitlap.rolls.core.annotations.prettyToString
 import org.scalacheck.Gen
 import org.scalacheck.Gen.*
 import org.scalatest.flatspec.AnyFlatSpec

@@ -30,7 +30,7 @@ final class ClassSchemaPhase extends PluginPhase with TypeDefPluginPhaseFilter:
 
   @threadUnsafe private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
 
-  override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.classSchema")
+  override val annotationFullNames: List[String] = List("bitlap.rolls.core.annotations.classSchema")
 
   override def handle(tree: TypeDef): Context ?=> tpd.TypeDef = {
     if tree.isClassDef then

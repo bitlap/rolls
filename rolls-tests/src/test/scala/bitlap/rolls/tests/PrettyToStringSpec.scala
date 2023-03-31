@@ -4,7 +4,7 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalacheck.Gen
 import Gen.*
-import bitlap.rolls.annotations.prettyToString
+import bitlap.rolls.core.annotations.prettyToString
 
 import java.time.Instant
 

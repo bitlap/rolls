@@ -1,4 +1,4 @@
-package bitlap.rolls.annotations
+package bitlap.rolls.core.annotations
 
 import scala.annotation.StaticAnnotation
 

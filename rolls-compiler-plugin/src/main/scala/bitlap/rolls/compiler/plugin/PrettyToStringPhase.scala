@@ -26,7 +26,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
-  override val annotationFullNames: List[String] = List("bitlap.rolls.annotations.prettyToString")
+  override val annotationFullNames: List[String] = List("bitlap.rolls.core.annotations.prettyToString")
 
   override def transformTypeDef(tree: tpd.TypeDef)(using Context): tpd.Tree =
     if (tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
@@ -36,7 +36,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
   private val toStringMethodName                              = "toString_"
 
   @threadUnsafe private lazy val RollsRuntimeClass: Context ?=> Symbol = requiredModule(
-    "bitlap.rolls.annotations.RollsRuntime"
+    "bitlap.rolls.core.RollsRuntime"
   )
   @threadUnsafe private lazy val Tuple2Class: Context ?=> Symbol = requiredModule("scala.Tuple2")
 

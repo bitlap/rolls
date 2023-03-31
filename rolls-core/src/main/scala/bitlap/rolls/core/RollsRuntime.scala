@@ -1,4 +1,4 @@
-package bitlap.rolls.annotations
+package bitlap.rolls.core
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -9,7 +9,7 @@ import com.github.pjfanning.`enum`.EnumModule
 
 object RollsRuntime {
 
-  final val mapper = JsonMapper
+  final lazy val mapper = JsonMapper
     .builder()
     .addModule(DefaultScalaModule)
     .serializationInclusion(JsonInclude.Include.NON_NULL)
