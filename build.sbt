@@ -3,7 +3,7 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots/",
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
-val pluginVersion = "0.1.1-SNAPSHOT"
+val pluginVersion = "0.1.2-SNAPSHOT"
 ThisBuild / version := pluginVersion
 inThisBuild(
   List(
@@ -97,8 +97,9 @@ lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
 lazy val `rolls-tests` = (project in file("rolls-tests"))
   .settings(
     commonSettings,
-    publish / skip      := true,
-    name                := "rolls-tests",
+    publish / skip := true,
+    name           := "rolls-tests",
+    scalacOptions += "-P:RollsCompilerPlugin:/Users/liguobin/Projects/rolls/config.properties",
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % pluginVersion),
     libraryDependencies ++= Seq(

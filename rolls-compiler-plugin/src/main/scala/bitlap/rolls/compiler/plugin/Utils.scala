@@ -21,9 +21,8 @@ object Utils {
   final val ContentType = "Content-Type"
   @targetName("applicationJson")
   final val `application/json` = "application/json"
-  private final val folder     = "/tmp/.compiler"
-  private val fileName         = s"$folder/classSchema_%s.txt"
-  private val timeout          = Duration.ofSeconds(5)
+
+  private val timeout = Duration.ofSeconds(5)
   private lazy val client = HttpClient
     .newBuilder()
     .version(HttpClient.Version.HTTP_2)
@@ -31,9 +30,6 @@ object Utils {
     .followRedirects(HttpClient.Redirect.NEVER)
     .proxy(ProxySelector.getDefault)
     .build()
-
-  val reqUrl            = "http://localhost:18000/rolls-mapping"
-  private val reqDocUrl = "http://localhost:18000/rolls-doc"
 
   def sendRhsMapping(url: String): String =
     val request = HttpRequest.newBuilder
@@ -46,36 +42,38 @@ object Utils {
     val response = client.send(request, HttpResponse.BodyHandlers.ofString)
     if response.statusCode == OK then response.body else Empty
 
-  private def sendClassSchema(body: HttpRequest.BodyPublisher): String =
+  private def sendClassSchema(body: HttpRequest.BodyPublisher, config: Config): String =
     val request = HttpRequest.newBuilder
       .header(ContentType, `application/json`)
       .version(HttpClient.Version.HTTP_2)
-      .uri(URI.create(reqDocUrl))
+      .uri(URI.create(config.classSchemaPostUri))
       .POST(body)
       .timeout(timeout)
       .build
     val response = client.send(request, HttpResponse.BodyHandlers.ofString)
     if response.statusCode == OK then response.body else Empty
 
-  def sendClassSchema(classSchema: ClassSchema): String =
+  def sendClassSchema(classSchema: ClassSchema, config: Config): String =
     Using.resource(new ByteArrayOutputStream()) { byteArr =>
       Using.resource(new ObjectOutputStream(byteArr)) { outputStream =>
         outputStream.writeObject(classSchema)
         outputStream.flush()
-        val file = Paths.get(fileName.format(classSchema.className))
+        val file = Paths.get(config.classSchemaFolder, "/", config.classSchemaFileName.format(classSchema.className))
         if (file.toFile.exists()) {
           file.toFile.delete()
         }
-        val f = new java.io.File(folder)
+        val f = new java.io.File(config.classSchemaFolder)
         if (f.exists()) {
           f.delete()
         }
 
-        Files.createDirectories(Paths.get(folder))
+        Files.createDirectories(Paths.get(config.classSchemaFolder))
         Files.createFile(file)
         Files.write(file, byteArr.toByteArray).getFileName.toUri.toString
-//        val buffer = BodyPublishers.ofByteArray(byteArr.toByteArray)
-//        sendClassSchema(buffer)
+        if (config.postClassSchemaToServer) {
+          val buffer = BodyPublishers.ofByteArray(byteArr.toByteArray)
+          sendClassSchema(buffer)
+        }
       }
     }
 
@@ -84,10 +82,12 @@ object Utils {
       objectInputStream.readObject().asInstanceOf[ClassSchema]
     }
 
-  def readObject(className: String): ClassSchema =
+  def readObject(className: String, config: Config = Config.default): ClassSchema =
     Using.resource(
       new ObjectInputStreamWithCustomClassLoader(
-        new ByteArrayInputStream(Files.readAllBytes(Paths.get(fileName.format(className))))
+        new ByteArrayInputStream(
+          Files.readAllBytes(Paths.get(config.classSchemaFolder, "/", config.classSchemaFileName.format(className)))
+        )
       )
     ) { objectInputStream =>
       objectInputStream.readObject().asInstanceOf[ClassSchema]

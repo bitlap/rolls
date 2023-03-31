@@ -1,8 +1,8 @@
 package bitlap.rolls.compiler.plugin
 
 import bitlap.rolls.compiler.plugin.Utils
+import dotty.tools.dotc.ast.*
 import dotty.tools.dotc.ast.tpd.*
-import dotty.tools.dotc.ast.{ tpd, Trees }
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Symbols.*
@@ -14,18 +14,17 @@ import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
  *    梦境迷离
  *  @version 1.0,2023/3/27
  */
-final class RhsMappingPhase extends PluginPhase with PluginPhaseFilter[tpd.ValDef] {
+final class RhsMappingPhase(setting: Setting) extends PluginPhase with PluginPhaseFilter[ValDef] {
 
   override val phaseName               = "RhsMappingPhase"
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
-  override def transformValDef(tree: tpd.ValDef)(using Context): tpd.Tree =
+  override def transformValDef(tree: ValDef)(using Context): Tree =
     if (existsAnnot(tree)) handle(tree) else tree
   end transformValDef
 
-  override val annotationFullNames: List[String] =
-    List("bitlap.rolls.core.annotations.rhsMapping", "bitlap.rolls.core.annotations.customRhsMapping")
+  override val annotationFullNames: List[String] = List(setting.config.rhsMapping, setting.config.customRhsMapping)
 
   override def existsAnnot(tree: ValDef): Context ?=> Boolean = {
     val annotCls = annotationFullNames.map(requiredClass(_))
@@ -63,7 +62,7 @@ final class RhsMappingPhase extends PluginPhase with PluginPhaseFilter[tpd.ValDe
         }
 
         val httpUrl =
-          s"${Utils.reqUrl}?value=$original&idColumn=${_idColumn}&nameColumns=${_nameColumns}&tableName=${_tableName}"
+          s"${setting.config.rhsMappingUri}?value=$original&idColumn=${_idColumn}&nameColumns=${_nameColumns}&tableName=${_tableName}"
         val response = Utils.sendRhsMapping(httpUrl)
         debug(s"Rhs mapping transform with $httpUrl, response:$response", tree)
         if response == null || response.isEmpty then {

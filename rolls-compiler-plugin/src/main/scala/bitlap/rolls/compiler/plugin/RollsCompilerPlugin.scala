@@ -12,10 +12,15 @@ import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
  */
 class RollsCompilerPlugin extends StandardPlugin:
   self =>
-  val name: String                 = "RollsCompilerPlugin"
+
+  override val name: String        = "RollsCompilerPlugin"
   override val description: String = "Rolls Compiler Plugin"
 
-  def init(options: List[String]): List[PluginPhase] =
-    new ClassSchemaPhase :: new RhsMappingPhase :: new PrettyToStringPhase :: Nil
+  def init(options: List[String]): List[PluginPhase] = {
+    val setting = new Setting(options.headOption)
+    new ClassSchemaPhase(setting) :: new RhsMappingPhase(setting) :: new PrettyToStringPhase(
+      setting
+    ) :: new CaseClassWithMethodPhase(setting) :: Nil
+  }
 
 end RollsCompilerPlugin

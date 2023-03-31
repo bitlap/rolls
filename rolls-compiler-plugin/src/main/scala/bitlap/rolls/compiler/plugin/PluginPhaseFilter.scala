@@ -9,6 +9,10 @@ import dotty.tools.dotc.core.Symbols.{ defn, requiredClass, ClassSymbol }
 import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
 
+/** @author
+ *    梦境迷离
+ *  @version 1.0,2023/3/31
+ */
 trait PluginPhaseFilter[T]:
 
   def annotationFullNames: List[String]

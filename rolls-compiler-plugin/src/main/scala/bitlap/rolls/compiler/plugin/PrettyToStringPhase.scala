@@ -1,34 +1,32 @@
 package bitlap.rolls.compiler.plugin
 
 import bitlap.rolls.compiler.plugin.*
-import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.ast.tpd.*
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.Names.*
 import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.*
+import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.plugins.PluginPhase
 import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.StdNames.nme
-import dotty.tools.dotc.core.Types.MethodType
-
 import scala.annotation.threadUnsafe
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/3/28
  */
-final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilter:
+final class PrettyToStringPhase(setting: Setting) extends PluginPhase with TypeDefPluginPhaseFilter:
 
   override val phaseName               = "PrettyToStringPhase"
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
-  override val annotationFullNames: List[String] = List("bitlap.rolls.core.annotations.prettyToString")
+  override val annotationFullNames: List[String] = List(setting.config.prettyToString)
 
-  override def transformTypeDef(tree: tpd.TypeDef)(using Context): tpd.Tree =
+  override def transformTypeDef(tree: TypeDef)(using Context): Tree =
     if (tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
   end transformTypeDef
 
@@ -40,12 +38,12 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
   )
   @threadUnsafe private lazy val Tuple2Class: Context ?=> Symbol = requiredModule("scala.Tuple2")
 
-  private def filterDefDef(tree: tpd.Tree)(using ctx: Context): Boolean =
+  private def filterDefDef(tree: Tree)(using ctx: Context): Boolean =
     tree match
       case dd: DefDef if dd.name == methodName => true
       case _                                   => false
 
-  override def handle(tree: TypeDef): Context ?=> tpd.TypeDef =
+  override def handle(tree: TypeDef): Context ?=> TypeDef =
     val clazz    = tree.symbol.asClass
     val template = tree.rhs.asInstanceOf[Template]
     val annots   = tree.mods.annotations ++ getContrAnnotations(tree)
@@ -71,7 +69,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
             mapDefDef(standard, tree, d.symbol.asTerm)
           case o => o
       }
-      val ret = tpd.ClassDefWithParents(clazz, template.constr, template.parents, newBody)
+      val ret = ClassDefWithParents(clazz, template.constr, template.parents, newBody)
       debug(s"Modify ${tree.name.show} toString", EmptyTree)
       ret
     else
@@ -86,7 +84,7 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
         coord = clazz.coord
       )
 
-      val ret = tpd.ClassDefWithParents(
+      val ret = ClassDefWithParents(
         clazz,
         template.constr,
         template.parents,
@@ -97,8 +95,8 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
       debug(s"Add ${tree.name.show} toString", ret)
       ret
 
-  private def mapDefDef(standard: Boolean, tree: TypeDef, ts: Symbol)(using ctx: Context): tpd.DefDef =
-    val clazz = tree.symbol.asClass
+  private def mapDefDef(standard: Boolean, tree: TypeDef, ts: Symbol)(using ctx: Context): DefDef =
+    implicit val clazz: ClassSymbol = tree.symbol.asClass
     if (isProduct(clazz)) {
       val body = ref(RollsRuntimeClass.requiredMethod(toStringMethodName))
         .withSpan(ctx.owner.span.focus)
@@ -107,16 +105,13 @@ final class PrettyToStringPhase extends PluginPhase with TypeDefPluginPhaseFilte
       DefDef(ts.asTerm, body)
     } else {
       val elements = tree.tpe.fields
-        .filter(f => !f.symbol.isPrivate)
-        .map(f =>
-          This(clazz)
-            .select(f.name, f => f.info.isParameterless)
-        )
+        .map(_.toField)
+        .filter(f => !f.isPrivate)
         .map { f =>
           ref(Tuple2Class)
             .select(nme.apply)
             .appliedToTypes(List(defn.StringType, defn.AnyType))
-            .appliedToArgs(List(const(f.name.show), f))
+            .appliedToArgs(List(const(f.name.show), f.thisDot))
         }
         .toList
 
