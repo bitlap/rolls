@@ -5,7 +5,9 @@ import dotty.tools.dotc.ast.tpd.*
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Symbols
-import dotty.tools.dotc.core.Symbols.{ defn, requiredClass, ClassSymbol }
+import dotty.tools.dotc.core.Annotations.*
+import dotty.tools.dotc.core.Symbols.*
+import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
 
@@ -30,22 +32,34 @@ trait PluginPhaseFilter[T]:
 
   def getDeclarationAnnots: Context ?=> List[ClassSymbol] = annotationFullNames.map(requiredClass(_))
 
-  def templateBody(tree: TypeDef): Context ?=> Template = tree.rhs.asInstanceOf[Template]
+  def getTemplateBody(tree: TypeDef): Context ?=> Template = tree.rhs.asInstanceOf[Template]
+
+  def getPrimaryConstructor(tree: TypeDef): Context ?=> Symbols.Symbol = tree.tpe.typeSymbol.primaryConstructor
+
+  def getAnnotatedTypeAnnotation(tpe: Type): Context ?=> Option[Tree] =
+    tpe match
+      case a @ AnnotatedType(_, ConcreteAnnotation(Apply(Select(New(Ident(_)), _), _))) => Option(a.annot.tree)
+      case _                                                                            => None
 
 end PluginPhaseFilter
 
 trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
 
+  /** get annotations which on typeConstructor or primaryConstructor
+   *  @param tree
+   *  @return
+   *    Tree list of the annotations
+   */
   def getContrAnnotations(tree: TypeDef): Context ?=> List[tpd.Tree] =
     if (tree.isClassDef && isProduct(tree.symbol.asClass))
       val typeContrAnnots = tree.tpe.typeConstructor.typeSymbol.annotations
-      val contrAnnots     = tree.tpe.typeSymbol.primaryConstructor.annotations
+      val contrAnnots     = getPrimaryConstructor(tree).annotations
       debug(
         s"${tree.name.show} - getContrAnnotations - typeContrAnnots:${typeContrAnnots.map(_.tree)} - contrAnnots:$contrAnnots",
         tree
       )
       contrAnnots.map(f => FromSymbol.definitionFromSym(f.symbol)) ++ typeContrAnnots.map(_.tree)
-    else tree.tpe.typeSymbol.primaryConstructor.annotations.map(f => FromSymbol.definitionFromSym(f.symbol))
+    else getPrimaryConstructor(tree).annotations.map(f => FromSymbol.definitionFromSym(f.symbol))
 
   override def existsAnnot(tree: TypeDef): Context ?=> Boolean = {
     lazy val declarAnnotCls = getDeclarationAnnots

@@ -14,6 +14,7 @@ import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
  *    梦境迷离
  *  @version 1.0,2023/3/27
  */
+@experimental
 final class RhsMappingPhase(setting: RollsSetting) extends PluginPhase with PluginPhaseFilter[ValDef] {
 
   override val phaseName               = "RhsMappingPhase"

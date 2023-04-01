@@ -26,7 +26,10 @@ final case class RollsConfig(
   rhsMappingUri: String = "http://localhost:18000/rolls-mapping",
   classSchemaPostUri: String = "http://localhost:18000/rolls-doc",
   classSchemaQueryUri: String = "http://localhost:18000/rolls-schema",
-  postClassSchemaToServer: Boolean = false
+  postClassSchemaToServer: Boolean = false,
+  stringMask: String = "bitlap.rolls.core.annotations.stringMask",
+  rollsRuntimeClass: String = "bitlap.rolls.core.RollsRuntime",
+  rollsRuntimeToStringMethod: String = "toString_"
 )
 object RollsConfig:
   lazy val default: RollsConfig = RollsConfig()
@@ -46,16 +49,19 @@ final class RollsSetting(configFile: Option[String]) {
           val parts = line.split('=')
           assert(parts.length == 2, "incorrect config file " + file + ", line = " + line)
           parts(0) match
-            case "classSchema"             => config.copy(classSchema = parts(1).trim)
-            case "prettyToString"          => config.copy(prettyToString = parts(1).trim)
-            case "rhsMapping"              => config.copy(rhsMapping = parts(1).trim)
-            case "customRhsMapping"        => config.copy(customRhsMapping = parts(1).trim)
-            case "classSchemaFolder"       => config.copy(classSchemaFolder = parts(1).trim)
-            case "classSchemaFileName"     => config.copy(classSchemaFileName = parts(1).trim)
-            case "rhsMappingUri"           => config.copy(rhsMappingUri = parts(1).trim)
-            case "classSchemaPostUri"      => config.copy(classSchemaPostUri = parts(1).trim)
-            case "classSchemaQueryUri"     => config.copy(classSchemaQueryUri = parts(1).trim)
-            case "postClassSchemaToServer" => config.copy(postClassSchemaToServer = parts(1).trim.toBoolean)
+            case "classSchema"                => config.copy(classSchema = parts(1).trim)
+            case "prettyToString"             => config.copy(prettyToString = parts(1).trim)
+            case "rhsMapping"                 => config.copy(rhsMapping = parts(1).trim)
+            case "customRhsMapping"           => config.copy(customRhsMapping = parts(1).trim)
+            case "classSchemaFolder"          => config.copy(classSchemaFolder = parts(1).trim)
+            case "classSchemaFileName"        => config.copy(classSchemaFileName = parts(1).trim)
+            case "rhsMappingUri"              => config.copy(rhsMappingUri = parts(1).trim)
+            case "classSchemaPostUri"         => config.copy(classSchemaPostUri = parts(1).trim)
+            case "classSchemaQueryUri"        => config.copy(classSchemaQueryUri = parts(1).trim)
+            case "postClassSchemaToServer"    => config.copy(postClassSchemaToServer = parts(1).trim.toBoolean)
+            case "stringMask"                 => config.copy(stringMask = parts(1).trim)
+            case "rollsRuntimeClass"          => config.copy(rollsRuntimeClass = parts(1).trim)
+            case "rollsRuntimeToStringMethod" => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
         }
       }
       bufferedSource.close()

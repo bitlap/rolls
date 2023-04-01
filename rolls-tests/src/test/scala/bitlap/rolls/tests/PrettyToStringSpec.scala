@@ -112,6 +112,13 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
     subPermissions
   )
 
+  "prettyToString with stringMask" should "genTestCaseClassJson" in {
+    println(genTestCaseClassJson.sample.toString)
+    genTestCaseClassJson.sample.map(_.toString.contains(""""tenantId":"***"""")) shouldEqual Option(true)
+    genTestCaseClassJson.sample.map(_.toString.contains(""""deleted":"***"""")) shouldEqual Option(true)
+    genTestCaseClassJson.sample.map(_.toString.contains(""""subPermissions":"***"""")) shouldEqual Option(true)
+  }
+
   "prettyToString" should "genTestCaseClassJson" in {
     println(genTestCaseClassJson.sample.toString)
     genTestCaseClassJson.sample.map(_.toString.startsWith("{")) shouldEqual Option(true)
@@ -147,6 +154,7 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
   "prettyToString" should "genTestClassJson" in {
     println(genTestClassJson.sample.toString)
     genTestClassJson.sample.map(_.toString.startsWith("{")) shouldEqual Option(true)
+    genTestClassJson.sample.map(_.toString.contains(""""tenantId":"***"""")) shouldEqual Option(true)
   }
 
 }

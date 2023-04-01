@@ -1,7 +1,7 @@
 package bitlap.rolls.tests
 
 import bitlap.rolls.core.*
-import bitlap.rolls.core.annotations.{ classSchema, prettyToString }
+import bitlap.rolls.core.annotations.{ classSchema, prettyToString, stringMask }
 
 import java.time.Instant
 
@@ -12,10 +12,10 @@ import java.time.Instant
 @prettyToString
 final case class TestCaseClassJson(
   id: String,
-  tenantId: Map[String, String],
+  tenantId: Map[String, String] @stringMask,
   private val resourceActions: List[String],
-  deleted: Long,
-  subPermissions: List[String]
+  @stringMask deleted: Long,
+  @stringMask subPermissions: List[String]
 )
 
 @prettyToString(standard = false)
@@ -66,7 +66,7 @@ final class TestClassJsonNamedArg(
 @prettyToString
 final class TestClassJson(
   id: String,
-  val tenantId: Map[String, String],
+  @stringMask val tenantId: Map[String, String],
   private val resourceActions: List[String],
   deleted: Long,
   subPermissions: List[String]

@@ -33,7 +33,7 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
 
   override def handle(tree: TypeDef): Context ?=> TypeDef = {
     if tree.isClassDef then
-      val template     = templateBody(tree)
+      val template     = getTemplateBody(tree)
       val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
       val classSchema  = ClassSchema(tree.name.show, methodSchema)
       Utils.sendClassSchema(classSchema, setting.config)
@@ -81,7 +81,7 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
         Unknown
 
   private def mapTemplate(tree: TypeDef): Context ?=> TypeSchema = {
-    val ps = templateBody(tree).body.collect { case vd: ValDef => mapType(vd) }
+    val ps = getTemplateBody(tree).body.collect { case vd: ValDef => mapType(vd) }
     TypeSchema(
       typeName = tree.name.show,
       fields = if tree.tpe.typeSymbol.is(Abstract) then List.empty else ps

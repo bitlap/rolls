@@ -30,13 +30,14 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
     if (tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
   end transformTypeDef
 
-  @threadUnsafe private lazy val methodName: Context ?=> Name = StdNames.nme.toString_.asSimpleName
-  private val toStringMethodName                              = "toString_"
+  private val toStringMethodName = setting.config.rollsRuntimeToStringMethod
 
-  @threadUnsafe private lazy val RollsRuntimeClass: Context ?=> Symbol = requiredModule(
-    "bitlap.rolls.core.RollsRuntime"
+  @threadUnsafe private lazy val methodName: Context ?=> Name             = StdNames.nme.toString_.asSimpleName
+  @threadUnsafe private lazy val StringMaskClass: Context ?=> ClassSymbol = requiredClass(setting.config.stringMask)
+  @threadUnsafe private lazy val RollsRuntimeClass: Context ?=> TermSymbol = requiredModule(
+    setting.config.rollsRuntimeClass
   )
-  @threadUnsafe private lazy val Tuple2Class: Context ?=> Symbol = requiredModule("scala.Tuple2")
+  @threadUnsafe private lazy val Tuple2Class: Context ?=> TermSymbol = requiredModule("scala.Tuple2")
 
   private def filterDefDef(tree: Tree)(using ctx: Context): Boolean =
     tree match
@@ -45,7 +46,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
 
   override def handle(tree: TypeDef): Context ?=> TypeDef =
     val clazz    = tree.symbol.asClass
-    val template = templateBody(tree)
+    val template = getTemplateBody(tree)
     val annots   = tree.mods.annotations ++ getContrAnnotations(tree)
     val annotCls = getDeclarationAnnots
     val standard = annots.collectFirst {
@@ -70,7 +71,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
           case o => o
       }
       val ret = ClassDefWithParents(clazz, template.constr, template.parents, newBody)
-      debug(s"Modify ${tree.name.show} toString", EmptyTree)
+      debug(s"Modify ${tree.name.show} toString", ret)
       ret
     else
       val meth: Symbol = newSymbol(
@@ -84,7 +85,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
         coord = clazz.coord
       )
 
-      val ret = ClassDefWithParents(
+      ClassDefWithParents(
         clazz,
         template.constr,
         template.parents,
@@ -92,34 +93,30 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
           mapDefDef(standard, tree, meth)
         )
       )
-      debug(s"Add ${tree.name.show} toString", ret)
-      ret
 
   private def mapDefDef(standard: Boolean, tree: TypeDef, ts: Symbol)(using ctx: Context): DefDef =
     implicit val clazz: ClassSymbol = tree.symbol.asClass
-    if (isProduct(clazz)) {
-      val body = ref(RollsRuntimeClass.requiredMethod(toStringMethodName))
-        .withSpan(ctx.owner.span.focus)
-        .appliedToArgs(const(standard) :: const(tree.name.show) :: This(clazz) :: Nil)
-      debug(s"${tree.name.show} generate toString for case class", DefDef(ts.asTerm, body))
-      DefDef(ts.asTerm, body)
-    } else {
-      val elements = tree.tpe.fields
-        .map(_.toField)
-        .filter(f => !f.isPrivate)
-        .map { f =>
-          ref(Tuple2Class)
-            .select(nme.apply)
-            .appliedToTypes(List(defn.StringType, defn.AnyType))
-            .appliedToArgs(List(const(f.name.show), f.thisDot))
-        }
-        .toList
+    val paramSymss                  = getPrimaryConstructor(tree).paramSymss.flatten.map(_.toField)
+    val elements = paramSymss
+      .filter(f => !f.isPrivate)
+      .map { f =>
+        ref(Tuple2Class)
+          .select(nme.apply)
+          .appliedToTypes(List(defn.StringType, defn.AnyType))
+          .appliedToArgs(
+            List(
+              const(f.name.show),
+              if f.containsAnnotation(StringMaskClass.name.asSimpleName, getAnnotatedTypeAnnotation(f.tpe).toList)
+              then Literal(Constant("***"))
+              else f.thisDot
+            )
+          )
+      }
 
-      val list = mkList(elements, TypeTree(defn.AnyType))
-      val body = ref(RollsRuntimeClass.requiredMethod(toStringMethodName))
-        .withSpan(ctx.owner.span.focus)
-        .appliedToArgs(const(standard) :: const(tree.name.show) :: list :: Nil)
+    val list = mkList(elements, TypeTree(defn.AnyType))
+    val body = ref(RollsRuntimeClass.requiredMethod(toStringMethodName))
+      .withSpan(ctx.owner.span.focus)
+      .appliedToArgs(const(standard) :: const(tree.name.show) :: list :: Nil)
 
-      debug(s"${tree.name.show} generate toString for class", DefDef(ts.asTerm, body))
-      DefDef(ts.asTerm, body)
-    }
+    debug(s"${tree.name.show} generate toString for class", DefDef(ts.asTerm, body))
+    DefDef(ts.asTerm, body)
