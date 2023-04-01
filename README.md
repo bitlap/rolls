@@ -21,7 +21,7 @@
   - Generate `toString`, has one `standard` arg for config, default is `false`
   - If `standard` is `true`,  `toString` get `Test(field1=value1,field2=value2)`
   - If `standard` is `false`,  `toString` get `{"field1":"value1","field2":"value2"}`
-  - `@stringMask` applied to the fields of classes or case classes, the field will output as `***`
+  - `@stringMask` add on the fields of classes or case classes, the field will output as `***`
 - config `config.properties`
 
 ## config
