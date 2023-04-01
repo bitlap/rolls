@@ -14,12 +14,14 @@ import java.time.Instant
  */
 class PrettyToStringSpec extends AnyFlatSpec with Matchers {
 
+  val listSize = 5
+
   val genTestCaseClassJsonNamedArg = for
     id              <- Gen.uuid.map(_.toString)
-    tenantId        <- Gen.mapOf(Gen.stringOf(Gen.alphaChar).map(f => f -> f))
-    resourceActions <- Gen.listOf(Gen.alphaUpperStr)
+    tenantId        <- Gen.mapOf(Gen.uuid.map(_.toString).map(f => f -> f)).map(_.toList.take(listSize).toMap)
+    resourceActions <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
     deleted         <- Gen.long
-    subPermissions  <- Gen.listOf(Gen.alphaUpperStr)
+    subPermissions  <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
   yield TestCaseClassJsonNamedArg(
     id,
     tenantId,
@@ -30,10 +32,10 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
 
   val genTestCaseClassJson = for
     id              <- Gen.uuid.map(_.toString)
-    tenantId        <- Gen.mapOf(Gen.stringOf(Gen.alphaChar).map(f => f -> f))
-    resourceActions <- Gen.listOf(Gen.alphaUpperStr)
+    tenantId        <- Gen.mapOf(Gen.uuid.map(_.toString).map(f => f -> f)).map(_.toList.take(listSize).toMap)
+    resourceActions <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
     deleted         <- Gen.long
-    subPermissions  <- Gen.listOf(Gen.alphaUpperStr)
+    subPermissions  <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
   yield TestCaseClassJson(
     id,
     tenantId,
@@ -44,10 +46,10 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
 
   val genTestCaseClassStandard = for
     id              <- Gen.uuid.map(_.toString)
-    tenantId        <- Gen.mapOf(Gen.stringOf(Gen.alphaChar).map(f => f -> f))
-    resourceActions <- Gen.listOf(Gen.alphaUpperStr)
+    tenantId        <- Gen.mapOf(Gen.uuid.map(_.toString).map(f => f -> f)).map(_.toList.take(listSize).toMap)
+    resourceActions <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
     deleted         <- Gen.long
-    subPermissions  <- Gen.listOf(Gen.alphaUpperStr)
+    subPermissions  <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
   yield TestCaseClassStandard(
     id,
     tenantId,
@@ -58,10 +60,10 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
 
   val genTestCaseClassStandardNamedArg = for
     id              <- Gen.uuid.map(_.toString)
-    tenantId        <- Gen.mapOf(Gen.stringOf(Gen.alphaChar).map(f => f -> f))
-    resourceActions <- Gen.listOf(Gen.alphaUpperStr)
+    tenantId        <- Gen.mapOf(Gen.uuid.map(_.toString).map(f => f -> f)).map(_.toList.take(listSize).toMap)
+    resourceActions <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
     deleted         <- Gen.long
-    subPermissions  <- Gen.listOf(Gen.alphaUpperStr)
+    subPermissions  <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
   yield TestCaseClassStandardNamedArg(
     id,
     tenantId,
@@ -72,10 +74,10 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
 
   val genTestClassStandardNamedArg = for
     id              <- Gen.uuid.map(_.toString)
-    tenantId        <- Gen.mapOf(Gen.stringOf(Gen.alphaChar).map(f => f -> f))
-    resourceActions <- Gen.listOf(Gen.alphaUpperStr)
+    tenantId        <- Gen.mapOf(Gen.uuid.map(_.toString).map(f => f -> f)).map(_.toList.take(listSize).toMap)
+    resourceActions <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
     deleted         <- Gen.long
-    subPermissions  <- Gen.listOf(Gen.alphaUpperStr)
+    subPermissions  <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
   yield TestClassStandardNamedArg(
     id,
     tenantId,
@@ -86,10 +88,10 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
 
   val genTestClassJsonNamedArg = for
     id              <- Gen.uuid.map(_.toString)
-    tenantId        <- Gen.mapOf(Gen.stringOf(Gen.alphaChar).map(f => f -> f))
-    resourceActions <- Gen.listOf(Gen.alphaUpperStr)
+    tenantId        <- Gen.mapOf(Gen.uuid.map(_.toString).map(f => f -> f)).map(_.toList.take(listSize).toMap)
+    resourceActions <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
     deleted         <- Gen.long
-    subPermissions  <- Gen.listOf(Gen.alphaUpperStr)
+    subPermissions  <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
   yield TestClassJsonNamedArg(
     id,
     tenantId,
@@ -100,10 +102,10 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
 
   val genTestClassJson = for
     id              <- Gen.uuid.map(_.toString)
-    tenantId        <- Gen.mapOf(Gen.stringOf(Gen.alphaChar).map(f => f -> f))
-    resourceActions <- Gen.listOf(Gen.alphaUpperStr)
+    tenantId        <- Gen.mapOf(Gen.uuid.map(_.toString).map(f => f -> f)).map(_.toList.take(listSize).toMap)
+    resourceActions <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
     deleted         <- Gen.long
-    subPermissions  <- Gen.listOf(Gen.alphaUpperStr)
+    subPermissions  <- Gen.listOf(Gen.uuid.map(_.toString)).map(_.take(listSize))
   yield TestClassJson(
     id,
     tenantId,
