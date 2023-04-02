@@ -53,8 +53,9 @@ jobs:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           
   test:
+    # TODO
     runs-on: ubuntu-latest
-    needs: [ publish ] # TODO
+    needs: [ publish ]
     steps:
       - uses: actions/checkout@v3
       - name: Setup JDK

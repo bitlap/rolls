@@ -1,4 +1,4 @@
-val pluginVersion = "0.1.3"
+val pluginVersion = "0.1.3-SNAPSHOT"
 
 resolvers +=
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
