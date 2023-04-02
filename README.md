@@ -8,8 +8,8 @@
 [Link-Snapshots]: https://s01.oss.sonatype.org/content/repositories/snapshots/org/bitlap/rolls-compiler-plugin_3
 [Badge-Codecov]: https://codecov.io/gh/bitlap/rolls/branch/master/graph/badge.svg?token=IA596YRTOT
 [Link-Codecov]: https://codecov.io/gh/bitlap/rolls
-[Badge-Scaladex]: https://index.scala-lang.org/bitlap/rolls/rolls-core/latest.svg?platform=jvm
-[Link-Scaladex]: https://index.scala-lang.org/bitlap/rolls/rolls-core
+[Badge-Scaladex]: https://index.scala-lang.org/bitlap/rolls/rolls-compiler-plugin/latest.svg?platform=jvm
+[Link-Scaladex]: https://index.scala-lang.org/bitlap/rolls/rolls-compiler-plugin
 
 ----
 
