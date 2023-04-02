@@ -31,14 +31,14 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
 
   override val annotationFullNames: List[String] = List(setting.config.classSchema)
 
-  override def handle(tree: TypeDef): Context ?=> TypeDef = {
+  override def handle(tree: TypeDef): Context ?=> TypeDef =
     if tree.isClassDef then
-      val template     = getTemplateBody(tree)
-      val methodSchema = template.body.map(mapDefDef).collect { case Some(value) => value }
-      val classSchema  = ClassSchema(tree.name.show, methodSchema)
+      val typeTypeTree = tree.toClassDef
+      val methodSchema = typeTypeTree.template.body.map(mapDefDef).collect { case Some(value) => value }
+      val classSchema  = ClassSchema(typeTypeTree.name, methodSchema)
       Utils.sendClassSchema(classSchema, setting.config)
     tree
-  }
+  end handle
 
   def mapDefDef(tree: Tree): Context ?=> Option[MethodSchema] =
     tree match
@@ -54,43 +54,39 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
               resultType = mapType(dd.tpt)
             )
           )
-        else {
-          None
-        }
+        else None
       case _ => None
+  end mapDefDef
 
   private def mapSeqLiteral(tree: SeqLiteral): Context ?=> TypeSchema =
     TypeSchema(typeName = tree.show, fields = tree.elems.map(mapType))
 
   private def mapTypeDef(tree: TypeDef): Context ?=> TypeSchema =
     tree match
-      case tdef: TypeDef if tdef.isClassDef =>
+      case tpeDef: TypeDef if tpeDef.isClassDef =>
         lazy val IterableType: Types.TypeRef = requiredClassRef("scala.collection.Iterable")
-        if tdef.tpe <:< IterableType
+        if tpeDef.tpe <:< IterableType
         then
-          val typeTree = tdef.tpe.typeParams
-            .map(_.paramInfo)
-            .map(_.typeSymbol)
-            .map(s => FromSymbol.definitionFromSym(s))
-            .map(tr => mapType(tr))
-          TypeSchema(typeName = tdef.name.show, genericType = Option(typeTree))
-        else mapTemplate(tdef)
-      case tdef: TypeDef =>
-        TypeSchema(typeName = tdef.name.show)
-      case null =>
-        Unknown
+          val typeTree = tpeDef.toClassDef
+          TypeSchema(typeName = typeTree.name, genericType = Option(typeTree.typeParams.map(tr => mapType(tr))))
+        else mapTemplate(tpeDef)
+      case tpeDef: TypeDef =>
+        TypeSchema(typeName = tpeDef.name.show)
+  end mapTypeDef
 
-  private def mapTemplate(tree: TypeDef): Context ?=> TypeSchema = {
-    val ps = getTemplateBody(tree).body.collect { case vd: ValDef => mapType(vd) }
+  private def mapTemplate(tree: TypeDef): Context ?=> TypeSchema =
+    val typeTree = tree.toClassDef
+    val fields   = typeTree.template.body.collect { case vd: ValDef => mapType(vd) }
     TypeSchema(
-      typeName = tree.name.show,
-      fields = if tree.tpe.typeSymbol.is(Abstract) then List.empty else ps
+      typeName = typeTree.name,
+      fields = if typeTree.typeSymbol.is(Abstract) then List.empty else fields
     )
-  }
+  end mapTemplate
 
   private def mapTypeTree(tree: TypeTree): Context ?=> TypeSchema =
-    val actualGeneric = tree.tpe.argTypes.map(_.typeSymbol).map(FromSymbol.definitionFromSym).map(mapType)
-    val typeTree      = FromSymbol.definitionFromSym(tree.tpe.typeSymbol)
+    val typeTypeTree  = tree.toTypeTree
+    val actualGeneric = typeTypeTree.argTypes.map(mapType)
+    val typeTree      = typeTypeTree.typeSymbol
     mapType(typeTree).copy(genericType = Option(actualGeneric))
 
   private def mapValDef(name: String, tree: ValDef): Context ?=> TypeSchema =
@@ -101,11 +97,13 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
       typeName = ctx.printer.nameString(tree.tpt.symbol),
       genericType = Option(tree.args.map(a => mapType(a)))
     )
+  end mapAppliedTypeTree
 
   private def mapRefTree(tree: RefTree): Context ?=> TypeSchema =
     tree match
       case t: Ident => mapIdent(t)
       case _        => Unknown
+  end mapRefTree
 
   private def mapIdent(tree: Ident): Context ?=> TypeSchema =
     tree match
@@ -114,14 +112,14 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
         TypeSchema(typeName = it.name.show)
       case it: Ident =>
         val fields = tree.tpe.fields.map { field =>
-          val itTree        = FromSymbol.definitionFromSym(field.info.typeSymbol)
-          val actualGeneric = field.info.argTypes.map(_.typeSymbol).map(FromSymbol.definitionFromSym).map(mapType)
-          mapType(itTree).copy(fieldName = Some(field.name.show)).copy(genericType = Option(actualGeneric))
+          val fieldType = field.toFieldTree
+          mapType(fieldType.typeTree)
+            .copy(fieldName = Some(fieldType.name))
+            .copy(genericType = Option(fieldType.argTypes.map(mapType)))
         }.toList
 
         TypeSchema(typeName = it.name.show, fields)
-      case null =>
-        Unknown
+  end mapIdent
 
   private def mapType(tree: Tree): Context ?=> TypeSchema =
     tree match

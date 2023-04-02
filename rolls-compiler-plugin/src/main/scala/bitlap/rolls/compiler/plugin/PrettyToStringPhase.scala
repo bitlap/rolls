@@ -45,10 +45,11 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
       case _                                   => false
 
   override def handle(tree: TypeDef): Context ?=> TypeDef =
-    val clazz    = tree.symbol.asClass
-    val template = getTemplateBody(tree)
-    val annots   = tree.mods.annotations ++ getContrAnnotations(tree)
-    val annotCls = getDeclarationAnnots
+    val typeTypeTree = tree.toClassDef
+    val clazz        = typeTypeTree.classSymbol
+    val template     = typeTypeTree.template
+    val annots       = typeTypeTree.annotations ++ typeTypeTree.contrAnnotations
+    val annotCls     = getDeclarationAnnots
     val standard = annots.collectFirst {
       case Apply(Select(New(Ident(an)), _), Nil) if an.asSimpleName == annotCls.head.name.asSimpleName =>
         false
@@ -71,7 +72,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
           case o => o
       }
       val ret = ClassDefWithParents(clazz, template.constr, template.parents, newBody)
-      debug(s"Modify ${tree.name.show} toString", ret)
+      debug(s"Modify ${typeTypeTree.name} toString", ret)
       ret
     else
       val meth: Symbol = newSymbol(
@@ -95,8 +96,9 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
       )
 
   private def mapDefDef(standard: Boolean, tree: TypeDef, ts: Symbol)(using ctx: Context): DefDef =
-    implicit val clazz: ClassSymbol = tree.symbol.asClass
-    val paramSymss                  = getPrimaryConstructor(tree).paramSymss.flatten.map(_.toField)
+    val typeTypeTree                = tree.toClassDef
+    implicit val clazz: ClassSymbol = typeTypeTree.classSymbol
+    val paramSymss                  = typeTypeTree.primaryConstructor.paramSymss.flatten.map(_.toField)
     val elements = paramSymss
       .filter(f => !f.isPrivate)
       .map { f =>
@@ -106,7 +108,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
           .appliedToArgs(
             List(
               const(f.name.show),
-              if f.containsAnnotation(StringMaskClass.name.asSimpleName, getAnnotatedTypeAnnotation(f.tpe).toList)
+              if f.containsAnnotation(StringMaskClass.name.asSimpleName)
               then Literal(Constant("***"))
               else f.thisDot
             )
@@ -116,7 +118,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
     val list = mkList(elements, TypeTree(defn.AnyType))
     val body = ref(RollsRuntimeClass.requiredMethod(toStringMethodName))
       .withSpan(ctx.owner.span.focus)
-      .appliedToArgs(const(standard) :: const(tree.name.show) :: list :: Nil)
+      .appliedToArgs(const(standard) :: const(typeTypeTree.name) :: list :: Nil)
 
-    debug(s"${tree.name.show} generate toString for class", DefDef(ts.asTerm, body))
+    debug(s"${typeTypeTree.name} generate toString for class", DefDef(ts.asTerm, body))
     DefDef(ts.asTerm, body)

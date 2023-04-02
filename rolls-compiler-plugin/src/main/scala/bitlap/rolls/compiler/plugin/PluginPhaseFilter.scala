@@ -28,49 +28,21 @@ trait PluginPhaseFilter[T]:
 
   def handle(tree: T): Context ?=> T
 
-  def isProduct(clazz: ClassSymbol): Context ?=> Boolean = clazz.parentSyms.contains(defn.ProductClass)
-
   def getDeclarationAnnots: Context ?=> List[ClassSymbol] = annotationFullNames.map(requiredClass(_))
-
-  def getTemplateBody(tree: TypeDef): Context ?=> Template = tree.rhs.asInstanceOf[Template]
-
-  def getPrimaryConstructor(tree: TypeDef): Context ?=> Symbols.Symbol = tree.tpe.typeSymbol.primaryConstructor
-
-  def getAnnotatedTypeAnnotation(tpe: Type): Context ?=> Option[Tree] =
-    tpe match
-      case a @ AnnotatedType(_, ConcreteAnnotation(Apply(Select(New(Ident(_)), _), _))) => Option(a.annot.tree)
-      case _                                                                            => None
 
 end PluginPhaseFilter
 
 trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
 
-  /** get annotations which on typeConstructor or primaryConstructor
-   *  @param tree
-   *  @return
-   *    Tree list of the annotations
-   */
-  def getContrAnnotations(tree: TypeDef): Context ?=> List[tpd.Tree] =
-    if (tree.isClassDef && isProduct(tree.symbol.asClass))
-      val typeContrAnnots = tree.tpe.typeConstructor.typeSymbol.annotations
-      val contrAnnots     = getPrimaryConstructor(tree).annotations
-      debug(
-        s"${tree.name.show} - getContrAnnotations - typeContrAnnots:${typeContrAnnots.map(_.tree)} - contrAnnots:$contrAnnots",
-        tree
-      )
-      contrAnnots.map(f => FromSymbol.definitionFromSym(f.symbol)) ++ typeContrAnnots.map(_.tree)
-    else getPrimaryConstructor(tree).annotations.map(f => FromSymbol.definitionFromSym(f.symbol))
-
   override def existsAnnot(tree: TypeDef): Context ?=> Boolean = {
-    lazy val declarAnnotCls = getDeclarationAnnots
-    val contrAnnots         = getContrAnnotations(tree)
-    lazy val exists = (contrAnnots ++ tree.mods.annotations).collectFirst {
-      case Apply(Select(New(Ident(an)), _), args) if declarAnnotCls.exists(_.name.asSimpleName == an.asSimpleName) =>
-        debug(s"${tree.name.show} - annot args:$args", EmptyTree)
+    val declareAnnotCls = getDeclarationAnnots
+    val exists = (tree.getContrAnnotations ++ tree.getAnnotations).collectFirst {
+      case Apply(Select(New(Ident(an)), _), args) if declareAnnotCls.exists(_.name.asSimpleName == an.asSimpleName) =>
+        debug(s"${tree.getName} - annot args:$args", EmptyTree)
         true
     }.getOrElse(false)
 
-    debug(s"${tree.name.show} - $exists - total contrAnnots:$contrAnnots", EmptyTree)
+    debug(s"${tree.getName} - $exists - TypeDef:$tree", EmptyTree)
 
     exists
   }
