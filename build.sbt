@@ -3,7 +3,7 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots",
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
-val pluginVersion = "0.1.3-SNAPSHOT"
+val pluginVersion = "0.1.3"
 ThisBuild / version := pluginVersion
 inThisBuild(
   List(

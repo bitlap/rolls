@@ -2,11 +2,17 @@
 
 ![CI][Badge-CI] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots] [![codecov][Badge-Codecov]][Link-Codecov]
 
+
+| [![Scala version support][Badge-Scaladex]][Link-Scaladex] | [![Version][Badge-Jetbrains]][Link-Jetbrains]
+
+
 [Badge-CI]: https://github.com/bitlap/rolls/actions/workflows/ScalaCI.yml/badge.svg
 [Badge-Snapshots]: https://img.shields.io/nexus/s/org.bitlap/rolls-compiler-plugin_3?server=https%3A%2F%2Fs01.oss.sonatype.org
 [Link-Snapshots]: https://s01.oss.sonatype.org/content/repositories/snapshots/org/bitlap/rolls-compiler-plugin_3
 [Badge-Codecov]: https://codecov.io/gh/bitlap/rolls/branch/master/graph/badge.svg?token=IA596YRTOT
 [Link-Codecov]: https://codecov.io/gh/bitlap/rolls
+[Badge-Scaladex]: https://index.scala-lang.org/bitlap/rolls/rolls-core/latest.svg?platform=jvm
+[Link-Scaladex]: https://index.scala-lang.org/bitlap/rolls/rolls-core
 
 ----
 
