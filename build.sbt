@@ -1,10 +1,10 @@
 val pluginVersion = "0.1.3-SNAPSHOT"
 
-resolvers +=
+ThisBuild / resolvers ++= Seq(
+  Resolver.mavenLocal,
+  "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots",
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
-resolvers +=
-  "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots"
-
+)
 ThisBuild / version := pluginVersion
 inThisBuild(
   List(
