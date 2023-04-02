@@ -1,11 +1,11 @@
-val pluginVersion = "0.1.3-SNAPSHOT"
-
 ThisBuild / resolvers ++= Seq(
   Resolver.mavenLocal,
   "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots",
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
-ThisBuild / version := pluginVersion
+
+val exampleVersion = "0.1.3-SNAPSHOT"
+
 inThisBuild(
   List(
     organization           := "org.bitlap",
@@ -105,7 +105,7 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
       "-Xprint:parser,typer,posttyper,erasure"
     ),
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % pluginVersion),
+    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % exampleVersion),
     libraryDependencies ++= Seq(
       "org.scalatest"  %% "scalatest"  % "3.2.15" % Test,
       "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
