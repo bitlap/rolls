@@ -4,7 +4,7 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-val exampleVersion = "0.1.3-SNAPSHOT"
+val exampleVersion = "0.1.0"
 
 inThisBuild(
   List(
