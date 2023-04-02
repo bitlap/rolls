@@ -1,18 +1,18 @@
-ThisBuild / resolvers ++= Seq(
-  Resolver.mavenLocal,
-  "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots",
-  "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
-)
 val pluginVersion = "0.1.3"
+
+resolvers +=
+  "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
+resolvers +=
+  "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots"
+
 ThisBuild / version := pluginVersion
 inThisBuild(
   List(
     organization           := "org.bitlap",
     sonatypeCredentialHost := "s01.oss.sonatype.org",
-    sonatypeRepository :=
-      "https://s01.oss.sonatype.org/service/local",
-    homepage := Some(url("https://github.com/bitlap/bitlap")),
-    licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    sonatypeRepository     := "https://s01.oss.sonatype.org/service/local",
+    homepage               := Some(url("https://github.com/bitlap/bitlap")),
+    licenses               := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
         id = "dreamylost",

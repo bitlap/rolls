@@ -1,9 +1,6 @@
 # rolls
 
-![CI][Badge-CI] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots] [![codecov][Badge-Codecov]][Link-Codecov]
-
-
-| [![Scala version support][Badge-Scaladex]][Link-Scaladex] | [![Version][Badge-Jetbrains]][Link-Jetbrains]
+![CI][Badge-CI] [![codecov][Badge-Codecov]][Link-Codecov] [![Scala version support][Badge-Scaladex]][Link-Scaladex] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots]
 
 
 [Badge-CI]: https://github.com/bitlap/rolls/actions/workflows/ScalaCI.yml/badge.svg
