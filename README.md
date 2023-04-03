@@ -1,6 +1,6 @@
 # rolls
 
-![CI][Badge-CI] [![codecov][Badge-Codecov]][Link-Codecov] [![Nexus][Badge-Releases]][Link-Releases] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots]
+![CI][Badge-CI] [![Nexus][Badge-Releases]][Link-Releases] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots]
 
 
 [Badge-CI]: https://github.com/bitlap/rolls/actions/workflows/ScalaCI.yml/badge.svg
@@ -13,6 +13,8 @@
 
 ----
 
+# Features
+
 - **@rhsMapping** on `val`
   - Replace the `rhs` of the constant `ValDef` with specifying one
   - Must start `HttpServer.scala`
@@ -24,17 +26,17 @@
   - Generate `toString`, has one `standard` arg for config, default is `false`
   - If `standard` is `true`,  `toString` get `Test(field1=value1,field2=value2)`
   - If `standard` is `false`,  `toString` get `{"field1":"value1","field2":"value2"}`
-  - `@stringMask` add on the fields of classes or case classes, the field will output as `***`
-- config `config.properties`
+  - **@stringMask** add on the fields of classes or case classes, the field will output as `***`
+- **config.properties** Specify some options
 
-## config
+# Dependency
 ``` sbt
 autoCompilerPlugins := true
 addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0")
 libraryDependencies += "org.bitlap" %% "rolls-core" % "0.1.0"
 ```
 
-## @classSchema
+# @classSchema
 
 <details>
 <summary>Example</summary>
@@ -172,7 +174,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 </details>
 
 
-## @prettyToString
+# @prettyToString
 
 <details>
 <summary>Example</summary>
@@ -200,7 +202,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 
 </details>
 
-## @prettyToString with @stringMask
+# @prettyToString with @stringMask
 
 <details>
 <summary>Example</summary>
