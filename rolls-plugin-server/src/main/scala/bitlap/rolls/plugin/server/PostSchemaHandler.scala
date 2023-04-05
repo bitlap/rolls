@@ -1,6 +1,6 @@
-package bitlap.rolls.server
+package bitlap.rolls.plugin.server
 
-import bitlap.rolls.compiler.plugin.{ ClassSchema, MethodSchema, TypeSchema, Utils }
+import bitlap.rolls.compiler.plugin.*
 import com.sun.net.httpserver.*
 
 /** @author

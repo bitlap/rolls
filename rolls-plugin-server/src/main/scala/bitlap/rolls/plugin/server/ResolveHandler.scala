@@ -1,4 +1,4 @@
-package bitlap.rolls.server
+package bitlap.rolls.plugin.server
 
 import bitlap.rolls.compiler.plugin.Utils
 import com.sun.net.httpserver.*

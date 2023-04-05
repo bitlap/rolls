@@ -55,7 +55,7 @@ lazy val `rolls` = (project in file("."))
   .aggregate(
     `rolls-compiler-plugin`,
     `rolls-core`,
-    `rolls-server`,
+    `rolls-plugin-server`,
     `rolls-csv`,
     `rolls-tests`
   )
@@ -84,11 +84,11 @@ lazy val `rolls-core` = (project in file("rolls-core"))
     )
   )
 
-lazy val `rolls-server` = (project in file("rolls-server"))
+lazy val `rolls-plugin-server` = (project in file("rolls-plugin-server"))
   .settings(
     commonSettings,
     publish / skip := true,
-    name           := "rolls-server",
+    name           := "rolls-plugin-server",
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % "42.6.0",
       "com.typesafe"   % "config"     % "1.4.2"

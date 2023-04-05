@@ -1,8 +1,8 @@
-package bitlap.rolls.server
+package bitlap.rolls.plugin.server
 
 import com.typesafe.config.ConfigFactory
 
-import java.sql.{ Connection, DriverManager }
+import java.sql.*
 
 /** @author
  *    梦境迷离
