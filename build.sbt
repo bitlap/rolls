@@ -56,11 +56,21 @@ lazy val `rolls` = (project in file("."))
     `rolls-compiler-plugin`,
     `rolls-core`,
     `rolls-server`,
+    `rolls-csv`,
     `rolls-tests`
   )
   .settings(
     publish / skip := true,
     commonSettings
+  )
+
+lazy val `rolls-csv` = (project in file("rolls-csv"))
+  .settings(
+    commonSettings,
+    name := "rolls-csv",
+    libraryDependencies ++= Seq(
+      "org.scalameta" %% "munit" % "0.7.29" % Test
+    )
   )
 
 lazy val `rolls-core` = (project in file("rolls-core"))
