@@ -51,7 +51,7 @@ private[csv] object BuilderMacros {
             SpecificBuilder[
               From,
               FromSubs,
-              Field.DropByLabel[selectedField, DerivedFromSubs],
+              Field.DropByLabel[selectedField, DerivedFromSubs]
             ]
           ]
         }

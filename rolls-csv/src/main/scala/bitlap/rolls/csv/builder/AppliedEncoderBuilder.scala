@@ -38,7 +38,7 @@ object AppliedEncoderBuilder:
         new AppliedEncoderBuilder[
           From,
           Field.FromLabelsAndTypes[from.MirroredElemLabels, from.MirroredElemTypes],
-          Field.FromLabelsAndTypes[from.MirroredElemLabels, from.MirroredElemTypes],
+          Field.FromLabelsAndTypes[from.MirroredElemLabels, from.MirroredElemTypes]
         ](appliedTo, Map.empty)
       case _ => throw new Exception("Only support case classes!")
 

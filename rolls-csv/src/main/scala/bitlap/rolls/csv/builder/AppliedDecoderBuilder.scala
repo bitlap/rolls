@@ -38,7 +38,7 @@ object AppliedDecoderBuilder:
         new AppliedDecoderBuilder[
           To,
           Field.FromLabelsAndTypes[to.MirroredElemLabels, to.MirroredElemTypes],
-          Field.FromLabelsAndTypes[to.MirroredElemLabels, to.MirroredElemTypes],
+          Field.FromLabelsAndTypes[to.MirroredElemLabels, to.MirroredElemTypes]
         ](appliedTo, Map.empty)
       case _ => throw new Exception("Only support case classes!")
 
