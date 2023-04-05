@@ -11,9 +11,8 @@ import scala.compiletime.testing.*
  *    梦境迷离
  *  @version 1.0,2023/4/5
  */
-case class SimpleClass(field1: Int, field2: String, field3: Double, field4Opt: Option[String])
 
-class BuilderConfigurationSuite extends FunSuite {
+class AppliedEncoderBuilderSuite extends FunSuite {
 
   test("encode simple class to csv string") {
     val simpleClass = SimpleClass(field1 = 1, field2 = "2", field3 = 0.4, None)

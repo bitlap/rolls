@@ -2,6 +2,7 @@ package bitlap.rolls.csv.test.matchtypes
 
 import bitlap.rolls.csv.*
 import bitlap.rolls.csv.internal.Field
+import bitlap.rolls.csv.test.model.*
 import munit.FunSuite
 
 import scala.deriving.Mirror
@@ -10,14 +11,9 @@ import scala.deriving.Mirror
  *    梦境迷离
  *  @version 1.0,2023/4/5
  */
-object FieldSuite:
-  final case class Product(field1: Int, field2: String, field3: Double)
-
-end FieldSuite
-
 class FieldSuite extends FunSuite {
 
-  private val mirror = summon[Mirror.Of[FieldSuite.Product]]
+  private val mirror = summon[Mirror.Of[FieldSuiteProduct]]
 
   test("Field.FromLabelsAndTypes has proper type") {
     type Expected =

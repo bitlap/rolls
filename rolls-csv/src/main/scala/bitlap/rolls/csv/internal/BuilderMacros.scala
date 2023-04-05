@@ -4,13 +4,16 @@ import scala.quoted.*
 import scala.compiletime.*
 import bitlap.rolls.csv.*
 import bitlap.rolls.csv.builder.*
+
 import scala.deriving.Mirror
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/4/5
  */
-object BuilderMacros {
+private[csv] object BuilderMacros {
+
+  private type IsString[S <: String] = S
 
   transparent inline def dropCompletionField[
     SpecificBuilder[_, _ <: Tuple, _ <: Tuple],
@@ -40,20 +43,18 @@ object BuilderMacros {
     selector: Expr[From => Field]
   )(using Quotes) =
     import quotes.reflect.*
-    val selectedField = selectedFieldName(selector)
-    constantString(selectedField) match {
-      case '[field] =>
+    val selectedField = selectedFieldName(selector).asConstantType
+    selectedField match {
+      case '[IsString[selectedField]] =>
         '{
           $builder.asInstanceOf[
             SpecificBuilder[
               From,
               FromSubs,
-              Field.DropByLabel[field, DerivedFromSubs],
+              Field.DropByLabel[selectedField, DerivedFromSubs],
             ]
           ]
         }
-      case _ =>
-        report.errorAndAbort("Not a field selector!")
     }
 
   private def selectedFieldName[From: Type, FieldType](lambda: Expr[From => FieldType])(using Quotes): String = {
@@ -65,8 +66,10 @@ object BuilderMacros {
     }
   }
 
-  private def constantString(value: String)(using Quotes) =
-    import quotes.reflect.*
-    ConstantType(StringConstant(value)).asType
-
+  extension (value: String) {
+    def asConstantType(using Quotes): Type[? <: AnyKind] = {
+      import quotes.reflect.*
+      ConstantType(StringConstant(value)).asType
+    }
+  }
 }

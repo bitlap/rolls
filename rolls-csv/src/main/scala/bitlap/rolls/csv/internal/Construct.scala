@@ -11,7 +11,7 @@ import scala.compiletime.*
  *    梦境迷离
  *  @version 1.0,2023/4/5
  */
-object Construct:
+private[csv] object Construct:
 
   inline def constructInstance[L](
     values: List[String],

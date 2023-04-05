@@ -13,7 +13,9 @@
 
 ----
 
-# Features
+# rolls-core
+
+## Features
 
 - **@rhsMapping** on `val`
   - Replace the `rhs` of the constant `ValDef` with specifying one
@@ -29,14 +31,14 @@
   - **@stringMask** add on the fields of classes or case classes, the field will output as `***`
 - **config.properties** Specify some options
 
-# Dependency
+## Dependency
 ``` sbt
 autoCompilerPlugins := true
 addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0")
 libraryDependencies += "org.bitlap" %% "rolls-core" % "0.1.0"
 ```
 
-# @classSchema
+## @classSchema
 
 <details>
 <summary>Example</summary>
@@ -174,7 +176,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 </details>
 
 
-# @prettyToString
+## @prettyToString
 
 <details>
 <summary>Example</summary>
@@ -202,7 +204,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 
 </details>
 
-# @prettyToString with @stringMask
+## @prettyToString with @stringMask
 
 <details>
 <summary>Example</summary>
@@ -229,3 +231,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 ```
 
 </details>
+
+# rolls-csv
+
+TODO
