@@ -30,7 +30,7 @@ addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheckAll")
 
 lazy val scala3Version  = "3.2.2"
-lazy val jacksonVersion = "2.14.1"
+lazy val jacksonVersion = "2.14.2"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 lazy val commonSettings =
