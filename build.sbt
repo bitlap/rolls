@@ -64,7 +64,7 @@ lazy val `rolls` = (project in file("."))
   .settings(
     publish / skip := true,
     commonSettings,
-    Commands.value
+    commands ++= Commands.value
   )
 
 lazy val `rolls-csv` = (project in file("rolls-csv"))
