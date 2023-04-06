@@ -234,7 +234,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 
 # rolls-csv
 
-## Read from file
+## Read from CSV file
 
 <details>
 <summary>Example</summary>
@@ -250,20 +250,18 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 
 </details>
 
-## Write to file
+## Write to CSV file
 
 <details>
 <summary>Example</summary>
 
 ``` scala
-    val file = new File("./simple_data.csv")
     if (file.exists()) file.delete() else file.createNewFile()
-    val status:Boolean = CSVUtils.writeCSV(file,
-      Metric.`simple_data_objs`.map { m =>
-        m.into
-          .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
-          .encode
-    })
+    val status: Boolean = CSVUtils.writeCSV(file, Metric.`simple_data_objs`) { m =>
+      m.into
+        .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
+        .encode
+    }
 ```
 
 </details>

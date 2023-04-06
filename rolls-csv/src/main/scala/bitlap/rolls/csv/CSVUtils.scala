@@ -42,6 +42,9 @@ object CSVUtils {
     ts.result()
   }
 
+  def writeCSV[T <: Product](file: File, objs: List[T])(func: T => String)(using format: CsvFormat): Boolean =
+    writeCSV(file, objs.map(func))
+
   def writeCSV(fileName: String, lines: List[String])(using format: CsvFormat): Boolean =
     writeCSV(new File(fileName), lines)
 
