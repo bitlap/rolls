@@ -11,7 +11,7 @@ import munit.FunSuite
 class CSVUtilsSuite extends FunSuite {
 
   test("CSVUtils#readCSV ok") {
-    val file = ClassLoader.getSystemResource("simple_data.csv").getFile
+    val file = this.getClass.getClassLoader.getResource("simple_data.csv").getFile
     val metrics: List[Metric] = CSVUtils.readCSV(file) { line =>
       line
         .into[Metric]

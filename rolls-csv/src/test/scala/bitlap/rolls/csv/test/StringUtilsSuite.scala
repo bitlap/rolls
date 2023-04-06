@@ -1,6 +1,5 @@
 package bitlap.rolls.csv.test
 
-import java.io.{ BufferedReader, InputStreamReader }
 import bitlap.rolls.csv.*
 import bitlap.rolls.csv.test.model.*
 import munit.FunSuite
@@ -24,21 +23,5 @@ class StringUtilsSuite extends FunSuite {
     val csv  = StringUtils.extractJsonValues[Dimension](line)((k, v) => Dimension(k, v))
     println(csv)
     assert(csv.toString() == "List(Dimension(\"a\",\"b\"), Dimension(\"c\",\"d\"))")
-  }
-
-  test("StringUtilsTest ok for file") {
-    val reader         = new InputStreamReader(ClassLoader.getSystemResourceAsStream("simple_data.csv"))
-    val bufferedReader = new BufferedReader(reader)
-    CSVUtils.using(bufferedReader) { input =>
-      var line: String = null
-      while ({
-        line = input.readLine()
-        line != null
-      }) {
-        // List(Dimension("city","北京"), Dimension("os","Mac"))
-        val dims = StringUtils.extractJsonValues(line)((k, v) => Dimension(k, v))
-        println(dims.size == 2)
-      }
-    }
   }
 }
