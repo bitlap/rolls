@@ -34,9 +34,6 @@ inThisBuild(
   )
 )
 
-addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
-addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheckAll")
-
 Global / onChangedBuildSource := ReloadOnSourceChanges
 lazy val commonSettings =
   Seq(
@@ -66,7 +63,8 @@ lazy val `rolls` = (project in file("."))
   )
   .settings(
     publish / skip := true,
-    commonSettings
+    commonSettings,
+    Commands.value
   )
 
 lazy val `rolls-csv` = (project in file("rolls-csv"))

@@ -14,24 +14,6 @@ import scala.compiletime.testing.*
 
 class AppliedDecoderBuilderSuite extends FunSuite {
 
-  val csvData =
-    """100,1,"{""city"":""北京"",""os"":""Mac""}",vv,1
-      |100,1,"{""city"":""北京"",""os"":""Mac""}",pv,2
-      |100,1,"{""city"":""北京"",""os"":""Windows""}",vv,1
-      |100,1,"{""city"":""北京"",""os"":""Windows""}",pv,3
-      |100,2,"{""city"":""北京"",""os"":""Mac""}",vv,1
-      |100,2,"{""city"":""北京"",""os"":""Mac""}",pv,5
-      |100,3,"{""city"":""北京"",""os"":""Mac""}",vv,1
-      |100,3,"{""city"":""北京"",""os"":""Mac""}",pv,2
-      |200,1,"{""city"":""北京"",""os"":""Mac""}",vv,1
-      |200,1,"{""city"":""北京"",""os"":""Mac""}",pv,2
-      |200,1,"{""city"":""北京"",""os"":""Windows""}",vv,1
-      |200,1,"{""city"":""北京"",""os"":""Windows""}",pv,3
-      |200,2,"{""city"":""北京"",""os"":""Mac""}",vv,1
-      |200,2,"{""city"":""北京"",""os"":""Mac""}",pv,5
-      |200,3,"{""city"":""北京"",""os"":""Mac""}",vv,1
-      |200,3,"{""city"":""北京"",""os"":""Mac""}",pv,2""".stripMargin
-
   test("decode simple class to csv string") {
     val obj = "hello world,2,0.4,"
       .into[SimpleClass]
@@ -42,7 +24,7 @@ class AppliedDecoderBuilderSuite extends FunSuite {
   }
 
   test("decode simple class from csv list") {
-    val metrics: List[Metric] = csvData
+    val metrics: List[Metric] = Metric.`simple_data_string`
       .split("\n")
       .toList
       .map(csv =>

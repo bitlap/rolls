@@ -9,7 +9,7 @@ import munit.FunSuite
  *    梦境迷离
  *  @version 1.0,2022/4/30
  */
-class StringUtilsTest extends FunSuite {
+class StringUtilsSuite extends FunSuite {
 
   test("StringUtilsTest#splitColumns ok") {
     val line = """abc,"{""a"":""b"",""c"":""d""}",d,12,2,false,0.1,0.23333"""
@@ -29,7 +29,7 @@ class StringUtilsTest extends FunSuite {
   test("StringUtilsTest ok for file") {
     val reader         = new InputStreamReader(ClassLoader.getSystemResourceAsStream("simple_data.csv"))
     val bufferedReader = new BufferedReader(reader)
-    FileUtils.using(bufferedReader) { input =>
+    CSVUtils.using(bufferedReader) { input =>
       var line: String = null
       while ({
         line = input.readLine()

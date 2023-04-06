@@ -234,4 +234,18 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 
 # rolls-csv
 
-TODO
+## Read from file
+
+<details>
+<summary>Example</summary>
+
+``` scala
+    val file = ClassLoader.getSystemResource("simple_data.csv").getFile
+    val metrics: List[Metric] = CSVUtils.readCSV(file) { line =>
+      line
+        .into[Metric]
+        .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
+        .decode
+```
+
+</details>
