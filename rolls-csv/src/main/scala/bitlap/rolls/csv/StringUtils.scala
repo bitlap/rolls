@@ -70,12 +70,6 @@ object StringUtils {
 
   /** Using in macro impl
    */
-  def combineRows(list: List[String])(using format: CsvFormat): String =
-    if (list.isEmpty) ""
-    else list.mkString(format.lineTerminator)
-
-  /** Using in macro impl
-   */
   def splitColumns(line: => String)(using format: CsvFormat): List[String] = {
     val listBuffer   = ListBuffer[String]()
     val columnBuffer = ListBuffer[Char]()
