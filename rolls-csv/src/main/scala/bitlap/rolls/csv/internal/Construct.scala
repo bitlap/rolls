@@ -41,15 +41,4 @@ private[csv] object Construct:
     StringUtils.combineColumns(result.toList)
   }
 
-  inline def labelIndices[
-    Labels <: Tuple,
-    Acc <: Int
-  ]: Map[FieldName, Int] =
-    inline erasedValue[Labels] match {
-      case _: EmptyTuple => Map.empty
-      case _: (h *: t) =>
-        val labelToIndex = FieldName(constValue[h].asInstanceOf[String]) -> constValue[Acc]
-        labelIndices[t, S[Acc]] + labelToIndex
-    }
-
 end Construct
