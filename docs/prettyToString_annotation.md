@@ -1,11 +1,11 @@
 ---
-title: @prettyToString Annotation
+title: prettyToString Annotation
 custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/prettyToString_annotation.md
 ---
 
 ## Using `@prettyToString` on classes
 
-**@prettyToString** can bed added on classes or case classes. It will ignore private fields.
+**@prettyToString** can be added on classes or case classes. It will ignore private fields.
 
 - If `standard` is `true`, call `toString` yields `Test(field1=value1,field2=value2)`.
 - If `standard` is `false`, call `toString` yields `{"field1":"value1","field2":"value2"}`.
@@ -29,9 +29,9 @@ final case class TestCaseClassJsonNamedArg(
 
 ## Using `@stringMask` on fields
 
-**@stringMask** can bed added on the fields of classes or case classes, the field will output as `***`.
+**@stringMask** can be added on the fields of class or case class, the field will output as `***`.
 
-`@stringMask` can be on the field type or on the field name.
+`@stringMask` can be added on the field type or on the field name.
 
 ``` scala
 @prettyToString
