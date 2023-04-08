@@ -7,6 +7,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.github.pjfanning.`enum`.EnumModule
 
+/** @author
+ *    梦境迷离
+ *  @version 1.0,2023/4/8
+ */
 object RollsRuntime {
 
   final lazy val mapper = JsonMapper

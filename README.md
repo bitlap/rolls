@@ -24,3 +24,4 @@ The Collection of Rolling Kings.
 - `@classSchema` Annotation [Document](./docs/classSchema_annotation.md)
 - `@prettyToString` Annotation [Document](./docs/prettyToString_annotation.md)
 - CSV Encoder/Decoder [Document](./docs/csv.md)
+- `java.sql.ResultSet` Data Extractor [Document](./docs/resultset_x.md)

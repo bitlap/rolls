@@ -13,6 +13,7 @@ lazy val scalacheckVersion = "1.17.0"
 lazy val munitVersion      = "0.7.29"
 lazy val configVersion     = "1.4.2"
 lazy val postgresqlVersion = "42.6.0"
+lazy val h2Version         = "2.1.214"
 
 inThisBuild(
   List(
@@ -83,7 +84,9 @@ lazy val `rolls-core` = (project in file("rolls-core"))
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion,
       "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion,
-      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion,
+      "org.scalatest"                 %% "scalatest"                  % scalatestVersion % Test,
+      "com.h2database"                 % "h2"                         % h2Version        % Test
     )
   )
 
