@@ -1,11 +1,11 @@
 ---
-title: @classSchema Annotation
+title: classSchema Annotation
 custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/classSchema_annotation.md
 ---
 
 ## Using `@classSchema` on classes
 
-**@classSchema** can bed added on classes or case classes. It only for all public concrete methods and **exclude** methods of product.
+**@classSchema** can be added on classes or case classes. It only resolves schemas for public concrete methods and **excludes** the methods of `Product` and `Any`.
 
 ``` scala
 @classSchema
@@ -25,7 +25,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 
 curl `http://localhost:18000/rolls-schema?className=SimpleClassTest`
 
-It depends configs:
+It needs configs:
 ``` properties
 classSchemaPostUri=http://localhost:18000/rolls-doc     # post data
 postClassSchemaToServer=true                            # enable
