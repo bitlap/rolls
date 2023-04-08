@@ -4,7 +4,15 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-val exampleVersion = "0.1.0"
+lazy val exampleVersion = "0.1.0"
+
+lazy val scala3Version     = "3.2.2"
+lazy val jacksonVersion    = "2.14.1"
+lazy val scalatestVersion  = "3.2.15"
+lazy val scalacheckVersion = "1.17.0"
+lazy val munitVersion      = "0.7.29"
+lazy val configVersion     = "1.4.2"
+lazy val postgresqlVersion = "42.6.0"
 
 inThisBuild(
   List(
@@ -26,11 +34,6 @@ inThisBuild(
   )
 )
 
-addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
-addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheckAll")
-
-lazy val scala3Version  = "3.2.2"
-lazy val jacksonVersion = "2.14.2"
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 lazy val commonSettings =
@@ -61,7 +64,8 @@ lazy val `rolls` = (project in file("."))
   )
   .settings(
     publish / skip := true,
-    commonSettings
+    commonSettings,
+    commands ++= Commands.value
   )
 
 lazy val `rolls-csv` = (project in file("rolls-csv"))
@@ -69,7 +73,7 @@ lazy val `rolls-csv` = (project in file("rolls-csv"))
     commonSettings,
     name := "rolls-csv",
     libraryDependencies ++= Seq(
-      "org.scalameta" %% "munit" % "0.7.29" % Test
+      "org.scalameta" %% "munit" % munitVersion % Test
     )
   )
 
@@ -90,8 +94,8 @@ lazy val `rolls-plugin-server` = (project in file("rolls-plugin-server"))
     publish / skip := true,
     name           := "rolls-plugin-server",
     libraryDependencies ++= Seq(
-      "org.postgresql" % "postgresql" % "42.6.0",
-      "com.typesafe"   % "config"     % "1.4.2"
+      "org.postgresql" % "postgresql" % postgresqlVersion,
+      "com.typesafe"   % "config"     % configVersion
     )
   )
   .dependsOn(`rolls-compiler-plugin`, `rolls-core`)
@@ -117,8 +121,8 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % exampleVersion),
     libraryDependencies ++= Seq(
-      "org.scalatest"  %% "scalatest"  % "3.2.15" % Test,
-      "org.scalacheck" %% "scalacheck" % "1.17.0" % Test
+      "org.scalatest"  %% "scalatest"  % scalatestVersion  % Test,
+      "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test
     )
   )
   .dependsOn(`rolls-core`)

@@ -28,7 +28,6 @@ package bitlap.rolls.csv
 trait CsvFormat extends Serializable {
   def delimiter: Char
   def escapeChar: Char
-  def lineTerminator: String
 
   /** Mode for writing string into files.
    */
@@ -45,20 +44,14 @@ trait CsvFormat extends Serializable {
   /** Ignore the first row when reading from file.
    */
   def ignoreHeader: Boolean = false
-
-  /** Ignore empty lines when reading and ignore empty strings when writing.
-   */
-  def ignoreEmptyLines: Boolean = false
 }
 
 object DefaultCsvFormat extends CsvFormat {
-  val delimiter: Char        = ','
-  val escapeChar: Char       = '"'
-  val lineTerminator: String = "\n"
+  val delimiter: Char  = ','
+  val escapeChar: Char = '"'
 }
 
 object TsvFormat extends CsvFormat {
-  val delimiter: Char        = '\t'
-  val escapeChar: Char       = '\\'
-  val lineTerminator: String = "\n"
+  val delimiter: Char  = '\t'
+  val escapeChar: Char = '\\'
 }
