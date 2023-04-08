@@ -36,7 +36,7 @@ trait ResultSetX[T <: TypeRow] {
     getColumnValues(resultSet, 1, size)
 
   protected def getColumnValues(resultSet: ResultSet, idx: Int, size: Int): TypeRow = {
-    if (idx == size) return EmptyTuple
+    if (idx == size + 1) return EmptyTuple
     val metadata = resultSet.getMetaData
     val tpe      = metadata.getColumnType(idx)
     val name     = metadata.getColumnName(idx)
