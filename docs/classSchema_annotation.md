@@ -1,5 +1,5 @@
 ---
-title: `@classSchema` Annotation
+title: @classSchema Annotation
 custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/classSchema_annotation.md
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: `@prettyToString` Annotation
-custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/prettyToString_annottaion.md
+title: @prettyToString Annotation
+custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/prettyToString_annotation.md
 ---
 
 ## Using `@prettyToString` on classes
