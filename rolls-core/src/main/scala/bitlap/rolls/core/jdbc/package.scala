@@ -63,3 +63,4 @@ extension (typeRow: TypeRow)
         tuple2.head :: tuple2(1).asInstanceOf[TypeRow].values
       case t: TypeRow1[?] => List(t.productIterator.toList.head)
       case EmptyTuple     => Nil
+      case _              => Nil
