@@ -17,6 +17,6 @@
 
 - quickstart [Document](./docs/quickstart.md)
 - installation [Document](./docs/installation.md)
-- `@classSchema` Annotation [Document](./docs/classSchema_annottaion.md)
-- `@prettyToString` Annotation [Document](./docs/prettyToString_annottaion.md)
+- `@classSchema` Annotation [Document](./docs/classSchema_annotation.md)
+- `@prettyToString` Annotation [Document](./docs/prettyToString_annotation.md)
 - CSV Encoder/Decoder [Document](./docs/csv.md)
