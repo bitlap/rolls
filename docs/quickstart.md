@@ -15,11 +15,11 @@ This guide gets you started with rolls with a simple working example.
 The example code is part of the [rolls](https://github.com/bitlap/rolls) repository.
 
 1. clone the repo:
-   ```bash
+   ``` bash
    git clone https://github.com/bitlap/rolls
    ```
 
 2. Change to the examples directory:
-   ```bash
+   ``` bash
    cd rolls/rolls-tests
    ```

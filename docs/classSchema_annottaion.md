@@ -1,6 +1,6 @@
 ---
 title: `@classSchema` Annotation
-custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/classSchema_annottaion.md
+custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/classSchema_annotation.md
 ---
 
 ## Using `@classSchema` on classes
