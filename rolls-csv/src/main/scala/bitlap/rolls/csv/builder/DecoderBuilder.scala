@@ -30,15 +30,8 @@ trait DecoderBuilder[
 
   final inline def build(using csvFormat: CsvFormat): Decoder[To] =
     summonFrom {
-      case fromMirror: Mirror.ProductOf[To] =>
-        (from: String) => {
-          val strings  = StringUtils.splitColumns(from)
-          val decoders = Derivation.decodersForAllFields[DerivedToSubs]
-          val valueArrayOfTo =
-            Construct.constructInstance[fromMirror.MirroredElemLabels](strings, 0, decoders, computes)
-          fromMirror.fromProduct(Tuple.fromArray(valueArrayOfTo.toArray))
-        }
-      case _ => throw new Exception("Decoder Only support case classes!")
+      case toMirror: Mirror.ProductOf[To] => CodecMacros.decode[To, DerivedToSubs](toMirror, computes)
+      case _                              => throw new Exception("Decoder Only support case classes!")
     }
 
   def construct[DerivedToSubs <: Tuple](

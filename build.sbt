@@ -48,8 +48,8 @@ lazy val commonSettings =
       "-explain",
       "unchecked",
       "-deprecation",
-      "-feature",
-      "-Ydebug"
+      "-feature"
+//      "-Ydebug"
 //      "-Xshow-phases"
     )
   )

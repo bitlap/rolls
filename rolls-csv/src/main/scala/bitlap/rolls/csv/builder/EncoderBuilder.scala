@@ -30,17 +30,8 @@ trait EncoderBuilder[
 
   final inline def build(using csvFormat: CsvFormat): Encoder[From] =
     summonFrom {
-      case fromMirror: Mirror.ProductOf[From] =>
-        (from: From) => {
-          val encoders = Derivation.encodersForAllFields[DerivedFromSubs]
-          Construct.constructCSV(from.asInstanceOf[Product]) { (labelsToValuesOfFrom, label) =>
-            val fieldValue                                  = labelsToValuesOfFrom(label)
-            lazy val maybeValueFromDerived: Option[String]  = encoders.get(label).map(_.encode(fieldValue))
-            lazy val maybeValueFromComputed: Option[String] = computes.get(label).map(f => f(fieldValue))
-            maybeValueFromDerived.orElse(maybeValueFromComputed).getOrElse(fieldValue.toString)
-          }
-        }
-      case _ => throw new Exception("Encoder Only support case classes!")
+      case fromMirror: Mirror.ProductOf[From] => CodecMacros.encode[From, DerivedFromSubs](computes)
+      case _                                  => throw new Exception("Encoder Only support case classes!")
     }
 
   def construct[DerivedFromSubs <: Tuple](

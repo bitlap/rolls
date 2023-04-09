@@ -22,13 +22,13 @@
 package bitlap.rolls.csv
 
 import scala.compiletime.*
-import scala.deriving.Mirror
 import scala.util.Try
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/2/22
  */
+@FunctionalInterface
 trait Decoder[T]:
   def decode(str: String): T
 end Decoder
