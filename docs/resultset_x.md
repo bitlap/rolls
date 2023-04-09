@@ -9,7 +9,7 @@ If you want to quickly obtain all the data for the `ResultSet` without relying o
 
 ``` scala
 val rowSet: ResultSet = statement.getResultSet
-// ret is a Scala Tuple
+// rows is a Scala Tuple
 val rows = ResultSetX[TypeRow4[Int, String, String, String]](rowSet).fetch()
 assert(rows.size == 2)
 // Scala3 Tuple to List
