@@ -8,7 +8,7 @@ custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/prettyToString
 **@prettyToString** can be added on classes or case classes. It will ignore private fields.
 
 - If `standard` is `true`, call `toString` yields `Test(field1=value1,field2=value2)`.
-- If `standard` is `false`, call `toString` yields `{"field1":"value1","field2":"value2"}`.
+- Otherwise, call `toString` yields `{"field1":"value1","field2":"value2"}`.
 
 ``` scala
 @prettyToString(standard = false)

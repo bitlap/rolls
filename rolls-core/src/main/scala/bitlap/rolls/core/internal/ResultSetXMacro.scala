@@ -16,7 +16,7 @@ object ResultSetXMacro {
   def resultSetXImpl[T <: TypeRow: Type](resultSet: Expr[ResultSet])(using quotes: Quotes): Expr[ResultSetX[T]] =
     import quotes.reflect.*
     def error = report.errorAndAbort(
-      s"Cannot derive resultSetX for ${TypeRepr.of[T].show}. Only case classes are supported"
+      s"Cannot derive ResultSetX for ${TypeRepr.of[T].show}. Only case classes are supported."
     )
     Expr.summon[Mirror.ProductOf[T]].getOrElse(error) match
       case '{ $m: Mirror.ProductOf[T] { type MirroredElemTypes = types } } =>
