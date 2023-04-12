@@ -29,7 +29,9 @@ final case class RollsConfig(
   postClassSchemaToServer: Boolean = false,
   stringMask: String = "bitlap.rolls.core.annotations.stringMask",
   rollsRuntimeClass: String = "bitlap.rolls.core.RollsRuntime",
-  rollsRuntimeToStringMethod: String = "toString_"
+  rollsRuntimeToStringMethod: String = "toString_",
+  validatePrefixPhaseBy: String = "caliban.schema.Annotations.GQLDescription",
+  validateShouldStartWith: String = "star"
 )
 object RollsConfig:
   lazy val default: RollsConfig = RollsConfig()
@@ -41,14 +43,15 @@ final class RollsSetting(configFile: Option[String]) {
 
   private def readConfig(): RollsConfig = {
     val default = RollsConfig.default
-    configFile.map { file =>
-      val bufferedSource = Source.fromFile(file)
-      val config = bufferedSource.getLines.foldLeft(default) { (config, line) =>
+    val lines   = configFile.map(_.split('\n')).getOrElse(Array.empty[String])
+    lines
+      .foldLeft(default) { (config, line) =>
         if line.startsWith("#") then config
         else {
           val parts = line.split('=')
-          assert(parts.length == 2, "incorrect config file " + file + ", line = " + line)
-          parts(0) match
+          assert(parts.length == 2, "incorrect config line = " + line)
+          val name = parts(0).trim
+          name match
             case "classSchema"                => config.copy(classSchema = parts(1).trim)
             case "prettyToString"             => config.copy(prettyToString = parts(1).trim)
             case "rhsMapping"                 => config.copy(rhsMapping = parts(1).trim)
@@ -62,11 +65,9 @@ final class RollsSetting(configFile: Option[String]) {
             case "stringMask"                 => config.copy(stringMask = parts(1).trim)
             case "rollsRuntimeClass"          => config.copy(rollsRuntimeClass = parts(1).trim)
             case "rollsRuntimeToStringMethod" => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
+            case "validatePrefixPhaseBy"      => config.copy(validatePrefixPhaseBy = parts(1).trim)
+            case "validateShouldStartWith"    => config.copy(validateShouldStartWith = parts(1).trim)
         }
       }
-      bufferedSource.close()
-
-      config
-    }.getOrElse(default)
   }
 }

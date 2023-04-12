@@ -32,6 +32,18 @@ trait PluginPhaseFilter[T]:
 
 end PluginPhaseFilter
 
+trait ValDefPluginPhaseFilter extends PluginPhaseFilter[ValDef]:
+
+  override def existsAnnot(tree: ValDef): Context ?=> Boolean = {
+    val annotCls = annotationFullNames.map(requiredClass(_))
+    tree.mods.annotations.collectFirst {
+      case Apply(Select(New(Ident(an)), _), _) if annotCls.map(_.name.asSimpleName).contains(an.asSimpleName) =>
+        true
+    }.getOrElse(false)
+  }
+
+end ValDefPluginPhaseFilter
+
 trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
 
   override def existsAnnot(tree: TypeDef): Context ?=> Boolean = {

@@ -25,26 +25,24 @@ libraryDependencies ++= Seq(
 
 Add the following to `build.sbt`:
 ``` scala
+lazy val config =
+  """|classSchema=bitlap.rolls.core.annotations.classSchema
+    |prettyToString=bitlap.rolls.core.annotations.prettyToString
+    |rhsMapping=bitlap.rolls.core.annotations.rhsMapping
+    |customRhsMapping=bitlap.rolls.core.annotations.customRhsMapping
+    |classSchemaFolder=/tmp/.compiler
+    |classSchemaFileName=classSchema_%s.txt
+    |rhsMappingUri=http://localhost:18000/rolls-mapping
+    |classSchemaPostUri=http://localhost:18000/rolls-doc
+    |postClassSchemaToServer=false
+    |classSchemaQueryUri=http://localhost:18000/rolls-schema
+    |stringMask=bitlap.rolls.core.annotations.stringMask
+    |rollsRuntimeClass=bitlap.rolls.core.RollsRuntime
+    |rollsRuntimeToStringMethod=toString_""".stripMargin
+    
 scalacOptions ++= Seq(
-  "-P:RollsCompilerPlugin:/config.properties" // Absolute path
+  s"-P:RollsCompilerPlugin:$config"
 )
-```
-
-Configuration Example:
-```properties
-classSchema=bitlap.rolls.core.annotations.classSchema
-prettyToString=bitlap.rolls.core.annotations.prettyToString
-rhsMapping=bitlap.rolls.core.annotations.rhsMapping
-customRhsMapping=bitlap.rolls.core.annotations.customRhsMapping
-classSchemaFolder=/tmp/.compiler
-classSchemaFileName=classSchema_%s.txt
-rhsMappingUri=http://localhost:18000/rolls-mapping      # need  start `rolls-plugin-server/../HttpServer.scala`
-classSchemaPostUri=http://localhost:18000/rolls-doc     # need  start `rolls-plugin-server/../HttpServer.scala`
-postClassSchemaToServer=false                           # need  start `rolls-plugin-server/../HttpServer.scala`
-classSchemaQueryUri=http://localhost:18000/rolls-schema # need  start `rolls-plugin-server/../HttpServer.scala`
-stringMask=bitlap.rolls.core.annotations.stringMask
-rollsRuntimeClass=bitlap.rolls.core.annotations.stringMask
-rollsRuntimeToStringMethod=toString_
 ```
 
 > The feature with experimental annotations has hardly been tested and is not available.
