@@ -107,7 +107,7 @@ extension (td: TypeDef)
 
   def isCaseClass: Context ?=> Boolean =
     td.symbol.asClass.parentSyms.contains(defn.ProductClass) &&
-      td.tpe.member(nme.copy).filterWithFlags(Synthetic, EmptyFlags).exists
+    td.tpe.member(nme.copy).filterWithFlags(Synthetic, EmptyFlags).exists
 
   def getPrimaryConstructor: Context ?=> Symbols.Symbol = td.tpe.typeSymbol.primaryConstructor
 

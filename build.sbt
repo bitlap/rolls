@@ -4,8 +4,8 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-ThisBuild / version := "0.1.0-SNAPSHOT"
-lazy val exampleVersion = "0.2.0"
+// publish snapshot for rolls-test
+lazy val exampleVersion = "0.2.2-SNAPSHOT"
 
 lazy val scala3Version     = "3.2.2"
 lazy val jacksonVersion    = "2.14.1"
@@ -15,7 +15,7 @@ lazy val munitVersion      = "0.7.29"
 lazy val configVersion     = "1.4.2"
 lazy val postgresqlVersion = "42.6.0"
 lazy val h2Version         = "2.1.214"
-lazy val calibanVersion = "2.1.0"
+lazy val calibanVersion    = "2.1.0"
 
 inThisBuild(
   List(
@@ -32,8 +32,9 @@ inThisBuild(
         url = url("https://blog.dreamylost.cn")
       )
     )
-    // publish
-    // credentials += Credentials(Path.userHome / ".ivy2" / ".bitlap_sonatype_credentials")
+    // publish snapshot for rolls-test
+    ,
+    credentials += Credentials(Path.userHome / ".ivy2" / ".bitlap_sonatype_credentials")
   )
 )
 
@@ -50,8 +51,8 @@ lazy val commonSettings =
       "-explain",
       "unchecked",
       "-deprecation",
-      "-feature",
-      "-Ydebug"
+      "-feature"
+//      "-Ydebug"
 //      "-Xshow-phases"
     )
   )
@@ -139,11 +140,11 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
       "-Xprint:parser,typer,posttyper,erasure"
     ),
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT"),
+    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % exampleVersion),
     libraryDependencies ++= Seq(
-      "org.scalatest"  %% "scalatest"  % scalatestVersion  % Test,
-      "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test,
-      "com.github.ghostdogpr" %% "caliban" % calibanVersion
+      "org.scalatest"         %% "scalatest"  % scalatestVersion  % Test,
+      "org.scalacheck"        %% "scalacheck" % scalacheckVersion % Test,
+      "com.github.ghostdogpr" %% "caliban"    % calibanVersion
     )
   )
   .dependsOn(`rolls-core`)

@@ -65,8 +65,8 @@ final class RollsSetting(configFile: Option[String]) {
             case "stringMask"                 => config.copy(stringMask = parts(1).trim)
             case "rollsRuntimeClass"          => config.copy(rollsRuntimeClass = parts(1).trim)
             case "rollsRuntimeToStringMethod" => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
-            case "validatePrefixPhaseBy"        => config.copy(validatePrefixPhaseBy = parts(1).trim)
-            case "validateShouldStartWith"        => config.copy(validateShouldStartWith = parts(1).trim)
+            case "validatePrefixPhaseBy"      => config.copy(validatePrefixPhaseBy = parts(1).trim)
+            case "validateShouldStartWith"    => config.copy(validateShouldStartWith = parts(1).trim)
         }
       }
   }
