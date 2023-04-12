@@ -15,7 +15,7 @@ import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
  *  @version 1.0,2023/3/27
  */
 @experimental
-final class RhsMappingPhase(setting: RollsSetting) extends PluginPhase with PluginPhaseFilter[ValDef] {
+final class RhsMappingPhase(setting: RollsSetting) extends PluginPhase with ValDefPluginPhaseFilter {
 
   override val phaseName               = "RhsMappingPhase"
   override val runsAfter: Set[String]  = Set(Staging.name)
@@ -26,16 +26,6 @@ final class RhsMappingPhase(setting: RollsSetting) extends PluginPhase with Plug
   end transformValDef
 
   override val annotationFullNames: List[String] = List(setting.config.rhsMapping, setting.config.customRhsMapping)
-
-  override def existsAnnot(tree: ValDef): Context ?=> Boolean = {
-    val annotCls = annotationFullNames.map(requiredClass(_))
-    tree.mods.annotations.collectFirst {
-      case Apply(Select(New(Ident(an)), _), Nil) if an.asSimpleName == annotCls(0).name.asSimpleName =>
-        true
-      case Apply(Select(New(Ident(an)), _), _) if an.asSimpleName == annotCls(1).name.asSimpleName =>
-        true
-    }.getOrElse(false)
-  }
 
   override def handle(tree: ValDef): Context ?=> ValDef = {
     val annotCls = getDeclarationAnnots

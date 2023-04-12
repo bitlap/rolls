@@ -4,7 +4,8 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-lazy val exampleVersion = "0.1.0"
+ThisBuild / version := "0.1.0-SNAPSHOT"
+lazy val exampleVersion = "0.2.0"
 
 lazy val scala3Version     = "3.2.2"
 lazy val jacksonVersion    = "2.14.1"
@@ -14,6 +15,7 @@ lazy val munitVersion      = "0.7.29"
 lazy val configVersion     = "1.4.2"
 lazy val postgresqlVersion = "42.6.0"
 lazy val h2Version         = "2.1.214"
+lazy val calibanVersion = "2.1.0"
 
 inThisBuild(
   List(
@@ -48,8 +50,8 @@ lazy val commonSettings =
       "-explain",
       "unchecked",
       "-deprecation",
-      "-feature"
-//      "-Ydebug"
+      "-feature",
+      "-Ydebug"
 //      "-Xshow-phases"
     )
   )
@@ -111,20 +113,37 @@ lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
     )
   )
 
+lazy val config =
+  """|classSchema=bitlap.rolls.core.annotations.classSchema
+    |prettyToString=bitlap.rolls.core.annotations.prettyToString
+    |rhsMapping=bitlap.rolls.core.annotations.rhsMapping
+    |customRhsMapping=bitlap.rolls.core.annotations.customRhsMapping
+    |classSchemaFolder=/tmp/.compiler
+    |classSchemaFileName=classSchema_%s.txt
+    |rhsMappingUri=http://localhost:18000/rolls-mapping
+    |classSchemaPostUri=http://localhost:18000/rolls-doc
+    |postClassSchemaToServer=false
+    |classSchemaQueryUri=http://localhost:18000/rolls-schema
+    |stringMask=bitlap.rolls.core.annotations.stringMask
+    |rollsRuntimeClass=bitlap.rolls.core.RollsRuntime
+    |rollsRuntimeToStringMethod=toString_
+    |validatePrefixPhaseBy=caliban.schema.Annotations.GQLDescription
+    |validateShouldStartWith=star""".stripMargin
 lazy val `rolls-tests` = (project in file("rolls-tests"))
   .settings(
     commonSettings,
     publish / skip := true,
     name           := "rolls-tests",
     scalacOptions ++= Seq(
-//      "-P:RollsCompilerPlugin:/Users/liguobin/Projects/rolls/config.properties",
+      s"-P:RollsCompilerPlugin:$config",
       "-Xprint:parser,typer,posttyper,erasure"
     ),
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % exampleVersion),
+    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0-SNAPSHOT"),
     libraryDependencies ++= Seq(
       "org.scalatest"  %% "scalatest"  % scalatestVersion  % Test,
-      "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test
+      "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test,
+      "com.github.ghostdogpr" %% "caliban" % calibanVersion
     )
   )
   .dependsOn(`rolls-core`)

@@ -7,6 +7,8 @@ import dotty.tools.dotc.core.Denotations.SingleDenotation
 import dotty.tools.dotc.core.Names.*
 import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.core.Contexts.Context
+import dotty.tools.dotc.core.Flags.{ EmptyFlags, Synthetic }
+import dotty.tools.dotc.core.StdNames.nme
 import dotty.tools.dotc.core.Symbols
 import dotty.tools.dotc.core.Symbols.{ defn, requiredClass, ClassSymbol, Symbol }
 import dotty.tools.dotc.quoted.reflect.FromSymbol
@@ -26,7 +28,7 @@ final case class Field(
 ):
   def containsAnnotation(annotation: Name): Context ?=> Boolean =
     (annotations ++ getAnnotatedTypeAnnotation.toList).collectFirst {
-      case Apply(Select(New(Ident(an)), _), List()) if an.asSimpleName == annotation => true
+      case Apply(Select(New(Ident(an)), _), _) if an.asSimpleName == annotation => true
     }.getOrElse(false)
   end containsAnnotation
 
@@ -59,7 +61,7 @@ final case class TypeClassDef(
   classSymbol: ClassSymbol,
   contrAnnotations: List[Tree],
   primaryConstructor: Symbol,
-  isProduct: Boolean
+  isCaseClass: Boolean
 )
 extension (s: SingleDenotation)
   // from type
@@ -103,7 +105,9 @@ end extension
 
 extension (td: TypeDef)
 
-  def isProduct: Context ?=> Boolean = td.symbol.asClass.parentSyms.contains(defn.ProductClass)
+  def isCaseClass: Context ?=> Boolean =
+    td.symbol.asClass.parentSyms.contains(defn.ProductClass) &&
+      td.tpe.member(nme.copy).filterWithFlags(Synthetic, EmptyFlags).exists
 
   def getPrimaryConstructor: Context ?=> Symbols.Symbol = td.tpe.typeSymbol.primaryConstructor
 
@@ -114,7 +118,7 @@ extension (td: TypeDef)
     td.mods.annotations
 
   def getContrAnnotations: Context ?=> List[tpd.Tree] =
-    if (td.isClassDef && isProduct)
+    if (td.isClassDef && isCaseClass)
       val typeContrAnnots = td.tpe.typeConstructor.typeSymbol.annotations
       val contrAnnots     = getPrimaryConstructor.annotations
       contrAnnots.map(f => FromSymbol.definitionFromSym(f.symbol)) ++ typeContrAnnots.map(_.tree)
@@ -132,6 +136,6 @@ extension (td: TypeDef)
     td.symbol.asClass,
     getContrAnnotations,
     getPrimaryConstructor,
-    isProduct
+    isCaseClass
   )
 end extension

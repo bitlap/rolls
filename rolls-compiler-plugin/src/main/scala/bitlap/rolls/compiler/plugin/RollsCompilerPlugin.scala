@@ -20,7 +20,7 @@ class RollsCompilerPlugin extends StandardPlugin:
     val setting = new RollsSetting(options.headOption)
     new ClassSchemaPhase(setting) :: new RhsMappingPhase(setting) :: new PrettyToStringPhase(
       setting
-    ) :: Nil
+    ) :: new ValidateIdentPrefixPhase(setting) :: Nil
   }
 
 end RollsCompilerPlugin
