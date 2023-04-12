@@ -5,7 +5,6 @@ import dotty.tools.dotc.ast.tpd.*
 import dotty.tools.dotc.core.*
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.Contexts.Context
-import dotty.tools.dotc.core.Decorators.em
 import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.Names.*
 import dotty.tools.dotc.core.StdNames.nme
@@ -13,8 +12,6 @@ import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.plugins.PluginPhase
 import dotty.tools.dotc.report
-import dotty.tools.dotc.reporting.ErrorMessageID.IdentifierExpectedID
-import dotty.tools.dotc.reporting.SyntaxMsg
 import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
 
 import scala.annotation.threadUnsafe
@@ -101,3 +98,6 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
       }
 
       tree
+  end handle
+
+end ValidateIdentPrefixPhase
