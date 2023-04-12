@@ -33,8 +33,8 @@ inThisBuild(
       )
     )
     // publish snapshot for rolls-test
-    ,
-    credentials += Credentials(Path.userHome / ".ivy2" / ".bitlap_sonatype_credentials")
+//    ,
+//    credentials += Credentials(Path.userHome / ".ivy2" / ".bitlap_sonatype_credentials")
   )
 )
 

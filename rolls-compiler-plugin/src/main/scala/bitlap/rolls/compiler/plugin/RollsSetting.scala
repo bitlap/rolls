@@ -37,13 +37,13 @@ object RollsConfig:
   lazy val default: RollsConfig = RollsConfig()
 end RollsConfig
 
-final class RollsSetting(configFile: Option[String]) {
+final class RollsSetting(configString: Option[String]) {
 
   def config: RollsConfig = readConfig()
 
   private def readConfig(): RollsConfig = {
     val default = RollsConfig.default
-    val lines   = configFile.map(_.split('\n')).getOrElse(Array.empty[String])
+    val lines   = configString.map(_.split('\n')).getOrElse(Array.empty[String])
     lines
       .foldLeft(default) { (config, line) =>
         if line.startsWith("#") then config
