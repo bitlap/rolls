@@ -55,7 +55,6 @@ jobs:
   test:
     # TODO
     runs-on: ubuntu-latest
-    needs: [ publish ]
     steps:
       - uses: actions/checkout@v3
       - name: Setup JDK
