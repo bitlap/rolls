@@ -29,6 +29,7 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
+    if: ${{ vars.RUN_ROLLS_TEST == 'Y' }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup JDK

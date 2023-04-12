@@ -4,10 +4,7 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-// TODO publish snapshot for rolls-test
-//ThisBuild / version := "0.2.2-SNAPSHOT"
-
-lazy val `rolls-test-deps-version` = "0.2.2-SNAPSHOT"
+lazy val `rolls-test-deps-version` = "0.2.1+10-6d606212-SNAPSHOT"
 
 lazy val scala3Version     = "3.2.2"
 lazy val jacksonVersion    = "2.14.1"
@@ -34,9 +31,6 @@ inThisBuild(
         url = url("https://blog.dreamylost.cn")
       )
     )
-    // TODO publish snapshot for rolls-test
-//    ,
-//    credentials += Credentials(Path.userHome / ".ivy2" / ".bitlap_sonatype_credentials")
   )
 )
 
