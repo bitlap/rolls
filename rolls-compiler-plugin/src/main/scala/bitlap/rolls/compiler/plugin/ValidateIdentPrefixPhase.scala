@@ -26,7 +26,7 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
-  override val annotationFullNames: List[String] = List(setting.config.validatePrefixPhaseBy)
+  override val annotationFullNames: List[String] = setting.config.validateIdentPrefix
 
   private lazy val startWith = setting.config.validateShouldStartWith
 
@@ -34,16 +34,15 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
     if (tree.isClassDef) handle(tree) else tree
   end transformTypeDef
 
-  @threadUnsafe private lazy val ValidateAnnotationsClass: Context ?=> ClassSymbol = requiredClass(
-    setting.config.validatePrefixPhaseBy
-  )
+  @threadUnsafe private lazy val ValidateAnnotationsClasses: List[Context ?=> ClassSymbol] =
+    setting.config.validateIdentPrefix.map(v => requiredClass(v))
 
   override def handle(tree: TypeDef): Context ?=> TypeDef =
     // if annotation on type or primaryConstructor, check self name
     if (existsAnnot(tree) && !tree.name.show.startsWith(startWith.capitalize)) {
       report.error(
         s"""
-           |case class name not startWith ${startWith.capitalize} in ${tree.name}
+           |case class name does not startWith ${startWith.capitalize} in ${tree.name}
            |Expected: ${startWith.capitalize}${tree.name.show}
            |Actual: ${tree.name.show}
            |""".stripMargin,
@@ -54,14 +53,16 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
     val typeTypeTree                = tree.toClassDef
     implicit val clazz: ClassSymbol = typeTypeTree.classSymbol
     val paramSyms                   = typeTypeTree.primaryConstructor.paramSymss.flatten.map(_.toField)
-    val existsAnnots                = paramSyms.exists(_.containsAnnotation(ValidateAnnotationsClass.name.asSimpleName))
+    val existsAnnots = ValidateAnnotationsClasses
+      .map(_.name.asSimpleName)
+      .exists(declare => paramSyms.exists(_.containsAnnotation(declare)))
     if !existsAnnots then tree
     else
       // if paramss contains annotation, check self name
       if (!tree.name.asSimpleName.startsWith(startWith.capitalize)) {
         report.error(
           s"""
-             |case class name not startWith ${startWith.capitalize} in ${tree.name}
+             |case class name does not startWith ${startWith.capitalize} in ${tree.name}
              |Expected: ${startWith.capitalize}${tree.name.show}
              |Actual: ${tree.name.show}
              |""".stripMargin,
@@ -71,7 +72,9 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
 
       // if paramss contains annotation, check for case classes and functions
       val annotsParams = paramSyms
-        .filter(_.containsAnnotation(ValidateAnnotationsClass.name.asSimpleName))
+        .filter(p =>
+          ValidateAnnotationsClasses.map(_.name.asSimpleName).exists(declare => p.containsAnnotation(declare))
+        )
         .filter { f =>
           val caseClass =
             f.tpe <:< defn.ProductClass.typeRef && f.tpe.member(nme.copy).filterWithFlags(Synthetic, EmptyFlags).exists

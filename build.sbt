@@ -4,8 +4,10 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-// publish snapshot for rolls-test
-lazy val exampleVersion = "0.2.2-SNAPSHOT"
+// TODO publish snapshot for rolls-test
+//ThisBuild / version := "0.2.2-SNAPSHOT"
+
+lazy val `rolls-test-deps-version` = "0.2.2-SNAPSHOT"
 
 lazy val scala3Version     = "3.2.2"
 lazy val jacksonVersion    = "2.14.1"
@@ -32,7 +34,7 @@ inThisBuild(
         url = url("https://blog.dreamylost.cn")
       )
     )
-    // publish snapshot for rolls-test
+    // TODO publish snapshot for rolls-test
 //    ,
 //    credentials += Credentials(Path.userHome / ".ivy2" / ".bitlap_sonatype_credentials")
   )
@@ -128,7 +130,7 @@ lazy val config =
     |stringMask=bitlap.rolls.core.annotations.stringMask
     |rollsRuntimeClass=bitlap.rolls.core.RollsRuntime
     |rollsRuntimeToStringMethod=toString_
-    |validatePrefixPhaseBy=caliban.schema.Annotations.GQLDescription
+    |validateIdentPrefix=caliban.schema.Annotations.GQLDescription
     |validateShouldStartWith=star""".stripMargin
 lazy val `rolls-tests` = (project in file("rolls-tests"))
   .settings(
@@ -140,7 +142,7 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
       "-Xprint:parser,typer,posttyper,erasure"
     ),
     autoCompilerPlugins := true,
-    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % exampleVersion),
+    addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % `rolls-test-deps-version`),
     libraryDependencies ++= Seq(
       "org.scalatest"         %% "scalatest"  % scalatestVersion  % Test,
       "org.scalacheck"        %% "scalacheck" % scalacheckVersion % Test,

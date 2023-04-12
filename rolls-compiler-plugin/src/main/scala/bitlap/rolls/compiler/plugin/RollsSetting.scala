@@ -1,17 +1,5 @@
 package bitlap.rolls.compiler.plugin
 
-import dotty.tools.dotc._
-import core._
-import Contexts._
-import Symbols._
-import Flags._
-import SymDenotations._
-
-import Decorators._
-import ast.Trees._
-import ast.tpd
-import scala.io.Source
-
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/3/31
@@ -30,8 +18,8 @@ final case class RollsConfig(
   stringMask: String = "bitlap.rolls.core.annotations.stringMask",
   rollsRuntimeClass: String = "bitlap.rolls.core.RollsRuntime",
   rollsRuntimeToStringMethod: String = "toString_",
-  validatePrefixPhaseBy: String = "caliban.schema.Annotations.GQLDescription",
-  validateShouldStartWith: String = "star"
+  validateIdentPrefix: List[String] = List.empty,
+  validateShouldStartWith: String = ""
 )
 object RollsConfig:
   lazy val default: RollsConfig = RollsConfig()
@@ -65,8 +53,9 @@ final class RollsSetting(configString: Option[String]) {
             case "stringMask"                 => config.copy(stringMask = parts(1).trim)
             case "rollsRuntimeClass"          => config.copy(rollsRuntimeClass = parts(1).trim)
             case "rollsRuntimeToStringMethod" => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
-            case "validatePrefixPhaseBy"      => config.copy(validatePrefixPhaseBy = parts(1).trim)
+            case "validateIdentPrefix"        => config.copy(validateIdentPrefix = parts(1).trim.split(",").toList)
             case "validateShouldStartWith"    => config.copy(validateShouldStartWith = parts(1).trim)
+            case _                            => config
         }
       }
   }

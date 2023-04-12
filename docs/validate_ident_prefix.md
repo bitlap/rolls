@@ -6,7 +6,7 @@ custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/validate_ident
 Add Config:
 ``` scala
 lazy val config =
-    """|validatePrefixPhaseBy=caliban.schema.Annotations.GQLDescription
+    """|validateIdentPrefix=caliban.schema.Annotations.GQLDescription
        |validateShouldStartWith=star""".stripMargin
 
 scalacOptions ++= Seq(
