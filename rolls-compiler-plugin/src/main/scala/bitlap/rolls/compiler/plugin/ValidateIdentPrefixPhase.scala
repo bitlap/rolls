@@ -28,7 +28,7 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
 
   override val annotationFullNames: List[String] = setting.config.validateIdentPrefix
 
-  private lazy val startWith = setting.config.validateShouldStartWith
+  private lazy val startsWith = setting.config.validateShouldStartsWith
 
   override def transformTypeDef(tree: TypeDef)(using Context): Tree =
     if (tree.isClassDef) handle(tree) else tree
@@ -39,11 +39,11 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
 
   override def handle(tree: TypeDef): Context ?=> TypeDef =
     // if annotation on type or primaryConstructor, check self name
-    if (existsAnnot(tree) && !tree.name.show.startsWith(startWith.capitalize)) {
+    if (existsAnnot(tree) && !tree.name.show.startsWith(startsWith.capitalize)) {
       report.error(
         s"""
-           |case class name does not startWith ${startWith.capitalize} in ${tree.name}
-           |Expected: ${startWith.capitalize}${tree.name.show}
+           |case class name does not startsWith ${startsWith.capitalize} in ${tree.name}
+           |Expected: ${startsWith.capitalize}${tree.name.show}
            |Actual: ${tree.name.show}
            |""".stripMargin,
         tree.srcPos
@@ -59,11 +59,11 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
     if !existsAnnots then tree
     else
       // if paramss contains annotation, check self name
-      if (!tree.name.asSimpleName.startsWith(startWith.capitalize)) {
+      if (!tree.name.asSimpleName.startsWith(startsWith.capitalize)) {
         report.error(
           s"""
-             |case class name does not startWith ${startWith.capitalize} in ${tree.name}
-             |Expected: ${startWith.capitalize}${tree.name.show}
+             |case class name does not startsWith ${startsWith.capitalize} in ${tree.name}
+             |Expected: ${startsWith.capitalize}${tree.name.show}
              |Actual: ${tree.name.show}
              |""".stripMargin,
           tree.srcPos
@@ -83,16 +83,16 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
         }
 
       val assertFalseName: List[Field] =
-        annotsParams.filter(n => !n.name.startsWith(startWith))
+        annotsParams.filter(n => !n.name.startsWith(startsWith))
 
       // report error for fields
       if (assertFalseName.nonEmpty) {
         report.error(
           s"""
-             |The parameter name of the primary constructor does not startWith ${startWith} in ${tree.name}
+             |The parameter name of the primary constructor does not startsWith ${startsWith} in ${tree.name}
              |Expected: ${assertFalseName
               .map(_.name.show.capitalize)
-              .map(f => s"$startWith$f")
+              .map(f => s"$startsWith$f")
               .mkString(",")}
              |Actual: ${assertFalseName.map(_.name).mkString(",")}
              |""".stripMargin,

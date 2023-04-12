@@ -125,7 +125,7 @@ lazy val config =
     |rollsRuntimeClass=bitlap.rolls.core.RollsRuntime
     |rollsRuntimeToStringMethod=toString_
     |validateIdentPrefix=caliban.schema.Annotations.GQLDescription
-    |validateShouldStartWith=star""".stripMargin
+    |validateShouldStartsWith=star""".stripMargin
 lazy val `rolls-tests` = (project in file("rolls-tests"))
   .settings(
     commonSettings,

@@ -3,25 +3,26 @@ title: Validate Ident Prefix
 custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/validate_ident_prefix.md
 ---
 
-Add Config:
+Add Config for compiler plugin:
 ``` scala
+// Multiple annotations separated by comma.
 lazy val config =
     """|validateIdentPrefix=caliban.schema.Annotations.GQLDescription
-       |validateShouldStartWith=star""".stripMargin
+       |validateShouldStartsWith=star""".stripMargin
 
 scalacOptions ++= Seq(
   s"-P:RollsCompilerPlugin:$config"
 )
 ```
 
-## Validate it
+## What will be verified ? 
 
 - Validate the parameter name within primary constructor:
-  - When the parameter type is a case class or function type
-  - when there are annotations on the parameter or parameter type.
+  - when the parameter type is a case class or function type
+  - when there are annotations on the parameter or parameter type
 - Validate the case class name (use `.capitalize` to validate case classes):
-  - when there are annotations on the primary constructor or type constructor.
-  - when there are annotations on the function type or case class parameters within primary constructor.
+  - when there are annotations on the primary constructor or type constructor
+  - when there are annotations on the function type or case class parameters within primary constructor
 
 ``` scala
 final case class StarDictInput(
@@ -43,11 +44,13 @@ final case class StarDictPayload(
 )
 ```
 
-Compile Error:
+The above code will provide compiler error:
 ```
-The parameter name of the primary constructor does not startWith star in StarDictInput
+The parameter name of the primary constructor does not startsWith star in StarDictInput
 Expected: starDictFunction 
 Actual: dictFunction
 
   final case class StarDictInput(
 ```
+
+> Because dictFunction does not startsWith star

@@ -19,7 +19,7 @@ final case class RollsConfig(
   rollsRuntimeClass: String = "bitlap.rolls.core.RollsRuntime",
   rollsRuntimeToStringMethod: String = "toString_",
   validateIdentPrefix: List[String] = List.empty,
-  validateShouldStartWith: String = ""
+  validateShouldStartsWith: String = ""
 )
 object RollsConfig:
   lazy val default: RollsConfig = RollsConfig()
@@ -54,7 +54,7 @@ final class RollsSetting(configString: Option[String]) {
             case "rollsRuntimeClass"          => config.copy(rollsRuntimeClass = parts(1).trim)
             case "rollsRuntimeToStringMethod" => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
             case "validateIdentPrefix"        => config.copy(validateIdentPrefix = parts(1).trim.split(",").toList)
-            case "validateShouldStartWith"    => config.copy(validateShouldStartWith = parts(1).trim)
+            case "validateShouldStartsWith"   => config.copy(validateShouldStartsWith = parts(1).trim)
             case _                            => config
         }
       }
