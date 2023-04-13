@@ -89,7 +89,7 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
       if (assertFalseName.nonEmpty) {
         report.error(
           s"""
-             |The parameter name of the primary constructor does not startsWith ${startsWith} in ${tree.name}
+             |parameter names of the primary constructor don't startsWith $startsWith in ${tree.name}
              |Expected: ${assertFalseName
               .map(_.name.show.capitalize)
               .map(f => s"$startsWith$f")
