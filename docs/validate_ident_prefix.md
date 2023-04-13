@@ -27,12 +27,12 @@ scalacOptions ++= config
 
 ## What will be verified ? 
 
-- Validate the parameter name within primary constructor:
-  - when the parameter type is a case class or function type.
-  - when there are annotations on the parameter or parameter type.
-- Validate the case class name (use `.capitalize` to validate case classes):
-  - when there are annotations on the primary constructor or type constructor.
-  - when there are annotations on the function type or case class parameters within primary constructor.
+- Validate parameter name within primary constructor:
+  - when parameter type is a case class or function type and has annotations.
+  - annotations can be on parameter or parameter type.
+- Validate case class name (use `.capitalize` to validate case classes):
+  - when primary constructor or type constructor has annotations.
+  - when parameter type is function type or case class and has annotations.
 
 ``` scala
 final case class StarDictInput(
