@@ -4,9 +4,11 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-lazy val `rolls-test-deps-version` = "0.2.2+2-d3965b97-SNAPSHOT"
+lazy val `rolls-test-deps-version` = "0.2.2+12-2db5c449-SNAPSHOT"
 
-lazy val scala3Version     = "3.2.2"
+//ThisBuild / version := `rolls-test-deps-version`
+
+lazy val scala3Version     = "3.2.0"
 lazy val jacksonVersion    = "2.14.1"
 lazy val scalatestVersion  = "3.2.15"
 lazy val scalacheckVersion = "1.17.0"
@@ -18,6 +20,7 @@ lazy val calibanVersion    = "2.1.0"
 
 inThisBuild(
   List(
+    scalaVersion           := scala3Version,
     organization           := "org.bitlap",
     sonatypeCredentialHost := "s01.oss.sonatype.org",
     sonatypeRepository     := "https://s01.oss.sonatype.org/service/local",
@@ -110,31 +113,19 @@ lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
     )
   )
 
-lazy val config =
-  """|classSchema=bitlap.rolls.core.annotations.classSchema
-    |prettyToString=bitlap.rolls.core.annotations.prettyToString
-    |rhsMapping=bitlap.rolls.core.annotations.rhsMapping
-    |customRhsMapping=bitlap.rolls.core.annotations.customRhsMapping
-    |classSchemaFolder=/tmp/.compiler
-    |classSchemaFileName=classSchema_%s.txt
-    |rhsMappingUri=http://localhost:18000/rolls-mapping
-    |classSchemaPostUri=http://localhost:18000/rolls-doc
-    |postClassSchemaToServer=false
-    |classSchemaQueryUri=http://localhost:18000/rolls-schema
-    |stringMask=bitlap.rolls.core.annotations.stringMask
-    |rollsRuntimeClass=bitlap.rolls.core.RollsRuntime
-    |rollsRuntimeToStringMethod=toString_
-    |validateIdentPrefix=caliban.schema.Annotations.GQLDescription
-    |validateShouldStartsWith=star""".stripMargin
+lazy val reader = scala.io.Source.fromFile("config.properties")
+lazy val config = {
+  val ret = reader.getLines().toList.map(p => s"-P:RollsCompilerPlugin:$p")
+  reader.close()
+  ret
+}
+
 lazy val `rolls-tests` = (project in file("rolls-tests"))
   .settings(
     commonSettings,
     publish / skip := true,
     name           := "rolls-tests",
-    scalacOptions ++= Seq(
-      s"-P:RollsCompilerPlugin:$config",
-      "-Xprint:parser,typer,posttyper,erasure"
-    ),
+    scalacOptions ++= config,
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % `rolls-test-deps-version`),
     libraryDependencies ++= Seq(

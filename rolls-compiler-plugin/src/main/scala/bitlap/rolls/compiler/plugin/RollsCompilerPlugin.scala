@@ -5,6 +5,7 @@ import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.DenotTransformers.IdentityDenotTransformer
 import dotty.tools.dotc.plugins.{ PluginPhase, StandardPlugin }
 import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
+import dotty.tools.dotc.config.{ AllScalaSettings, Settings }
 
 /** @author
  *    梦境迷离
@@ -17,7 +18,7 @@ class RollsCompilerPlugin extends StandardPlugin:
   override val description: String = "Rolls Compiler Plugin"
 
   def init(options: List[String]): List[PluginPhase] = {
-    val setting = new RollsSetting(options.headOption)
+    val setting = new RollsSetting(options)
     new ClassSchemaPhase(setting) :: new RhsMappingPhase(setting) :: new PrettyToStringPhase(
       setting
     ) :: new ValidateIdentPrefixPhase(setting) :: Nil

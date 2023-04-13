@@ -4,15 +4,25 @@ custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/validate_ident
 ---
 
 Add Config for compiler plugin:
-``` scala
-// Multiple annotations separated by comma.
-lazy val config =
-    """|validateIdentPrefix=caliban.schema.Annotations.GQLDescription
-       |validateShouldStartsWith=star""".stripMargin
 
-scalacOptions ++= Seq(
-  s"-P:RollsCompilerPlugin:$config"
-)
+**config.properties**:
+``` properties
+# Multiple annotations split by '|'
+validateIdentPrefix=caliban.schema.Annotations.GQLDescription
+validateShouldStartsWith=star
+```
+
+**build.sbt**:
+``` scala
+lazy val reader = scala.io.Source.fromFile("config.properties")
+lazy val config = {
+  val ret = reader.getLines().toList.map(p => s"-P:RollsCompilerPlugin:$p")
+  reader.close()
+  ret
+}
+
+scalacOptions ++= config
+
 ```
 
 ## What will be verified ? 

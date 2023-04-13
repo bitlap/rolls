@@ -25,38 +25,38 @@ object RollsConfig:
   lazy val default: RollsConfig = RollsConfig()
 end RollsConfig
 
-final class RollsSetting(configString: Option[String]) {
+final class RollsSetting(configString: List[String]) {
+
+  private enum ConfigKey:
+    case classSchema, prettyToString, rhsMapping, customRhsMapping, classSchemaFolder, classSchemaFileName,
+      rhsMappingUri, classSchemaPostUri, classSchemaQueryUri, postClassSchemaToServer, stringMask, rollsRuntimeClass,
+      rollsRuntimeToStringMethod, validateIdentPrefix, validateShouldStartsWith
 
   def config: RollsConfig = readConfig()
 
   private def readConfig(): RollsConfig = {
     val default = RollsConfig.default
-    val lines   = configString.map(_.split('\n')).getOrElse(Array.empty[String])
-    lines
+    configString
       .foldLeft(default) { (config, line) =>
-        if line.startsWith("#") then config
-        else {
-          val parts = line.split('=')
-          assert(parts.length == 2, "incorrect config line = " + line)
-          val name = parts(0).trim
-          name match
-            case "classSchema"                => config.copy(classSchema = parts(1).trim)
-            case "prettyToString"             => config.copy(prettyToString = parts(1).trim)
-            case "rhsMapping"                 => config.copy(rhsMapping = parts(1).trim)
-            case "customRhsMapping"           => config.copy(customRhsMapping = parts(1).trim)
-            case "classSchemaFolder"          => config.copy(classSchemaFolder = parts(1).trim)
-            case "classSchemaFileName"        => config.copy(classSchemaFileName = parts(1).trim)
-            case "rhsMappingUri"              => config.copy(rhsMappingUri = parts(1).trim)
-            case "classSchemaPostUri"         => config.copy(classSchemaPostUri = parts(1).trim)
-            case "classSchemaQueryUri"        => config.copy(classSchemaQueryUri = parts(1).trim)
-            case "postClassSchemaToServer"    => config.copy(postClassSchemaToServer = parts(1).trim.toBoolean)
-            case "stringMask"                 => config.copy(stringMask = parts(1).trim)
-            case "rollsRuntimeClass"          => config.copy(rollsRuntimeClass = parts(1).trim)
-            case "rollsRuntimeToStringMethod" => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
-            case "validateIdentPrefix"        => config.copy(validateIdentPrefix = parts(1).trim.split(",").toList)
-            case "validateShouldStartsWith"   => config.copy(validateShouldStartsWith = parts(1).trim)
-            case _                            => config
-        }
+        val parts = line.split('=')
+        assert(parts.length == 2, "incorrect config line = " + line)
+        ConfigKey.valueOf(parts(0).trim) match
+          case ConfigKey.classSchema                => config.copy(classSchema = parts(1).trim)
+          case ConfigKey.prettyToString             => config.copy(prettyToString = parts(1).trim)
+          case ConfigKey.rhsMapping                 => config.copy(rhsMapping = parts(1).trim)
+          case ConfigKey.customRhsMapping           => config.copy(customRhsMapping = parts(1).trim)
+          case ConfigKey.classSchemaFolder          => config.copy(classSchemaFolder = parts(1).trim)
+          case ConfigKey.classSchemaFileName        => config.copy(classSchemaFileName = parts(1).trim)
+          case ConfigKey.rhsMappingUri              => config.copy(rhsMappingUri = parts(1).trim)
+          case ConfigKey.classSchemaPostUri         => config.copy(classSchemaPostUri = parts(1).trim)
+          case ConfigKey.classSchemaQueryUri        => config.copy(classSchemaQueryUri = parts(1).trim)
+          case ConfigKey.postClassSchemaToServer    => config.copy(postClassSchemaToServer = parts(1).trim.toBoolean)
+          case ConfigKey.stringMask                 => config.copy(stringMask = parts(1).trim)
+          case ConfigKey.rollsRuntimeClass          => config.copy(rollsRuntimeClass = parts(1).trim)
+          case ConfigKey.rollsRuntimeToStringMethod => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
+          case ConfigKey.validateIdentPrefix =>
+            config.copy(validateIdentPrefix = parts(1).trim.split('|').map(_.trim).toList)
+          case ConfigKey.validateShouldStartsWith => config.copy(validateShouldStartsWith = parts(1).trim)
       }
   }
 }

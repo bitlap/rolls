@@ -1,8 +1,5 @@
 package bitlap.rolls.core.jdbc
 
-import scala.Tuple.Union
-import scala.compiletime.*
-
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/4/8
