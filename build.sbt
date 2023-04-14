@@ -135,3 +135,14 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
     )
   )
   .dependsOn(`rolls-core`)
+
+
+lazy val `rolls-docs` = project
+  .in(file("rolls-docs"))
+  .dependsOn(`rolls-core`,`rolls-compiler-plugin`,`rolls-csv`)
+  .settings(
+    scalaVersion                                       := scala3Version,
+    publish / skip                                     := true,
+    moduleName                                         := "rolls-docs",
+  )
+  .enablePlugins(MdocPlugin, DocusaurusPlugin)

@@ -73,6 +73,14 @@ jobs:
           distribution: temurin
           java-version: 11
           check-latest: true
+          
+      - name: Update docs
+        run: |
+          sbt rolls-docs/mdoc
+          cd website
+          yarn install
+          yarn deploy
+          
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
       - name: Release artifacts
