@@ -3,6 +3,18 @@ title: classSchema Annotation
 custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/classSchema_annotation.md
 ---
 
+## Installation using SBT (Recommended)
+
+If you are building with sbt, add the following to your `build.sbt`:
+
+```scala
+autoCompilerPlugins := true
+addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "<version>")
+libraryDependencies ++= Seq(
+  "org.bitlap" %% "rolls-core" % "<version>"
+)
+```
+
 ## Use `@classSchema` on classes
 
 **@classSchema** can be added on classes or case classes. It only resolves schemas for public concrete methods and **excludes** the methods of `Product` and `Any`.
