@@ -76,10 +76,18 @@ jobs:
           
       - name: Update docs
         run: |
+          git config --global user.name "Rolls Docs"
+          git config --global user.email "568845948@qq.com"
+          eval "$(ssh-agent -s)"
+          echo "$TOKEN" | ssh-add -
           sbt rolls-docs/mdoc
           cd website
           yarn install
           yarn deploy
+        env:
+          TOKEN: ${{secrets.DEPLOY_KEY}}
+          USE_SSH: true
+          GIT_USER: git
           
       - name: Cache scala dependencies
         uses: coursier/cache-action@v6
