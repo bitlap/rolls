@@ -8,7 +8,7 @@ custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/installation.m
 
 If you are building with sbt, add the following to your `build.sbt`:
 
-``` scala
+```scala
 autoCompilerPlugins := true
 addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0")
 libraryDependencies ++= Seq(
@@ -24,7 +24,7 @@ libraryDependencies ++= Seq(
 `rolls-core` needs to work with `rolls-compiler-plugin`.
 
 Add the following to `build.sbt`:
-``` scala
+```scala
 lazy val config =
   """|classSchema=bitlap.rolls.core.annotations.classSchema
     |prettyToString=bitlap.rolls.core.annotations.prettyToString

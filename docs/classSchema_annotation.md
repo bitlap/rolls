@@ -7,7 +7,7 @@ custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/classSchema_an
 
 **@classSchema** can be added on classes or case classes. It only resolves schemas for public concrete methods and **excludes** the methods of `Product` and `Any`.
 
-``` scala
+```scala
 @classSchema
 final case class SimpleClassTest () {
   def testMethod(
@@ -26,7 +26,7 @@ final case class SubSubSubAuthPermissionPO(list: List[String])
 curl `http://localhost:18000/rolls-schema?className=SimpleClassTest`
 
 It needs configs:
-``` properties
+```properties
 classSchemaPostUri=http://localhost:18000/rolls-doc     # post data
 postClassSchemaToServer=true                            # enable
 classSchemaQueryUri=http://localhost:18000/rolls-schema # query data
@@ -36,7 +36,7 @@ By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, 
 
 ## Json Result
 
-``` json
+```json
 {
   "className":"SimpleClassTest",
   "methods":[

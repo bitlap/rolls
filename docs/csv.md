@@ -7,7 +7,7 @@ Add import `import bitlap.rolls.csv.*`
 
 ## Read from CSV file
 
-``` scala
+```scala
 val file = ClassLoader.getSystemResource("simple_data.csv").getFile
 val metrics: List[Metric] = CSVUtils.readCSV(file) { line =>
   line
@@ -18,7 +18,7 @@ val metrics: List[Metric] = CSVUtils.readCSV(file) { line =>
 
 ## Basics Decoder
 
-``` scala
+```scala
 val obj = "hello world,2,0.4,"
   .into[SimpleClass]
   .withFieldComputed(_.field1, _ => 1)
@@ -28,7 +28,7 @@ assertEquals(obj, SimpleClass(field1 = 1, field2 = "2", field3 = 0.4, None))
 
 ## Write to CSV file
 
-``` scala
+```scala
 if (file.exists()) file.delete() else file.createNewFile()
 val status: Boolean = CSVUtils.writeCSV(file, Metric.`simple_data_objs`) { m =>
   m.into
@@ -39,7 +39,7 @@ val status: Boolean = CSVUtils.writeCSV(file, Metric.`simple_data_objs`) { m =>
 
 ## Basics Encoder
 
-``` scala
+```scala
 val simpleClass = SimpleClass(field1 = 1, field2 = "2", field3 = 0.4, None)
 val csv: String = simpleClass.into
   .withFieldComputed(_.field1, _ => "hello world")
@@ -49,6 +49,6 @@ assertEquals(csv, "hello world,2,0.4,")
 
 ## Configuration
 
-``` scala
+```scala
 given CsvFormat = DefaultCsvFormat
 ```
