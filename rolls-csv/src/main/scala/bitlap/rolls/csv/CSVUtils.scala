@@ -106,7 +106,7 @@ object CSVUtils {
 
     val fields: List[String] = mirrors.labels[T](using mirror)
     CSVMetadata(
-      rawHeader.map(_.split(format.delimiter).toList),
+      rawHeader.map(_.split(format.delimiter).toList).toList.flatten,
       fields,
       () => lazyList.size,
       () => lazyList.count(_.split(format.delimiter).length != fields.size)
