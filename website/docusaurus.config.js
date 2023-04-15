@@ -78,6 +78,7 @@ const config = {
                 copyright: `Copyright © ${new Date().getFullYear()} Rolls, Inc. Built with Docusaurus.`,
             },
             prism: {
+                additionalLanguages: ['json', 'java', 'properties', 'scala'],
                 theme: lightCodeTheme,
                 darkTheme: darkCodeTheme,
             },
