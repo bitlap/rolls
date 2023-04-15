@@ -78,6 +78,7 @@ lazy val `rolls-csv` = (project in file("rolls-csv"))
       "org.scalameta" %% "munit" % munitVersion % Test
     )
   )
+  .dependsOn(`rolls-core`)
 
 lazy val `rolls-core` = (project in file("rolls-core"))
   .settings(

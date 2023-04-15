@@ -25,8 +25,10 @@ final case class Metric(time: Long, entity: Int, dimensions: List[Dimension], me
 ## Read from CSV file
 
 ```scala
+import bitlap.rolls.csv.CSVUtils.FileName
+
 val file = ClassLoader.getSystemResource("simple_data.csv").getFile
-val metrics: List[Metric] = CSVUtils.readCSV(file) { line =>
+val metrics: LazyList[Metric] = CSVUtils.readCSV(FileName(file)) { line =>
   line
     .into[Metric]
     .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
