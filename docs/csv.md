@@ -72,6 +72,7 @@ object Metric:
       Metric(200, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
       Metric(200, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 2)
     )
+end Metric
 
 val storeFile = new File("./simple_data.csv")
 
@@ -96,5 +97,5 @@ val csv: String = simpleClass.into
 ## Configuration
 
 ```scala mdoc
-given CsvFormat = DefaultCsvFormat
+given CSVFormat = DefaultCSVFormat
 ```

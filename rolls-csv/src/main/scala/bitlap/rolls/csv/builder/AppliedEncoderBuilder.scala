@@ -26,7 +26,7 @@ final class AppliedEncoderBuilder[
   ): AppliedEncoderBuilder[From, FromSubs, DerivedFromSubs] =
     new AppliedEncoderBuilder[From, FromSubs, DerivedFromSubs](this.appliedTo, computes)
 
-  inline def encode(using csvFormat: CsvFormat = DefaultCsvFormat): String = build.encode(appliedTo)
+  inline def encode(using csvFormat: CSVFormat = DefaultCSVFormat): String = build.encode(appliedTo)
 
 end AppliedEncoderBuilder
 

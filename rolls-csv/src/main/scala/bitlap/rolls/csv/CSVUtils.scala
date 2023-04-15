@@ -34,10 +34,10 @@ object CSVUtils {
         resource.close()
       }
 
-  def writeCSV[T](file: File, objs: List[T])(encodeLine: T => String)(using format: CsvFormat): Boolean =
+  def writeCSV[T](file: File, objs: List[T])(encodeLine: T => String)(using format: CSVFormat): Boolean =
     writeCSV(file, objs.map(encodeLine))
 
-  def writeCSV(file: File, lines: List[String])(using format: CsvFormat): Boolean = {
+  def writeCSV(file: File, lines: List[String])(using format: CSVFormat): Boolean = {
     checkFile(file)
     val bufferedWriter = new BufferedWriter(
       new OutputStreamWriter(new FileOutputStream(file, format.append), format.encoding)
@@ -58,19 +58,19 @@ object CSVUtils {
     true
   }
 
-  def readCSV[T](fileName: FileName)(decodeLine: String => T)(using format: CsvFormat): LazyList[T] =
+  def readCSV[T](fileName: FileName)(decodeLine: String => T)(using format: CSVFormat): LazyList[T] =
     readCSV[T](new File(fileName))(decodeLine)
 
-  def readCSV[T](file: File)(decodeLine: String => T)(using format: CsvFormat = DefaultCsvFormat): LazyList[T] =
+  def readCSV[T](file: File)(decodeLine: String => T)(using format: CSVFormat = DefaultCSVFormat): LazyList[T] =
     CSVUtils.readFromFile[T](file, decodeLine)
 
   inline def readCSVWithMetadata[T](file: File)(
     decodeLine: String => T
-  )(using format: CsvFormat = DefaultCsvFormat, mirror: Mirror.ProductOf[T]): CSVData[T] =
+  )(using format: CSVFormat = DefaultCSVFormat, mirror: Mirror.ProductOf[T]): CSVData[T] =
     CSVUtils.readFromFileWithMetadata[T](file, decodeLine)
 
   inline def readCSVWithMetadata[T](fileName: FileName)(decodeLine: String => T)(using
-    format: CsvFormat,
+    format: CSVFormat,
     mirror: Mirror.ProductOf[T]
   ): CSVData[T] =
     CSVUtils.readFromFileWithMetadata[T](new File(fileName), decodeLine)
@@ -85,7 +85,7 @@ object CSVUtils {
   }
 
   private def readFromFile[T](file: File, decodeLine: String => T)(using
-    format: CsvFormat
+    format: CSVFormat
   ): LazyList[T] = {
     val bufferedSource: BufferedSource = Source.fromFile(file)(Codec(format.encoding))
     val lazyList =
@@ -95,7 +95,7 @@ object CSVUtils {
   }
 
   private inline def readFromFileWithMetadata[T](file: File, func: String => T)(using
-    format: CsvFormat,
+    format: CSVFormat,
     mirror: Mirror.ProductOf[T]
   ): CSVData[T] = {
     val bufferedSource: BufferedSource = Source.fromFile(file)(Codec(format.encoding))

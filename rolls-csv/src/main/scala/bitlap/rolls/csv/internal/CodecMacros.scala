@@ -13,7 +13,7 @@ private[csv] object CodecMacros {
 
   inline def encode[From, DerivedFromSubs <: Tuple](
     computes: Map[FieldName, Any => String]
-  )(using CsvFormat): Encoder[From] = { (from: From) =>
+  )(using CSVFormat): Encoder[From] = { (from: From) =>
     val encoders = Derivation.encodersForAllFields[DerivedFromSubs]
     Construct.constructCSV(from.asInstanceOf[Product]) { (labelsToValuesOfFrom, label) =>
       val fieldValue                                  = labelsToValuesOfFrom(label)
@@ -25,7 +25,7 @@ private[csv] object CodecMacros {
   inline def decode[To, DerivedToSubs <: Tuple](
     toMirror: Mirror.ProductOf[To],
     computes: Map[FieldName, String => Any]
-  )(using CsvFormat): Decoder[To] = { (to: String) =>
+  )(using CSVFormat): Decoder[To] = { (to: String) =>
     val strings  = StringUtils.splitColumns(to)
     val decoders = Derivation.decodersForAllFields[DerivedToSubs]
     val valueArrayOfTo =

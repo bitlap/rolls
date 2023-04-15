@@ -25,7 +25,7 @@ package bitlap.rolls.csv
  *    梦境迷离
  *  @version 1.0,2023/4/5
  */
-trait CsvFormat extends Serializable {
+trait CSVFormat extends Serializable {
   def delimiter: Char
   def escapeChar: Char
 
@@ -46,12 +46,12 @@ trait CsvFormat extends Serializable {
   def ignoreHeader: Boolean = false
 }
 
-object DefaultCsvFormat extends CsvFormat {
+object DefaultCSVFormat extends CSVFormat {
   val delimiter: Char  = ','
   val escapeChar: Char = '"'
 }
 
-object TsvFormat extends CsvFormat {
+object TSVFormat extends CSVFormat {
   val delimiter: Char  = '\t'
   val escapeChar: Char = '\\'
 }

@@ -28,7 +28,7 @@ trait EncoderBuilder[
     BuilderMacros.dropCompletionField(modifiedBuilder, selector)
   }
 
-  final inline def build(using csvFormat: CsvFormat): Encoder[From] =
+  final inline def build(using csvFormat: CSVFormat): Encoder[From] =
     summonFrom {
       case fromMirror: Mirror.ProductOf[From] => CodecMacros.encode[From, DerivedFromSubs](computes)
       case _                                  => throw new Exception("Encoder Only support case classes!")

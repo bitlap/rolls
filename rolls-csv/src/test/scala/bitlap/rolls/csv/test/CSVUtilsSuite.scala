@@ -13,7 +13,7 @@ import java.io.File
  */
 class CSVUtilsSuite extends FunSuite {
 
-  given CsvFormat = DefaultCsvFormat
+  given CSVFormat = DefaultCSVFormat
 
   test("CSVUtils#readCSVWithMetadata ok") {
     val file = this.getClass.getClassLoader.getResource("simple_data.csv").getFile
