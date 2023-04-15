@@ -10,10 +10,10 @@ If you are building with sbt, add the following to your `build.sbt`:
 
 ```scala
 autoCompilerPlugins := true
-addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "0.1.0")
+addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "<version>")
 libraryDependencies ++= Seq(
-  "org.bitlap" %% "rolls-core" % "0.1.0", // depends rolls-compiler-plugin
-  "org.bitlap" %% "rolls-csv" % "0.1.0" // if needed
+  "org.bitlap" %% "rolls-core" % "<version>", // depends rolls-compiler-plugin
+  "org.bitlap" %% "rolls-csv" % "<version>" // if needed
 )
 ```
 
