@@ -43,7 +43,7 @@ lazy val config = {
 scalacOptions ++= config
 ```
 
-And add the following properties to **config.properties**:
+Add the following properties to **config.properties**:
 ```properties
 classSchemaPostUri=http://localhost:18000/rolls-doc     # post data
 postClassSchemaToServer=true                            # enable
@@ -59,7 +59,7 @@ sbt "rolls-server/runMain bitlap.rolls.server.HttpServer"
 
 By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, which can be configured by `config.properties`.
 
-## Json Result
+## Get JSON output
 
 ```json
 {

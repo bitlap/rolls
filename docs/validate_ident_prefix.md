@@ -21,7 +21,7 @@ lazy val config = {
 scalacOptions ++= config
 ```
 
-And add the following properties to **config.properties**:
+Add the following properties to **config.properties**:
 ```properties
 # Multiple annotations split by '|'
 validateIdentPrefix=caliban.schema.Annotations.GQLDescription
