@@ -27,6 +27,7 @@ class CSVUtilsSuite extends FunSuite {
     assertEquals(metrics.toList, Metric.`simple_data_objs`)
     assertEquals(metadata.classFieldNames, List("time", "entity", "dimensions", "metricName", "metricValue"))
     assertEquals(metadata.rowsNum.apply(), 16L)
+    assertEquals(metadata.rawHeaders, List())
   }
 
   test("CSVUtils#readCSV ok") {
