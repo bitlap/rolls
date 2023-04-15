@@ -34,7 +34,9 @@ scalacOptions ++= config
   - when primary constructor or type constructor has annotations.
   - when parameter type is function type or case class and has annotations.
 
-```scala
+```scala mdoc
+import caliban.schema.Annotations.GQLDescription
+
 final case class StarDictInput(
   @GQLDescription("dictName")
   dictName: Option[String],

@@ -10,7 +10,9 @@ custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/prettyToString
 - If `standard` is `true`, call `toString` yields `Test(field1=value1,field2=value2)`.
 - Otherwise, call `toString` yields `{"field1":"value1","field2":"value2"}`.
 
-```scala
+```scala mdoc
+import bitlap.rolls.core.annotations.*
+
 @prettyToString(standard = false)
 final case class TestCaseClassJsonNamedArg(
   id: String,
@@ -33,7 +35,9 @@ final case class TestCaseClassJsonNamedArg(
 
 `@stringMask` can be added on the field type or on the field name.
 
-```scala
+```scala mdoc
+import bitlap.rolls.core.annotations.*
+
 @prettyToString
 final case class TestCaseClassJson(
   id: String,

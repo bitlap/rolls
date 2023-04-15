@@ -7,7 +7,8 @@ custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/classSchema_an
 
 **@classSchema** can be added on classes or case classes. It only resolves schemas for public concrete methods and **excludes** the methods of `Product` and `Any`.
 
-```scala
+```scala mdoc
+import bitlap.rolls.core.annotations.classSchema
 @classSchema
 final case class SimpleClassTest () {
   def testMethod(
