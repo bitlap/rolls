@@ -3,6 +3,16 @@ title: CSV
 custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/csv.md
 ---
 
+## Installation using SBT (Recommended)
+
+If you are building with sbt, add the following to your `build.sbt`:
+
+```scala
+libraryDependencies ++= Seq(
+  "org.bitlap" %% "rolls-csv" % "<version>"
+)
+```
+
 Add import:
 ```scala mdoc
 import bitlap.rolls.csv.*

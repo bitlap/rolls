@@ -3,6 +3,16 @@ title: ResultSetX
 custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/resultset_x.md
 ---
 
+## Installation using SBT (Recommended)
+
+If you are building with sbt, add the following to your `build.sbt`:
+
+```scala
+libraryDependencies ++= Seq(
+  "org.bitlap" %% "rolls-core" % "<version>"
+)
+```
+
 ## `java.sql.ResultSet` Data Extractor
 
 If you want to quickly obtain all the data for the `ResultSet` without relying on the orm framework. For example, during testing.

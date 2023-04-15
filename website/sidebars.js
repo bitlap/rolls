@@ -18,7 +18,6 @@ const sidebars = {
 
     // But you can create a sidebar manually
     tutorialSidebar: [
-        'installation',
         'quickstart',
         'classSchema_annotation',
         'prettyToString_annotation',
