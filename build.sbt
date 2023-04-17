@@ -4,7 +4,7 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-lazy val `rolls-test-deps-version` = "0.2.3+17-6cd034ed+20230417-1937-SNAPSHOT"
+lazy val `rolls-test-deps-version` = "0.2.3+24-5be02be2-SNAPSHOT"
 
 //ThisBuild / version := `rolls-test-deps-version`
 
@@ -62,7 +62,7 @@ lazy val `rolls` = (project in file("."))
     `rolls-core`,
     `rolls-plugin-server`,
     `rolls-csv`,
-    `rolls-tests`
+    `rolls-plugin-tests`
   )
   .settings(
     publish / skip := true,
@@ -121,11 +121,11 @@ lazy val config = {
   ret
 }
 
-lazy val `rolls-tests` = (project in file("rolls-tests"))
+lazy val `rolls-plugin-tests` = (project in file("rolls-plugin-tests"))
   .settings(
     commonSettings,
     publish / skip := true,
-    name           := "rolls-tests",
+    name           := "rolls-plugin-tests",
     scalacOptions ++= config,
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % `rolls-test-deps-version`),
@@ -139,7 +139,7 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
 
 lazy val `rolls-docs` = project
   .in(file("rolls-docs"))
-  .dependsOn(`rolls-core`, `rolls-csv`, `rolls-tests`)
+  .dependsOn(`rolls-core`, `rolls-csv`, `rolls-plugin-tests`)
   .settings(
     scalaVersion   := scala3Version,
     publish / skip := true,

@@ -43,20 +43,12 @@ jobs:
         run: sbt coverage test
 
       - name: Aggregate coverage report
-        if: success() || failure()
+        if: ${{ vars.RUN_ROLLS_TEST_AGGREGATE == 'Y' }}
         run: sbt coverageAggregate
 
       - name: Upload test coverage report
-        if: success() || failure()
+        if: ${{ vars.RUN_ROLLS_TEST_AGGREGATE == 'Y' }}
         run: bash <(curl -s https://codecov.io/bash)
-  
-  ci:
-    runs-on: ubuntu-20.04
-    needs: [ test ]
-    steps:
-      - name: Aggregate outcomes
-        run: echo "build succeeded"
-  
   
   publish:
     runs-on: ubuntu-20.04
@@ -67,14 +59,13 @@ jobs:
         uses: actions/checkout@v3.3.0
         with:
           fetch-depth: 0
-      - name: Setup Java
-        uses: actions/setup-java@v3.9.0
+      - name: Setup JDK
+        uses: actions/setup-java@v1
         with:
-          distribution: temurin
           java-version: 11
-          check-latest: true
-          
+
       - name: Update docs
+        if: ${{ vars.RUN_ROLLS_TEST == 'Y' }}
         run: |
           git config --global user.name "Rolls Docs"
           git config --global user.email "568845948@qq.com"
@@ -88,13 +79,18 @@ jobs:
           TOKEN: ${{secrets.DEPLOY_KEY}}
           USE_SSH: true
           GIT_USER: git
-          
-      - name: Cache scala dependencies
-        uses: coursier/cache-action@v6
+
       - name: Release artifacts
         run: sbt ci-release
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}        
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+  
+  ci:
+    runs-on: ubuntu-20.04
+    needs: [ publish ]
+    steps:
+      - name: Aggregate outcomes
+        run: echo "build succeeded"          
