@@ -115,7 +115,7 @@ class ClassTest {
     listField: List[AuthPermissionPO],
     stringField: String,
     longField: Long,
-    NestedObjectField: SubAuthPermissionPO,
+    nestedObjectField: SubAuthPermissionPO,
     eitherField: Either[String, AuthPermissionPO],
     simpleEitherField: Either[Throwable, String]
   ): Seq[AuthPermissionPO] = ???

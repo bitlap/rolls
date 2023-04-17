@@ -26,18 +26,18 @@ class ClassSchemaSpec extends AnyFlatSpec with Matchers {
   "classSchema" should "ok on simple class" in {
     val res = readBinary("SimpleClassTest")
     println(res.length)
-    res.length shouldEqual 2181
+    res.length shouldEqual 2167
   }
 
   "classSchema" should "ok on class" in {
     val res = readBinary("ClassTest")
     println(res.length)
-    res.length shouldEqual 17560
+    res.length shouldEqual 17546
   }
 
   "classSchema" should "ok on case class" in {
     val res = readBinary("CaseClassTest")
     println(res.length)
-    res.length shouldEqual 20286
+    res.length shouldEqual 20272
   }
 }

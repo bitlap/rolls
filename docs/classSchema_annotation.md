@@ -21,16 +21,18 @@ libraryDependencies ++= Seq(
 
 ```scala mdoc
 import bitlap.rolls.core.annotations.classSchema
+
 @classSchema
-final case class SimpleClassTest () {
+final case class SimpleClassTest() {
   def testMethod(
     listField: List[SubSubSubAuthPermissionPO],
     stringField: String,
     longOptField: Option[SubSubSubAuthPermissionPO],
-    NestedObjectField: SubSubSubAuthPermissionPO,
+    nestedObjectField: SubSubSubAuthPermissionPO,
     eitherField: Either[String, SubSubSubAuthPermissionPO]
   ): SubSubSubAuthPermissionPO = ???
 }
+
 final case class SubSubSubAuthPermissionPO(list: List[String])
 ```
 
@@ -126,7 +128,7 @@ By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, 
         },
         {
           "typeName":"SubSubSubAuthPermissionPO",
-          "name":"NestedObjectField",
+          "name":"nestedObjectField",
           "fields":[
             {
               "typeName":"List",
