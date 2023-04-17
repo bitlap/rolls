@@ -16,7 +16,7 @@ object RollsRuntime {
   final lazy val mapper = JsonMapper
     .builder()
     .addModule(DefaultScalaModule)
-    .serializationInclusion(JsonInclude.Include.NON_NULL)
+    .serializationInclusion(JsonInclude.Include.NON_EMPTY)
     .addModule(EnumModule)
     .addModule(new JavaTimeModule)
     .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)

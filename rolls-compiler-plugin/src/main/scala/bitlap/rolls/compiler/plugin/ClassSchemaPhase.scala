@@ -49,7 +49,7 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
         then
           Some(
             MethodSchema(
-              methodName = dd.name.show,
+              name = dd.name.show,
               params = dd.termParamss.flatten.map(mapType),
               resultType = mapType(dd.tpt)
             )
@@ -68,7 +68,7 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
         if tpeDef.tpe <:< IterableType
         then
           val typeTree = tpeDef.toClassDef
-          TypeSchema(typeName = typeTree.name, genericType = Option(typeTree.typeParams.map(tr => mapType(tr))))
+          TypeSchema(typeName = typeTree.name, typeArgs = Option(typeTree.typeParams.map(tr => mapType(tr))))
         else mapTemplate(tpeDef)
       case tpeDef: TypeDef =>
         TypeSchema(typeName = tpeDef.name.show)
@@ -84,18 +84,18 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
   end mapTemplate
 
   private def mapTypeTree(tree: TypeTree): Context ?=> TypeSchema =
-    val typeTypeTree  = tree.toTypeTree
-    val actualGeneric = typeTypeTree.argTypes.map(mapType)
-    val typeTree      = typeTypeTree.typeSymbol
-    mapType(typeTree).copy(genericType = Option(actualGeneric))
+    val typeTypeTree   = tree.toTypeTree
+    val actualTypeArgs = typeTypeTree.argTypes.map(mapType)
+    val typeTree       = typeTypeTree.typeSymbol
+    mapType(typeTree).copy(typeArgs = Option(actualTypeArgs))
 
   private def mapValDef(name: String, tree: ValDef): Context ?=> TypeSchema =
-    mapType(tree.tpt).copy(fieldName = Some(name))
+    mapType(tree.tpt).copy(name = Some(name))
 
   private def mapAppliedTypeTree(tree: AppliedTypeTree)(using ctx: Context): TypeSchema =
     TypeSchema(
       typeName = ctx.printer.nameString(tree.tpt.symbol),
-      genericType = Option(tree.args.map(a => mapType(a)))
+      typeArgs = Option(tree.args.map(a => mapType(a)))
     )
   end mapAppliedTypeTree
 
@@ -114,11 +114,11 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
         val fields = tree.tpe.fields.map { field =>
           val fieldType = field.toFieldTree
           mapType(fieldType.typeTree)
-            .copy(fieldName = Some(fieldType.name))
-            .copy(genericType = Option(fieldType.argTypes.map(mapType)))
+            .copy(name = Some(fieldType.name))
+            .copy(typeArgs = Option(fieldType.argTypes.map(mapType)))
         }.toList
 
-        TypeSchema(typeName = it.name.show, fields)
+        TypeSchema(typeName = it.name.show, fields = fields)
   end mapIdent
 
   private def mapType(tree: Tree): Context ?=> TypeSchema =

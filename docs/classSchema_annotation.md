@@ -78,19 +78,19 @@ By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, 
   "className":"SimpleClassTest",
   "methods":[
     {
-      "methodName":"testMethod",
+      "name":"testMethod",
       "params":[
         {
           "typeName":"List",
-          "fieldName":"listField",
-          "genericType":[
+          "name":"listField",
+          "typeArgs":[
             {
               "typeName":"SubSubSubAuthPermissionPO",
               "fields":[
                 {
                   "typeName":"List",
-                  "fieldName":"list",
-                  "genericType":[
+                  "name":"list",
+                  "typeArgs":[
                     {
                       "typeName":"String"
                     }
@@ -102,19 +102,19 @@ By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, 
         },
         {
           "typeName":"String",
-          "fieldName":"stringField"
+          "name":"stringField"
         },
         {
           "typeName":"Option",
-          "fieldName":"optField",
-          "genericType":[
+          "name":"optField",
+          "typeArgs":[
             {
               "typeName":"SubSubSubAuthPermissionPO",
               "fields":[
                 {
                   "typeName":"List",
-                  "fieldName":"list",
-                  "genericType":[
+                  "name":"list",
+                  "typeArgs":[
                     {
                       "typeName":"String"
                     }
@@ -126,23 +126,23 @@ By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, 
         },
         {
           "typeName":"SubSubSubAuthPermissionPO",
+          "name":"NestedObjectField",
           "fields":[
             {
               "typeName":"List",
-              "fieldName":"list",
-              "genericType":[
+              "name":"list",
+              "typeArgs":[
                 {
                   "typeName":"String"
                 }
               ]
             }
-          ],
-          "fieldName":"NestedObjectField"
+          ]
         },
         {
           "typeName":"Either",
-          "fieldName":"eitherField",
-          "genericType":[
+          "name":"eitherField",
+          "typeArgs":[
             {
               "typeName":"String"
             },
@@ -151,8 +151,8 @@ By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, 
               "fields":[
                 {
                   "typeName":"List",
-                  "fieldName":"list",
-                  "genericType":[
+                  "name":"list",
+                  "typeArgs":[
                     {
                       "typeName":"String"
                     }
@@ -168,8 +168,8 @@ By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, 
         "fields":[
           {
             "typeName":"List",
-            "fieldName":"list",
-            "genericType":[
+            "name":"list",
+            "typeArgs":[
               {
                 "typeName":"String"
               }
