@@ -139,7 +139,7 @@ lazy val `rolls-tests` = (project in file("rolls-tests"))
 
 lazy val `rolls-docs` = project
   .in(file("rolls-docs"))
-  .dependsOn(`rolls-core`, `rolls-compiler-plugin`, `rolls-csv`, `rolls-tests`)
+  .dependsOn(`rolls-core`, `rolls-csv`, `rolls-tests`)
   .settings(
     scalaVersion   := scala3Version,
     publish / skip := true,
