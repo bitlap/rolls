@@ -12,6 +12,7 @@ autoCompilerPlugins := true
 addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "<version>")
 libraryDependencies ++= Seq(
   "org.bitlap" %% "rolls-core" % "<version>",
+  // if these jackson already exists in the classpath, there is no need to add them
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "<jacksonVersion>",
   "com.github.pjfanning" %% "jackson-module-scala3-enum" % "<jacksonVersion>",
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % "<jacksonVersion>",
