@@ -31,7 +31,7 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
   private lazy val startsWith = setting.config.validateShouldStartsWith
 
   override def transformTypeDef(tree: TypeDef)(using Context): Tree =
-    if (tree.isClassDef) handle(tree) else tree
+    if (tree.isClassDef && annotationFullNames.nonEmpty) handle(tree) else tree
   end transformTypeDef
 
   @threadUnsafe private lazy val ValidateAnnotationsClasses: List[Context ?=> ClassSymbol] =
