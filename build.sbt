@@ -99,11 +99,11 @@ lazy val `rolls-plugin-server` = (project in file("rolls-plugin-server"))
     publish / skip := true,
     name           := "rolls-plugin-server",
     libraryDependencies ++= Seq(
-      "org.postgresql" % "postgresql" % postgresqlVersion,
-      "com.typesafe"   % "config"     % configVersion,
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
-      "com.github.pjfanning" %% "jackson-module-scala3-enum" % jacksonVersion,
-      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
+      "org.postgresql"                 % "postgresql"                 % postgresqlVersion,
+      "com.typesafe"                   % "config"                     % configVersion,
+      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion,
+      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion
     )
   )
   .dependsOn(`rolls-compiler-plugin`, `rolls-core`)
@@ -133,12 +133,12 @@ lazy val `rolls-plugin-tests` = (project in file("rolls-plugin-tests"))
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % `rolls-test-deps-version`),
     libraryDependencies ++= Seq(
-      "org.scalatest"         %% "scalatest"  % scalatestVersion  % Test,
-      "org.scalacheck"        %% "scalacheck" % scalacheckVersion % Test,
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion % Test,
-      "com.github.pjfanning" %% "jackson-module-scala3-enum" % jacksonVersion % Test,
-      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion % Test,
-      "com.github.ghostdogpr" %% "caliban"    % calibanVersion
+      "org.scalatest"                 %% "scalatest"                  % scalatestVersion  % Test,
+      "org.scalacheck"                %% "scalacheck"                 % scalacheckVersion % Test,
+      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion    % Test,
+      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion    % Test,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion    % Test,
+      "com.github.ghostdogpr"         %% "caliban"                    % calibanVersion
     )
   )
   .dependsOn(`rolls-core`)
