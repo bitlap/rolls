@@ -24,12 +24,12 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
   override def transformTypeDef(tree: TypeDef)(using Context): Tree =
-    if (existsAnnot(tree)) handle(tree) else tree
+    if (annotationFullNames.nonEmpty && tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
   end transformTypeDef
 
   @threadUnsafe private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
 
-  override val annotationFullNames: List[String] = List(setting.config.classSchema)
+  override val annotationFullNames: List[String] = setting.config.classSchema.toList
 
   override def handle(tree: TypeDef): Context ?=> TypeDef =
     if tree.isClassDef then

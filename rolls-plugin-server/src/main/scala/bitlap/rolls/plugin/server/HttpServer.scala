@@ -10,15 +10,16 @@ import java.net.InetSocketAddress
  */
 object HttpServer extends App {
 
+  val port = 18000
+
   /** in sbt
    *
    *  > sbt
    *
    *  > rolls-server/runMain bitlap.rolls.server.HttpServer
    */
-  private lazy val server = NHttpServer.create(new InetSocketAddress(Configs.port), 0)
+  private lazy val server = NHttpServer.create(new InetSocketAddress(port), 0)
 
-  server.createContext("/rolls-mapping", new ResolveHandler())
   server.createContext("/rolls-doc", new PostSchemaHandler)
   server.createContext("/rolls-schema", new QuerySchemaHandler)
 
@@ -33,7 +34,7 @@ object HttpServer extends App {
               | |__|   \____/|____/____/____  >
               |                             \/ 
               |""".stripMargin)
-    println(s"started at port: ${Configs.port}")
+    println(s"started at port: $port")
     server.start()
   }
 

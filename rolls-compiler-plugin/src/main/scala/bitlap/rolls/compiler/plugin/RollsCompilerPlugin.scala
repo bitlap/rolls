@@ -19,9 +19,7 @@ class RollsCompilerPlugin extends StandardPlugin:
 
   def init(options: List[String]): List[PluginPhase] = {
     val setting = new RollsSetting(options)
-    new ClassSchemaPhase(setting) :: new RhsMappingPhase(setting) :: new PrettyToStringPhase(
-      setting
-    ) :: new ValidateIdentPrefixPhase(setting) :: Nil
+    new ClassSchemaPhase(setting) :: new PrettyToStringPhase(setting) :: new ValidateIdentPrefixPhase(setting) :: Nil
   }
 
 end RollsCompilerPlugin

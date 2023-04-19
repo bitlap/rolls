@@ -23,5 +23,3 @@ The example code is part of the [rolls](https://github.com/bitlap/rolls) reposit
    ```bash
    cd rolls/rolls-tests
    ```
-
-> The feature with experimental annotations has hardly been tested and is not available.
