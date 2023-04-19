@@ -31,17 +31,6 @@ object Utils {
     .proxy(ProxySelector.getDefault)
     .build()
 
-  def sendRhsMapping(url: String): String =
-    val request = HttpRequest.newBuilder
-      .header(ContentType, `application/json`)
-      .version(HttpClient.Version.HTTP_2)
-      .uri(URI.create(url))
-      .GET
-      .timeout(timeout)
-      .build
-    val response = client.send(request, HttpResponse.BodyHandlers.ofString)
-    if response.statusCode == OK then response.body else Empty
-
   private def postClassSchema(body: HttpRequest.BodyPublisher, config: RollsConfig): String =
     val request = HttpRequest.newBuilder
       .header(ContentType, `application/json`)

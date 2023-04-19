@@ -64,13 +64,13 @@ object StringUtils {
 
   /** Using in macro impl
    */
-  def combineColumns(values: List[String])(using format: CsvFormat): String =
+  def combineColumns(values: List[String])(using format: CSVFormat): String =
     if (values.isEmpty) ""
     else values.mkString(format.delimiter.toString)
 
   /** Using in macro impl
    */
-  def splitColumns(line: => String)(using format: CsvFormat): List[String] = {
+  def splitColumns(line: => String)(using format: CSVFormat): List[String] = {
     val listBuffer   = ListBuffer[String]()
     val columnBuffer = ListBuffer[Char]()
     val chars        = line.toCharArray

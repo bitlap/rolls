@@ -1,17 +1,27 @@
 package bitlap.rolls.csv
 
 import scala.io.Source
-import scala.language.reflectiveCalls
+import scala.reflect.Selectable.reflectiveSelectable
 import scala.util.control.Exception.ignoring
-
 import scala.collection.mutable.ListBuffer
+import scala.io.*
 import java.io.*
+import bitlap.rolls.core.*
+
+import scala.compiletime.summonFrom
+import scala.deriving.Mirror
+import scala.language.reflectiveCalls
 
 /** @author
  *    梦境迷离
  *  @version 1.0,5/13/22
  */
 object CSVUtils {
+
+  opaque type FileName   = String
+  opaque type CSVData[T] = (CSVMetadata, LazyList[T])
+
+  def FileName(fileName: String): FileName = fileName
 
   private type Closable = {
     def close(): Unit
@@ -24,31 +34,10 @@ object CSVUtils {
         resource.close()
       }
 
-  def readFileFunc[T](reader: BufferedReader, func: String => T)(using
-    format: CsvFormat = DefaultCsvFormat
-  ): List[T] = {
-    val ts           = ListBuffer[T]()
-    var line: String = null
-    var first        = true
-    CSVUtils.using(new BufferedReader(reader)) { input =>
-      while ({
-        line = input.readLine()
-        line != null
-      })
-        if (first && format.ignoreHeader) {
-          first = false
-        } else ts.append(func(line))
-    }
-    ts.result()
-  }
+  def writeCSV[T](file: File, objs: List[T])(encodeLine: T => String)(using format: CSVFormat): Boolean =
+    writeCSV(file, objs.map(encodeLine))
 
-  def writeCSV[T <: Product](file: File, objs: List[T])(func: T => String)(using format: CsvFormat): Boolean =
-    writeCSV(file, objs.map(func))
-
-  def writeCSV(fileName: String, lines: List[String])(using format: CsvFormat): Boolean =
-    writeCSV(new File(fileName), lines)
-
-  def writeCSV(file: File, lines: List[String])(using format: CsvFormat): Boolean = {
+  def writeCSV(file: File, lines: List[String])(using format: CSVFormat): Boolean = {
     checkFile(file)
     val bufferedWriter = new BufferedWriter(
       new OutputStreamWriter(new FileOutputStream(file, format.append), format.encoding)
@@ -69,13 +58,22 @@ object CSVUtils {
     true
   }
 
-  def readCSV[T <: Product](fileName: String)(func: String => T)(using format: CsvFormat): List[T] =
-    readCSV[T](new File(fileName))(func)
+  def readCSV[T](fileName: FileName)(decodeLine: String => T)(using format: CSVFormat): LazyList[T] =
+    readCSV[T](new File(fileName))(decodeLine)
 
-  def readCSV[T <: Product](file: File)(func: String => T)(using format: CsvFormat): List[T] = {
-    val reader = new BufferedReader(new FileReader(file))
-    CSVUtils.readFileFunc[T](reader, func)
-  }
+  def readCSV[T](file: File)(decodeLine: String => T)(using format: CSVFormat = DefaultCSVFormat): LazyList[T] =
+    CSVUtils.readFromFile[T](file, decodeLine)
+
+  inline def readCSVWithMetadata[T](file: File)(
+    decodeLine: String => T
+  )(using format: CSVFormat = DefaultCSVFormat, mirror: Mirror.ProductOf[T]): CSVData[T] =
+    CSVUtils.readFromFileWithMetadata[T](file, decodeLine)
+
+  inline def readCSVWithMetadata[T](fileName: FileName)(decodeLine: String => T)(using
+    format: CSVFormat,
+    mirror: Mirror.ProductOf[T]
+  ): CSVData[T] =
+    CSVUtils.readFromFileWithMetadata[T](new File(fileName), decodeLine)
 
   private def checkFile(file: File): Unit = {
     if (file.isDirectory) {
@@ -84,5 +82,35 @@ object CSVUtils {
     if (!file.exists()) {
       file.createNewFile()
     }
+  }
+
+  private def readFromFile[T](file: File, decodeLine: String => T)(using
+    format: CSVFormat
+  ): LazyList[T] = {
+    val bufferedSource: BufferedSource = Source.fromFile(file)(Codec(format.encoding))
+    val lazyList =
+      if format.ignoreHeader then LazyList.from(bufferedSource.getLines()).drop(1)
+      else LazyList.from(bufferedSource.getLines())
+    lazyList.map(decodeLine)
+  }
+
+  private inline def readFromFileWithMetadata[T](file: File, func: String => T)(using
+    format: CSVFormat,
+    mirror: Mirror.ProductOf[T]
+  ): CSVData[T] = {
+    val bufferedSource: BufferedSource = Source.fromFile(file)(Codec(format.encoding))
+    val (rawHeader, lazyList) =
+      if format.ignoreHeader then
+        LazyList.from(bufferedSource.getLines()).headOption -> LazyList.from(bufferedSource.getLines()).drop(1)
+      else None                                             -> LazyList.from(bufferedSource.getLines())
+
+    val fields: List[String] = mirrors.labels[T](using mirror)
+    CSVMetadata(
+      rawHeader.map(_.split(format.delimiter).toList).toList.flatten,
+      fields,
+      () => lazyList.size,
+      () => lazyList.count(_.split(format.delimiter).length != fields.size)
+    ) -> lazyList.map(func)
+
   }
 }

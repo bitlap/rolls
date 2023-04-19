@@ -1,7 +1,8 @@
 package bitlap.rolls.csv.test
 
-import bitlap.rolls.csv.{ into, CSVUtils, CsvFormat, DefaultCsvFormat, StringUtils }
-import bitlap.rolls.csv.test.model.{ Dimension, Metric }
+import bitlap.rolls.csv.*
+import bitlap.rolls.csv.CSVUtils.{ CSVData, FileName }
+import bitlap.rolls.csv.test.model.*
 import munit.FunSuite
 
 import java.io.File
@@ -12,28 +13,43 @@ import java.io.File
  */
 class CSVUtilsSuite extends FunSuite {
 
-  given CsvFormat = DefaultCsvFormat
+  given CSVFormat = DefaultCSVFormat
+
+  test("CSVUtils#readCSVWithMetadata ok") {
+    val file = this.getClass.getClassLoader.getResource("simple_data.csv").getFile
+    val (metadata: CSVMetadata, metrics: LazyList[Metric]) = CSVUtils.readCSVWithMetadata[Metric](FileName(file)) {
+      line =>
+        line
+          .into[Metric]
+          .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
+          .decode
+    }
+    assertEquals(metrics.toList, Metric.`simple_data_objs`)
+    assertEquals(metadata.classFieldNames, List("time", "entity", "dimensions", "metricName", "metricValue"))
+    assertEquals(metadata.rowsNum.apply(), 16L)
+    assertEquals(metadata.rawHeaders, List())
+  }
 
   test("CSVUtils#readCSV ok") {
     val file = this.getClass.getClassLoader.getResource("simple_data.csv").getFile
-    val metrics: List[Metric] = CSVUtils.readCSV(file) { line =>
+    val metrics: LazyList[Metric] = CSVUtils.readCSV(FileName(file)) { line =>
       line
         .into[Metric]
         .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
         .decode
     }
-    assertEquals(metrics, Metric.`simple_data_objs`)
+    assertEquals(metrics.toList, Metric.`simple_data_objs`)
   }
 
   test("CSVUtils#writeCSV ok") {
-    val file = new File("./simple_data.csv")
-    if (file.exists()) file.delete() else file.createNewFile()
-    val status: Boolean = CSVUtils.writeCSV(file, Metric.`simple_data_objs`) { m =>
+    val storeFile = new File("./simple_data.csv")
+    if (storeFile.exists()) storeFile.delete() else storeFile.createNewFile()
+    val status: Boolean = CSVUtils.writeCSV(storeFile, Metric.`simple_data_objs`) { m =>
       m.into
         .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
         .encode
     }
-    file.delete()
+    storeFile.delete()
     assertEquals(status, true)
   }
 }

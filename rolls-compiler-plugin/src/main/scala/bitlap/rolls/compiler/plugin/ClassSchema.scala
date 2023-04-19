@@ -12,14 +12,14 @@ final case class ClassSchema(
 ) extends Schema
 
 final case class MethodSchema(
-  methodName: String,
+  name: String,
   params: List[TypeSchema],
   resultType: TypeSchema
 ) extends Schema
 
 final case class TypeSchema(
   typeName: String,
+  name: Option[String] = None,
   fields: List[TypeSchema] = List.empty,
-  fieldName: Option[String] = None,
-  genericType: Option[List[TypeSchema]] = None
+  typeArgs: Option[List[TypeSchema]] = None
 ) extends Schema

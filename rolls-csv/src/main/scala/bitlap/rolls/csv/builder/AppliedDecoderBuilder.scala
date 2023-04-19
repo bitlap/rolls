@@ -26,7 +26,7 @@ final class AppliedDecoderBuilder[
   ): AppliedDecoderBuilder[To, ToSubs, DerivedToSubs] =
     new AppliedDecoderBuilder[To, ToSubs, DerivedToSubs](this.appliedTo, computes)
 
-  inline def decode(using csvFormat: CsvFormat = DefaultCsvFormat): To = build.decode(appliedTo)
+  inline def decode(using csvFormat: CSVFormat = DefaultCSVFormat): To = build.decode(appliedTo)
 
 end AppliedDecoderBuilder
 

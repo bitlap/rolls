@@ -4,12 +4,12 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-lazy val `rolls-test-deps-version` = "0.2.2+12-2db5c449-SNAPSHOT"
+lazy val `rolls-test-deps-version` = "0.2.4+3-56537203-SNAPSHOT"
 
 //ThisBuild / version := `rolls-test-deps-version`
 
 lazy val scala3Version     = "3.2.0"
-lazy val jacksonVersion    = "2.14.1"
+lazy val jacksonVersion    = "2.13.3"
 lazy val scalatestVersion  = "3.2.15"
 lazy val scalacheckVersion = "1.17.0"
 lazy val munitVersion      = "0.7.29"
@@ -62,7 +62,7 @@ lazy val `rolls` = (project in file("."))
     `rolls-core`,
     `rolls-plugin-server`,
     `rolls-csv`,
-    `rolls-tests`
+    `rolls-plugin-tests`
   )
   .settings(
     publish / skip := true,
@@ -78,15 +78,16 @@ lazy val `rolls-csv` = (project in file("rolls-csv"))
       "org.scalameta" %% "munit" % munitVersion % Test
     )
   )
+  .dependsOn(`rolls-core`)
 
 lazy val `rolls-core` = (project in file("rolls-core"))
   .settings(
     commonSettings,
     name := "rolls-core",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion,
-      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion,
-      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion,
+      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion   % Provided,
+      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion   % Provided,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion   % Provided,
       "org.scalatest"                 %% "scalatest"                  % scalatestVersion % Test,
       "com.h2database"                 % "h2"                         % h2Version        % Test
     )
@@ -98,8 +99,11 @@ lazy val `rolls-plugin-server` = (project in file("rolls-plugin-server"))
     publish / skip := true,
     name           := "rolls-plugin-server",
     libraryDependencies ++= Seq(
-      "org.postgresql" % "postgresql" % postgresqlVersion,
-      "com.typesafe"   % "config"     % configVersion
+      "org.postgresql"                 % "postgresql"                 % postgresqlVersion,
+      "com.typesafe"                   % "config"                     % configVersion,
+      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion,
+      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion
     )
   )
   .dependsOn(`rolls-compiler-plugin`, `rolls-core`)
@@ -120,18 +124,31 @@ lazy val config = {
   ret
 }
 
-lazy val `rolls-tests` = (project in file("rolls-tests"))
+lazy val `rolls-plugin-tests` = (project in file("rolls-plugin-tests"))
   .settings(
     commonSettings,
     publish / skip := true,
-    name           := "rolls-tests",
+    name           := "rolls-plugin-tests",
     scalacOptions ++= config,
     autoCompilerPlugins := true,
     addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % `rolls-test-deps-version`),
     libraryDependencies ++= Seq(
-      "org.scalatest"         %% "scalatest"  % scalatestVersion  % Test,
-      "org.scalacheck"        %% "scalacheck" % scalacheckVersion % Test,
-      "com.github.ghostdogpr" %% "caliban"    % calibanVersion
+      "org.scalatest"                 %% "scalatest"                  % scalatestVersion  % Test,
+      "org.scalacheck"                %% "scalacheck"                 % scalacheckVersion % Test,
+      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion    % Test,
+      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion    % Test,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion    % Test,
+      "com.github.ghostdogpr"         %% "caliban"                    % calibanVersion
     )
   )
   .dependsOn(`rolls-core`)
+
+lazy val `rolls-docs` = project
+  .in(file("rolls-docs"))
+  .dependsOn(`rolls-core`, `rolls-csv`, `rolls-plugin-tests`)
+  .settings(
+    scalaVersion   := scala3Version,
+    publish / skip := true,
+    moduleName     := "rolls-docs"
+  )
+  .enablePlugins(MdocPlugin, DocusaurusPlugin)

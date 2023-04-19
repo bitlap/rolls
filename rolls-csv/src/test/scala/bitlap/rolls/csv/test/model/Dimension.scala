@@ -41,3 +41,4 @@ object Metric:
     Metric(200, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
     Metric(200, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 2)
   )
+end Metric

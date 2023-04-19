@@ -3,17 +3,14 @@ title: Validate Ident Prefix
 custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/validate_ident_prefix.md
 ---
 
-Add Config for compiler plugin:
+## Installation using SBT (Recommended)
 
-**config.properties**:
-``` properties
-# Multiple annotations split by '|'
-validateIdentPrefix=caliban.schema.Annotations.GQLDescription
-validateShouldStartsWith=star
-```
+If you are building with sbt, add the following to your `build.sbt`:
 
-**build.sbt**:
-``` scala
+```scala
+autoCompilerPlugins := true
+addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "<version>")
+
 lazy val reader = scala.io.Source.fromFile("config.properties")
 lazy val config = {
   val ret = reader.getLines().toList.map(p => s"-P:RollsCompilerPlugin:$p")
@@ -22,7 +19,13 @@ lazy val config = {
 }
 
 scalacOptions ++= config
+```
 
+Add the following properties to **config.properties**:
+```properties
+# Multiple annotations split by '|'
+validateIdentPrefix=caliban.schema.Annotations.GQLDescription
+validateShouldStartsWith=star
 ```
 
 ## What will be verified ? 
@@ -34,7 +37,9 @@ scalacOptions ++= config
   - when primary constructor or type constructor has annotations.
   - when parameter type is function type or case class and has annotations.
 
-``` scala
+```scala mdoc
+import caliban.schema.Annotations.GQLDescription
+
 final case class StarDictInput(
   @GQLDescription("dictName")
   dictName: Option[String],

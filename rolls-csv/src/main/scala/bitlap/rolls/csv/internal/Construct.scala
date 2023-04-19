@@ -33,7 +33,7 @@ private[csv] object Construct:
 
   inline def constructCSV(
     from: Product
-  )(unsafeMapper: (Map[FieldName, Any], FieldName) => String)(using csvFormat: CsvFormat): String = {
+  )(unsafeMapper: (Map[FieldName, Any], FieldName) => String)(using csvFormat: CSVFormat): String = {
     val labelsToValuesOfFrom = FieldName.wrapAll(from.productElementNames.zip(from.productIterator).toMap)
     val result = from.productElementNames.map { label =>
       unsafeMapper(labelsToValuesOfFrom, FieldName(label))

@@ -24,10 +24,10 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
-  override val annotationFullNames: List[String] = List(setting.config.prettyToString)
+  override val annotationFullNames: List[String] = setting.config.prettyToString.toList
 
   override def transformTypeDef(tree: TypeDef)(using Context): Tree =
-    if (tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
+    if (annotationFullNames.nonEmpty && tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
   end transformTypeDef
 
   private val toStringMethodName = setting.config.rollsRuntimeToStringMethod
@@ -98,7 +98,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
   private def mapDefDef(standard: Boolean, tree: TypeDef, ts: Symbol)(using ctx: Context): DefDef =
     val typeTypeTree                = tree.toClassDef
     implicit val clazz: ClassSymbol = typeTypeTree.classSymbol
-    val paramSymss                  = typeTypeTree.primaryConstructor.paramSymss.flatten.map(_.toField)
+    val paramSymss = typeTypeTree.primaryConstructor.paramSymss.flatten.filter(!_.isType).map(_.toField)
     val elements = paramSymss
       .filter(f => !f.isPrivate)
       .map { f =>

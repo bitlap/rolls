@@ -12,7 +12,7 @@ class StringUtilsSuite extends FunSuite {
 
   test("StringUtilsTest#splitColumns ok") {
     val line = """abc,"{""a"":""b"",""c"":""d""}",d,12,2,false,0.1,0.23333"""
-    val csv  = StringUtils.splitColumns(line)(using DefaultCsvFormat)
+    val csv  = StringUtils.splitColumns(line)(using DefaultCSVFormat)
     println(csv)
     assert(csv.size == 8)
   }

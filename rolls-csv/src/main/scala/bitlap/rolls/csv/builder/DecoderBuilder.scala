@@ -28,7 +28,7 @@ trait DecoderBuilder[
     BuilderMacros.dropCompletionField(modifiedBuilder, selector)
   }
 
-  final inline def build(using csvFormat: CsvFormat): Decoder[To] =
+  final inline def build(using csvFormat: CSVFormat): Decoder[To] =
     summonFrom {
       case toMirror: Mirror.ProductOf[To] => CodecMacros.decode[To, DerivedToSubs](toMirror, computes)
       case _                              => throw new Exception("Decoder Only support case classes!")
