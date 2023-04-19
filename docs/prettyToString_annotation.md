@@ -11,7 +11,10 @@ If you are building with sbt, add the following to your `build.sbt`:
 autoCompilerPlugins := true
 addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "<version>")
 libraryDependencies ++= Seq(
-  "org.bitlap" %% "rolls-core" % "<version>"
+  "org.bitlap" %% "rolls-core" % "<version>",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "<jacksonVersion>",
+  "com.github.pjfanning" %% "jackson-module-scala3-enum" % "<jacksonVersion>",
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % "<jacksonVersion>",
 )
 ```
 

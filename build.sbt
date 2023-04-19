@@ -9,7 +9,7 @@ lazy val `rolls-test-deps-version` = "0.2.3+24-5be02be2-SNAPSHOT"
 //ThisBuild / version := `rolls-test-deps-version`
 
 lazy val scala3Version     = "3.2.0"
-lazy val jacksonVersion    = "2.14.1"
+lazy val jacksonVersion    = "2.13.3"
 lazy val scalatestVersion  = "3.2.15"
 lazy val scalacheckVersion = "1.17.0"
 lazy val munitVersion      = "0.7.29"
@@ -85,9 +85,9 @@ lazy val `rolls-core` = (project in file("rolls-core"))
     commonSettings,
     name := "rolls-core",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion,
-      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion,
-      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion,
+      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion   % Provided,
+      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion   % Provided,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion   % Provided,
       "org.scalatest"                 %% "scalatest"                  % scalatestVersion % Test,
       "com.h2database"                 % "h2"                         % h2Version        % Test
     )
@@ -100,7 +100,10 @@ lazy val `rolls-plugin-server` = (project in file("rolls-plugin-server"))
     name           := "rolls-plugin-server",
     libraryDependencies ++= Seq(
       "org.postgresql" % "postgresql" % postgresqlVersion,
-      "com.typesafe"   % "config"     % configVersion
+      "com.typesafe"   % "config"     % configVersion,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
+      "com.github.pjfanning" %% "jackson-module-scala3-enum" % jacksonVersion,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
     )
   )
   .dependsOn(`rolls-compiler-plugin`, `rolls-core`)
@@ -132,6 +135,9 @@ lazy val `rolls-plugin-tests` = (project in file("rolls-plugin-tests"))
     libraryDependencies ++= Seq(
       "org.scalatest"         %% "scalatest"  % scalatestVersion  % Test,
       "org.scalacheck"        %% "scalacheck" % scalacheckVersion % Test,
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion % Test,
+      "com.github.pjfanning" %% "jackson-module-scala3-enum" % jacksonVersion % Test,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion % Test,
       "com.github.ghostdogpr" %% "caliban"    % calibanVersion
     )
   )
