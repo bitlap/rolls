@@ -159,4 +159,9 @@ class PrettyToStringSpec extends AnyFlatSpec with Matchers {
     genTestClassJson.sample.map(_.toString.contains(""""tenantId":"***"""")) shouldEqual Option(true)
   }
 
+  "prettyToString type args" should "starGraphQLResult" in {
+    val starGraphQLResult = StarGraphQLResult(Option("hello"))
+    println(starGraphQLResult.toString)
+    starGraphQLResult.toString.contains("""{"data":"hello","statusCode":200,"msg":"OK"}""") shouldEqual true
+  }
 }

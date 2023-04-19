@@ -64,16 +64,6 @@ final case class TypeClassDef(
   isCaseClass: Boolean
 )
 extension (s: SingleDenotation)
-  // from type
-  def toField(using clazz: ClassSymbol): Context ?=> Field = Field(
-    s.name,
-    This(clazz)
-      .select(s.name, f => f.info.isParameterless),
-    s.info,
-    s.symbol.isPrivate,
-    s.symbol.annotations.map(_.tree)
-  )
-
   def toFieldTree: Context ?=> TypeFieldTree = TypeFieldTree(
     s.name.show,
     s.info,

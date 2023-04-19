@@ -2,6 +2,7 @@ package bitlap.rolls.tests
 
 import bitlap.rolls.core.*
 import bitlap.rolls.core.annotations.{ classSchema, prettyToString, stringMask }
+import caliban.schema.Annotations.GQLDescription
 
 import java.time.Instant
 
@@ -150,4 +151,11 @@ final case class SubSubAuthPermissionPO(
 
 final case class SubSubSubAuthPermissionPO(
   list: List[String]
+)
+
+@prettyToString
+final case class StarGraphQLResult[T](
+  data: Option[T],
+  statusCode: Int = 200,
+  msg: String = "OK"
 )

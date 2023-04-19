@@ -98,7 +98,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
   private def mapDefDef(standard: Boolean, tree: TypeDef, ts: Symbol)(using ctx: Context): DefDef =
     val typeTypeTree                = tree.toClassDef
     implicit val clazz: ClassSymbol = typeTypeTree.classSymbol
-    val paramSymss                  = typeTypeTree.primaryConstructor.paramSymss.flatten.map(_.toField)
+    val paramSymss = typeTypeTree.primaryConstructor.paramSymss.flatten.filter(!_.isType).map(_.toField)
     val elements = paramSymss
       .filter(f => !f.isPrivate)
       .map { f =>
