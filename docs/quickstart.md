@@ -19,7 +19,8 @@ The example code is part of the [rolls](https://github.com/bitlap/rolls) reposit
    git clone https://github.com/bitlap/rolls
    ```
 
-2. Change to the examples directory:
+2. Take a look at `rolls-plugin-tests` or the following unit tests:
    ```bash
-   cd rolls/rolls-tests
+   rolls/rolls-core/src/test/scala
+   rolls/rolls-csv/src/test/scala
    ```

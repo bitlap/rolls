@@ -17,17 +17,12 @@ class ResultSetXSpec extends AnyFlatSpec with Matchers {
   Class.forName("org.h2.Driver")
 
   "ResultSetX" should "ok on class" in {
-    val statement = DriverManager
+    given Connection = DriverManager
       .getConnection(
         "jdbc:h2:mem:zim?caseSensitive=false;MODE=MYSQL;TRACE_LEVEL_FILE=2;INIT=RUNSCRIPT FROM 'classpath:test.sql'"
       )
-      .createStatement()
-    statement.execute(s"""select * from T_USER""".stripMargin)
-
-    val rowSet: ResultSet = statement.getResultSet
-
     // default type mapping
-    val rows = ResultSetX[TypeRow4[Int, String, String, String]](rowSet).fetch()
+    val rows = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER").fetch()
     assert(rows.size == 2)
     assert(rows.head.values.size == 4)
   }

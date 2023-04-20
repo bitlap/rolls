@@ -1,5 +1,8 @@
 package bitlap.rolls.core.jdbc
 
+import java.sql.Connection
+import java.sql.ResultSet
+
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/4/8
@@ -23,3 +26,23 @@ extension (typeRow: TypeRow)
   }
 
   def values: List[Any] = flatProduct(typeRow).toList
+end extension
+
+extension (sqlStatement: StringContext)
+  def sqlQ(args: Any*)(using Connection): ResultSet = {
+    val stmt = summon[Connection].createStatement()
+    stmt.executeQuery(sqlStatement.s(args: _*))
+  }
+
+  def sql(args: Any*)(using Connection): ResultSet = {
+    val stmt = summon[Connection].createStatement()
+    stmt.execute(sqlStatement.s(args: _*))
+    stmt.getResultSet
+  }
+
+  def sqlU(args: Any*)(using Connection): ResultSet = {
+    val stmt = summon[Connection].createStatement()
+    stmt.executeUpdate(sqlStatement.s(args: _*))
+    stmt.getResultSet
+  }
+end extension
