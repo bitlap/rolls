@@ -26,24 +26,19 @@ package bitlap.rolls.csv
  *  @version 1.0,2023/4/5
  */
 trait CSVFormat extends Serializable {
+
   def delimiter: Char
+
   def escapeChar: Char
 
   /** Mode for writing string into files.
    */
   def append: Boolean = false
 
-  /** Character encoding of the file.
+  /** String Charset.
    */
-  def encoding: String = "utf-8"
+  def stringCharset: StringCharset = StringCharset.`UTF-8`
 
-  /** Write the column name in the first row.
-   */
-  def prependHeader: List[String] = Nil
-
-  /** Ignore the first row when reading from file.
-   */
-  def ignoreHeader: Boolean = false
 }
 
 object DefaultCSVFormat extends CSVFormat {

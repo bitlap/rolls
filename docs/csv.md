@@ -5,6 +5,8 @@ custom_edit_url: https://github.com/bitlap/rolls/edit/master/docs/csv.md
 
 ## Installation using SBT (Recommended)
 
+This simple csv tool is specifically to handle one-dimensional text, but allows for custom parsing of column values for complex structures within it.
+
 If you are building with sbt, add the following to your `build.sbt`:
 
 ```scala
@@ -28,7 +30,7 @@ final case class Metric(time: Long, entity: Int, dimensions: List[Dimension], me
 import bitlap.rolls.csv.CSVUtils.FileName
 
 val file = ClassLoader.getSystemResource("simple_data.csv").getFile
-val metrics: LazyList[Metric] = CSVUtils.readCSV(FileName(file)) { line =>
+val (metadata, metrics) = CSVUtils.readCSV(FileName(file)) { line =>
   line
     .into[Metric]
     .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
@@ -51,38 +53,21 @@ val obj = "hello world,2,0.4,"
 
 ```scala mdoc
 import java.io.File
+import bitlap.rolls.csv.CSVUtils.*
 
 object Metric:
-
   lazy val `simple_data_objs` = List(
       Metric(100, 1, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
       Metric(100, 1, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 2),
-      Metric(100, 1, List(Dimension("city", "北京"), Dimension("os", "Windows")), "vv", 1),
-      Metric(100, 1, List(Dimension("city", "北京"), Dimension("os", "Windows")), "pv", 3),
-      Metric(100, 2, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
-      Metric(100, 2, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 5),
-      Metric(100, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
-      Metric(100, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 2),
-      Metric(200, 1, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
-      Metric(200, 1, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 2),
-      Metric(200, 1, List(Dimension("city", "北京"), Dimension("os", "Windows")), "vv", 1),
-      Metric(200, 1, List(Dimension("city", "北京"), Dimension("os", "Windows")), "pv", 3),
-      Metric(200, 2, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
-      Metric(200, 2, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 5),
-      Metric(200, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
-      Metric(200, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 2)
     )
 end Metric
 
-val storeFile = new File("./simple_data.csv")
-
-if (storeFile.exists()) storeFile.delete() else storeFile.createNewFile()
-val status: Boolean = CSVUtils.writeCSV(storeFile, Metric.`simple_data_objs`) { m =>
+val fileName = FileName("./simple_data.csv")
+val status = CSVUtils.writeCSV(fileName, Metric.`simple_data_objs`) { m =>
   m.into
     .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
     .encode
 }
-storeFile.delete()
 ```
 
 ## Basics Encoder
