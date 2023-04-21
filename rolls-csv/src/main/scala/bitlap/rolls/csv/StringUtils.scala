@@ -31,7 +31,7 @@ import scala.util.matching.Regex
  *    梦境迷离
  *  @version 1.0,2022/4/30
  */
-object StringUtils {
+object StringUtils:
 
   private val regex: Regex     = "\\{(.*?)\\}".r
   private val kvr: Regex       = "(.*):(.*)".r
@@ -68,9 +68,20 @@ object StringUtils {
     if (values.isEmpty) ""
     else values.mkString(format.delimiter.toString)
 
+  def firstDelimiterIndex(line: => String)(using format: CSVFormat): Int =
+    val chars = line.toCharArray
+    var idx   = 0
+    while (idx < chars.length)
+      chars(idx) match {
+        case c if c == format.delimiter => return idx + 1
+        case _                          => idx += 1
+      }
+    0
+  end firstDelimiterIndex
+
   /** Using in macro impl
    */
-  def splitColumns(line: => String)(using format: CSVFormat): List[String] = {
+  def splitColumns(line: => String)(using format: CSVFormat): List[String] =
     val listBuffer   = ListBuffer[String]()
     val columnBuffer = ListBuffer[Char]()
     val chars        = line.toCharArray
@@ -109,5 +120,4 @@ object StringUtils {
       listBuffer.append("")
     }
     listBuffer.result()
-  }
-}
+  end splitColumns

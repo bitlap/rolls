@@ -39,6 +39,14 @@ trait CSVFormat extends Serializable {
    */
   def stringCharset: StringCharset = StringCharset.`UTF-8`
 
+  /** Does the CSV file contain header?
+   */
+  def hasHeaders: Boolean = false
+
+  /** Does the CSV file contain row index?
+   */
+  def hasColIndex: Boolean = false
+
 }
 
 object DefaultCSVFormat extends CSVFormat {

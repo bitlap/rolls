@@ -41,13 +41,23 @@ object CSVUtils {
         true
       )
     ) { r =>
-      lines.zipWithIndex.foreach { case (line, index) =>
-        if (line.isEmpty) {} else if (headerRow.nonEmpty && index == 0) {
-          r.println(headerRow.mkString(format.delimiter.toString))
-          r.println(line)
+
+      if (headerRow.nonEmpty) {
+        if (format.hasColIndex) {
+          r.println((List(0) ::: headerRow).mkString(format.delimiter.toString))
         } else {
-          r.println(line)
+          r.println(headerRow.mkString(format.delimiter.toString))
         }
+      }
+
+      lines.zipWithIndex.foreach { case (line, index) =>
+        if (line.nonEmpty) {
+          if (format.hasColIndex) {
+            r.println(s"${index + 1}${format.delimiter.toString}$line")
+          } else {
+            r.println(line)
+          }
+        } else {}
         r.flush()
       }
     }
@@ -76,23 +86,29 @@ object CSVUtils {
     }
   }
 
-  inline private def readFromFileWithMetadata[T](file: File, func: String => T)(using
+  inline private def readFromFileWithMetadata[T](file: File, decodeLine: String => T)(using
     mirror: Mirror.ProductOf[T],
     format: CSVFormat
   ): CSVData[T] = {
-    val bufferedSource: BufferedSource = Source.fromFile(file)(Codec(format.stringCharset.charset))
-    val (rawHeader, lazyList) =
-      if format.ignoreHeader then
-        LazyList.from(bufferedSource.getLines()).headOption -> LazyList.from(bufferedSource.getLines()).drop(1)
-      else None                                             -> LazyList.from(bufferedSource.getLines())
+    val lines: Iterator[String] = Source.fromFile(file)(Codec(format.stringCharset.charset)).getLines()
+
+    val (_rawHeaders, lazyList) =
+      if format.hasHeaders && lines.hasNext then Some(lines.next()) -> LazyList.from(lines)
+      else None                                                     -> LazyList.from(lines)
+
+    val skipIndexCol =
+      if (format.hasColIndex) lazyList.map(l => l.substring(StringUtils.firstDelimiterIndex(l))) else lazyList
 
     val fields: List[String] = mirrors.labels[T](using mirror)
+
+    val rawHeaders = _rawHeaders.map(_.split(format.delimiter).toList).toList.flatten
+
     CSVMetadata(
-      rawHeader.map(_.split(format.delimiter).toList).toList.flatten,
+      if (format.hasColIndex) rawHeaders.tail else rawHeaders,
       fields,
-      () => lazyList.size,
-      () => lazyList.count(_.split(format.delimiter).length != fields.size)
-    ) -> lazyList.map(func)
+      () => skipIndexCol.size,
+      () => skipIndexCol.count(_.split(format.delimiter).length != fields.size)
+    ) -> skipIndexCol.map(decodeLine)
 
   }
 }
