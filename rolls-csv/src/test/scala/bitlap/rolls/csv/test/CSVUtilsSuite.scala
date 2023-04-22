@@ -20,8 +20,6 @@ class CSVUtilsSuite extends FunSuite {
     given CSVFormat = new CSVFormat {
       override val hasHeaders: Boolean  = true
       override val hasColIndex: Boolean = true
-      override val delimiter: Char      = ','
-      override val escapeChar: Char     = '"'
     }
     val (metadata, metrics) = CSVUtils.readCSV(FileName(file)) { line =>
       line
@@ -66,8 +64,6 @@ class CSVUtilsSuite extends FunSuite {
     given CSVFormat = new CSVFormat {
       override val hasHeaders: Boolean  = true
       override val hasColIndex: Boolean = true
-      override val delimiter: Char      = ','
-      override val escapeChar: Char     = '"'
     }
 
     val fileName = FileName("./header_simple_data.csv")
@@ -77,6 +73,42 @@ class CSVUtilsSuite extends FunSuite {
         .encode
     }
     Files.delete(new File("./header_simple_data.csv").toPath)
+    assertEquals(status, true)
+  }
+
+  test("CSVUtils#readCSV multiple json columns") {
+    given CSVFormat = new CSVFormat {
+      override val hasHeaders: Boolean = true
+    }
+
+    val file = this.getClass.getClassLoader.getResource("multiple_json_columns_data.csv").getFile
+    val (metadata, metrics) = CSVUtils.readCSV(FileName(file)) { line =>
+      line
+        .into[MultipleFieldsMetric]
+        .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
+        .withFieldComputed(_.attributes, atts => StringUtils.extractJsonValues(atts)((k, v) => Dimension(k, v)))
+        .decode
+    }
+    assertEquals(metrics.toList, Metric.`multiple_field_data_objs`)
+    assertEquals(
+      metadata.classFieldNames,
+      List("time", "entity", "dimensions", "metricName", "metricValue", "attributes")
+    )
+    assertEquals(metadata.rowsNum.apply(), 16L)
+    assertEquals(metadata.rawHeaders, List("time", "entity", "dimensions", "metric_name", "metric_value", "attributes"))
+  }
+
+  test("CSVUtils#writeCSV multiple json columns") {
+    given CSVFormat = DefaultCSVFormat
+
+    val fileName = FileName("./multiple_json_columns_data.csv")
+    val status = CSVUtils.writeCSV(fileName, Metric.`multiple_field_data_objs`) { m =>
+      m.into
+        .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
+        .withFieldComputed(_.attributes, atts => StringUtils.asJsonString(atts.map(f => f.key -> f.value).toList))
+        .encode
+    }
+    Files.delete(new File("./multiple_json_columns_data.csv").toPath)
     assertEquals(status, true)
   }
 }

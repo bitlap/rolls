@@ -27,9 +27,9 @@ package bitlap.rolls.csv
  */
 trait CSVFormat extends Serializable {
 
-  def delimiter: Char
+  def delimiter: Char = ','
 
-  def escapeChar: Char
+  def escapeChar: Char = '"'
 
   /** Mode for writing string into files.
    */
@@ -49,12 +49,9 @@ trait CSVFormat extends Serializable {
 
 }
 
-object DefaultCSVFormat extends CSVFormat {
-  val delimiter: Char  = ','
-  val escapeChar: Char = '"'
-}
+object DefaultCSVFormat extends CSVFormat
 
 object TSVFormat extends CSVFormat {
-  val delimiter: Char  = '\t'
-  val escapeChar: Char = '\\'
+  override val delimiter: Char  = '\t'
+  override val escapeChar: Char = '\\'
 }

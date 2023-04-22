@@ -2,6 +2,14 @@ package bitlap.rolls.csv.test.model
 
 final case class Dimension(key: String, value: String)
 final case class Metric(time: Long, entity: Int, dimensions: List[Dimension], metricName: String, metricValue: Int)
+final case class MultipleFieldsMetric(
+  time: Long,
+  entity: Int,
+  dimensions: List[Dimension],
+  metricName: String,
+  metricValue: Int,
+  attributes: List[Dimension]
+)
 
 object Metric:
 
@@ -40,5 +48,136 @@ object Metric:
     Metric(200, 2, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 5),
     Metric(200, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "vv", 1),
     Metric(200, 3, List(Dimension("city", "北京"), Dimension("os", "Mac")), "pv", 2)
+  )
+
+  lazy val `multiple_field_data_objs` = List(
+    MultipleFieldsMetric(
+      100,
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "vv",
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      100,
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "pv",
+      2,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      100,
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Windows")),
+      "vv",
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Windows"))
+    ),
+    MultipleFieldsMetric(
+      100,
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Windows")),
+      "pv",
+      3,
+      List(Dimension("city", "北京"), Dimension("os", "Windows"))
+    ),
+    MultipleFieldsMetric(
+      100,
+      2,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "vv",
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      100,
+      2,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "pv",
+      5,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      100,
+      3,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "vv",
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      100,
+      3,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "pv",
+      2,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      200,
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "vv",
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      200,
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "pv",
+      2,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      200,
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Windows")),
+      "vv",
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Windows"))
+    ),
+    MultipleFieldsMetric(
+      200,
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Windows")),
+      "pv",
+      3,
+      List(Dimension("city", "北京"), Dimension("os", "Windows"))
+    ),
+    MultipleFieldsMetric(
+      200,
+      2,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "vv",
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      200,
+      2,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "pv",
+      5,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      200,
+      3,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "vv",
+      1,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    ),
+    MultipleFieldsMetric(
+      200,
+      3,
+      List(Dimension("city", "北京"), Dimension("os", "Mac")),
+      "pv",
+      2,
+      List(Dimension("city", "北京"), Dimension("os", "Mac"))
+    )
   )
 end Metric
