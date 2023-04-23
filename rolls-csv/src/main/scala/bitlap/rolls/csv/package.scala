@@ -1,7 +1,6 @@
 package bitlap.rolls.csv
 
 import bitlap.rolls.csv.builder.*
-import bitlap.rolls.csv.internal.Field.FromLabelsAndTypes
 
 /** @author
  *    梦境迷离
