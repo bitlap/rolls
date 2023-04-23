@@ -1,12 +1,21 @@
 package bitlap.rolls.core.jdbc
 
-import java.sql.Connection
-import java.sql.ResultSet
+import java.sql.{ Connection, ResultSet, Statement }
 
 /** @author
  *    梦境迷离
  *  @version 1.0,2023/4/8
  */
+opaque type TypeMappingArgs = (ResultSet, Int)
+def TypeMappingArgs(resultSet: ResultSet, index: Int): TypeMappingArgs = resultSet -> index
+
+extension (typeMappingArgs: TypeMappingArgs)
+  def underlyingMappingResultSet: ResultSet = typeMappingArgs._1
+  def underlyingMappingIndex: Int           = typeMappingArgs._2
+end extension
+
+type FetchInput = (Statement, ResultSet)
+
 type TypeRow                                      = Tuple
 type TypeRow1[T1]                                 = Tuple1[T1] *: EmptyTuple
 type TypeRow2[T1, T2]                             = (T1, T2)
@@ -29,20 +38,15 @@ extension (typeRow: TypeRow)
 end extension
 
 extension (sqlStatement: StringContext)
-  def sqlQ(args: Any*)(using Connection): ResultSet = {
+  def sqlQ(args: Any*)(using Connection): FetchInput = {
     val stmt = summon[Connection].createStatement()
-    stmt.executeQuery(sqlStatement.s(args: _*))
+    stmt -> stmt.executeQuery(sqlStatement.s(args: _*))
   }
 
-  def sql(args: Any*)(using Connection): ResultSet = {
+  def sql(args: Any*)(using Connection): FetchInput = {
     val stmt = summon[Connection].createStatement()
     stmt.execute(sqlStatement.s(args: _*))
-    stmt.getResultSet
-  }
+    stmt -> stmt.getResultSet
 
-  def sqlU(args: Any*)(using Connection): ResultSet = {
-    val stmt = summon[Connection].createStatement()
-    stmt.executeUpdate(sqlStatement.s(args: _*))
-    stmt.getResultSet
   }
 end extension

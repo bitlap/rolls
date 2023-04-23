@@ -32,7 +32,9 @@ import scala.language.postfixOps
  */
 trait ResultSetX[T <: TypeRow] {
 
-  protected def getResultSetTuple(resultSet: ResultSet, size: Int): TypeRow =
+  protected def getResultSetTuple(typeMappingArgs: TypeMappingArgs): TypeRow =
+    val resultSet = typeMappingArgs.underlyingMappingResultSet
+    val size      = typeMappingArgs.underlyingMappingIndex
     getColumnValues(resultSet, 1, size)
 
   protected def getColumnValues(resultSet: ResultSet, idx: Int, size: Int): TypeRow = {
@@ -56,11 +58,11 @@ trait ResultSetX[T <: TypeRow] {
     }) :* getColumnValues(resultSet, idx + 1, size)
   }
 
-  def fetch(typeMapping: (ResultSet, Int) => TypeRow = getResultSetTuple): Seq[T]
+  def fetch(typeMappingFunc: TypeMappingArgs => TypeRow = getResultSetTuple): Seq[T]
 }
 object ResultSetX {
 
-  inline def apply[T <: TypeRow](resultSet: ResultSet): ResultSetX[T] = ${
-    ResultSetXMacro.resultSetXImpl[T]('resultSet)
+  inline def apply[T <: TypeRow](fetchInput: FetchInput): ResultSetX[T] = ${
+    ResultSetXMacro.resultSetXImpl[T]('fetchInput)
   }
 }
