@@ -13,7 +13,7 @@
 
 # What is rolls?
 
-The Collection of Rolling Kings. <img src="https://github.com/bitlap/rolls/blob/master/rolls.jpg" width = "100" height = "100" alt="rolls" align=right />
+The Collection of Rolling Kings. <img src="https://github.com/bitlap/rolls/blob/master/rolls.jpg" width = "100" height = "70" alt="rolls" align=right />
 
 ----
 
