@@ -13,7 +13,7 @@
 
 # What is rolls?
 
-The Collection of Rolling Kings.
+The Collection of Rolling Kings. ![rolls](./rolls.jpg =200x200)
 
 ----
 
