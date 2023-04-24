@@ -25,7 +25,7 @@ import java.util.regex.Pattern
 import scala.collection.mutable.ListBuffer
 import scala.util.matching.Regex
 
-/** split csv column value by columnSeparator.
+/** split csv column value by delimiter.
  *
  *  @author
  *    梦境迷离
@@ -37,7 +37,7 @@ object StringUtils:
   private val kvr: Regex       = "(.*):(.*)".r
   private val pattern: Pattern = Pattern.compile(regex.toString())
 
-  @inline private def extraJsonPairs(input: String): String = {
+  private def extractJsonPairs(input: String): String = {
     val matcher = pattern.matcher(input)
     while (matcher.find) {
       val tail = matcher.group().tail.init
@@ -49,11 +49,11 @@ object StringUtils:
     null
   }
 
-  def asJsonString[K, V](kvs: Seq[(K, V)]): String =
+  def asString[K, V](kvs: Seq[(K, V)]): String =
     s"""\"{${kvs.map(kv => s"""\"\"${kv._1}\"\":\"\"${kv._2}\"\"""").mkString(",")}}\""""
 
-  def extractJsonValues[T <: Product](jsonString: String)(func: (String, String) => T): List[T] = {
-    val pairs = extraJsonPairs(jsonString)
+  def asClasses[T](jsonString: String)(func: (String, String) => T): List[T] = {
+    val pairs = extractJsonPairs(jsonString)
     if (pairs == null) return Nil
     val jsonElements = pairs.split(",")
     val kvs = jsonElements.collect {
@@ -62,8 +62,6 @@ object StringUtils:
     kvs.toList.map(f => func(f._1, f._2))
   }
 
-  /** Using in macro impl
-   */
   def combineColumns(values: List[String])(using format: CSVFormat): String =
     if (values.isEmpty) ""
     else values.mkString(format.delimiter.toString)
@@ -79,8 +77,6 @@ object StringUtils:
     0
   end firstDelimiterIndex
 
-  /** Using in macro impl
-   */
   def splitColumns(line: => String)(using format: CSVFormat): List[String] =
     val listBuffer   = ListBuffer[String]()
     val columnBuffer = ListBuffer[Char]()

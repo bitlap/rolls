@@ -33,7 +33,7 @@ val file = ClassLoader.getSystemResource("simple_data.csv").getFile
 val (metadata, metrics) = CSVUtils.readCSV(FileName(file)) { line =>
   line
     .into[Metric]
-    .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
+    .withFieldComputed(_.dimensions, dims => StringUtils.asClasses(dims)((k, v) => Dimension(k, v)))
     .decode
 }
 ```
@@ -65,7 +65,7 @@ end Metric
 val fileName = FileName("./simple_data.csv")
 val status = CSVUtils.writeCSV(fileName, Metric.`simple_data_objs`) { m =>
   m.into
-    .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
+    .withFieldComputed(_.dimensions, dims => StringUtils.asString(dims.map(f => f.key -> f.value).toList))
     .encode
 }
 ```

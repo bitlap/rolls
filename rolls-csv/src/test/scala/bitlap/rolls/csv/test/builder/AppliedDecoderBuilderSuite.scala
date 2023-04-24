@@ -30,7 +30,7 @@ class AppliedDecoderBuilderSuite extends FunSuite {
       .map(csv =>
         csv
           .into[Metric]
-          .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
+          .withFieldComputed(_.dimensions, dims => StringUtils.asClasses(dims)((k, v) => Dimension(k, v)))
           .decode
       )
 

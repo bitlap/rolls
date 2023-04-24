@@ -20,7 +20,7 @@ class StringUtilsSuite extends FunSuite {
   test("StringUtilsTest#extractJsonValues ok") {
     // only extract json `"{""a"":""b"",""c"":""d""}"`
     val line = """abc,"{""a"":""b"",""c"":""d""}",d,12,2,false,0.1,0.23333"""
-    val csv  = StringUtils.extractJsonValues[Dimension](line)((k, v) => Dimension(k, v))
+    val csv  = StringUtils.asClasses[Dimension](line)((k, v) => Dimension(k, v))
     println(csv)
     assert(csv.toString() == "List(Dimension(\"a\",\"b\"), Dimension(\"c\",\"d\"))")
   }

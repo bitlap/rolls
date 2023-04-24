@@ -28,7 +28,7 @@ class AppliedEncoderBuilderSuite extends FunSuite {
     assert(metrics.head.dimensions.head.value == "北京")
 
     val csv = metrics.map(metric =>
-      metric.into.withFieldComputed(_.dimensions, ds => StringUtils.asJsonString(ds.map(f => f.key -> f.value))).encode
+      metric.into.withFieldComputed(_.dimensions, ds => StringUtils.asString(ds.map(f => f.key -> f.value))).encode
     )
 
     println(csv)

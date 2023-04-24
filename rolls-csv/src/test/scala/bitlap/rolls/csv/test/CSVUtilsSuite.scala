@@ -24,7 +24,7 @@ class CSVUtilsSuite extends FunSuite {
     val (metadata, metrics) = CSVUtils.readCSV(FileName(file)) { line =>
       line
         .into[Metric]
-        .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
+        .withFieldComputed(_.dimensions, dims => StringUtils.asClasses(dims)((k, v) => Dimension(k, v)))
         .decode
     }
     assertEquals(metrics.toList, Metric.`simple_data_objs`)
@@ -39,7 +39,7 @@ class CSVUtilsSuite extends FunSuite {
     val (metadata, metrics) = CSVUtils.readCSV(FileName(file)) { line =>
       line
         .into[Metric]
-        .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
+        .withFieldComputed(_.dimensions, dims => StringUtils.asClasses(dims)((k, v) => Dimension(k, v)))
         .decode
     }
     assertEquals(metrics.toList, Metric.`simple_data_objs`)
@@ -53,7 +53,7 @@ class CSVUtilsSuite extends FunSuite {
     val fileName    = FileName("./simple_data.csv")
     val status = CSVUtils.writeCSV(fileName, Metric.`simple_data_objs`) { m =>
       m.into
-        .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
+        .withFieldComputed(_.dimensions, dims => StringUtils.asString(dims.map(f => f.key -> f.value).toList))
         .encode
     }
     Files.delete(new File("./simple_data.csv").toPath)
@@ -69,7 +69,7 @@ class CSVUtilsSuite extends FunSuite {
     val fileName = FileName("./header_simple_data.csv")
     val status = CSVUtils.writeCSV(fileName, Metric.`simple_data_objs`) { m =>
       m.into
-        .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
+        .withFieldComputed(_.dimensions, dims => StringUtils.asString(dims.map(f => f.key -> f.value).toList))
         .encode
     }
     Files.delete(new File("./header_simple_data.csv").toPath)
@@ -85,8 +85,8 @@ class CSVUtilsSuite extends FunSuite {
     val (metadata, metrics) = CSVUtils.readCSV(FileName(file)) { line =>
       line
         .into[MultipleFieldsMetric]
-        .withFieldComputed(_.dimensions, dims => StringUtils.extractJsonValues(dims)((k, v) => Dimension(k, v)))
-        .withFieldComputed(_.attributes, atts => StringUtils.extractJsonValues(atts)((k, v) => Dimension(k, v)))
+        .withFieldComputed(_.dimensions, dims => StringUtils.asClasses(dims)((k, v) => Dimension(k, v)))
+        .withFieldComputed(_.attributes, atts => StringUtils.asClasses(atts)((k, v) => Dimension(k, v)))
         .decode
     }
     assertEquals(metrics.toList, Metric.`multiple_field_data_objs`)
@@ -104,8 +104,8 @@ class CSVUtilsSuite extends FunSuite {
     val fileName = FileName("./multiple_json_columns_data.csv")
     val status = CSVUtils.writeCSV(fileName, Metric.`multiple_field_data_objs`) { m =>
       m.into
-        .withFieldComputed(_.dimensions, dims => StringUtils.asJsonString(dims.map(f => f.key -> f.value).toList))
-        .withFieldComputed(_.attributes, atts => StringUtils.asJsonString(atts.map(f => f.key -> f.value).toList))
+        .withFieldComputed(_.dimensions, dims => StringUtils.asString(dims.map(f => f.key -> f.value).toList))
+        .withFieldComputed(_.attributes, atts => StringUtils.asString(atts.map(f => f.key -> f.value).toList))
         .encode
     }
     Files.delete(new File("./multiple_json_columns_data.csv").toPath)

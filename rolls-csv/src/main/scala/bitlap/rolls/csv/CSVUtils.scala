@@ -12,7 +12,7 @@ import scala.util.Using
  *    梦境迷离
  *  @version 1.0,5/13/22
  */
-object CSVUtils {
+object CSVUtils:
 
   opaque type FileName = String
   type CSVData[T]      = (CSVMetadata, LazyList[T])
@@ -111,4 +111,3 @@ object CSVUtils {
     ) -> skipIndexCol.map(decodeLine)
 
   }
-}

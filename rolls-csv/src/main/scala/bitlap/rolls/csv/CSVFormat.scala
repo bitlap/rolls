@@ -25,7 +25,7 @@ package bitlap.rolls.csv
  *    梦境迷离
  *  @version 1.0,2023/4/5
  */
-trait CSVFormat extends Serializable {
+trait CSVFormat extends Serializable:
 
   def delimiter: Char = ','
 
@@ -39,19 +39,19 @@ trait CSVFormat extends Serializable {
    */
   def stringCharset: StringCharset = StringCharset.`UTF-8`
 
-  /** Does the CSV file contain header?
+  /** Does the CSV file contains headers?
    */
   def hasHeaders: Boolean = false
 
-  /** Does the CSV file contain row index?
+  /** Does the CSV file contains row index?
    */
   def hasColIndex: Boolean = false
 
-}
+end CSVFormat
 
 object DefaultCSVFormat extends CSVFormat
 
-object TSVFormat extends CSVFormat {
+object DefaultTSVFormat extends CSVFormat:
   override val delimiter: Char  = '\t'
   override val escapeChar: Char = '\\'
-}
+end DefaultTSVFormat
