@@ -1,16 +1,16 @@
 package bitlap.rolls.compiler.plugin
 
 import dotty.tools.dotc.ast.tpd.*
-import dotty.tools.dotc.ast.{ tpd, untpd }
-import dotty.tools.dotc.core.Annotations.{ Annotation, ConcreteAnnotation }
+import dotty.tools.dotc.ast.*
+import dotty.tools.dotc.core.Annotations.*
 import dotty.tools.dotc.core.Denotations.SingleDenotation
 import dotty.tools.dotc.core.Names.*
 import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.core.Contexts.Context
-import dotty.tools.dotc.core.Flags.{ EmptyFlags, Synthetic }
+import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.StdNames.nme
 import dotty.tools.dotc.core.Symbols
-import dotty.tools.dotc.core.Symbols.{ defn, requiredClass, ClassSymbol, Symbol }
+import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.quoted.reflect.FromSymbol
 
 import scala.collection.immutable.List
@@ -19,7 +19,7 @@ import scala.collection.immutable.List
  *    梦境迷离
  *  @version 1.0,2023/3/31
  */
-final case class Field(
+final case class FieldTree(
   name: Name,
   thisDot: Select,
   tpe: Type,
@@ -38,21 +38,21 @@ final case class Field(
       case _                                                                            => None
   end getAnnotatedTypeAnnotation
 
-end Field
+end FieldTree
 
-final case class TypeFieldTree(
+final case class SimpleFieldTree(
   name: String,
   tpe: Type,
   typeTree: Tree,
   argTypes: List[Tree]
 )
 
-final case class TypeTypeTree(
+final case class TpeTree(
   typeSymbol: Tree,
   argTypes: List[Tree]
 )
 
-final case class TypeClassDef(
+final case class ClassTree(
   name: String,
   typeParams: List[Tree],
   template: Template,
@@ -64,7 +64,7 @@ final case class TypeClassDef(
   isCaseClass: Boolean
 )
 extension (s: SingleDenotation)
-  def toFieldTree: Context ?=> TypeFieldTree = TypeFieldTree(
+  def toSimpleFieldTree: Context ?=> SimpleFieldTree = SimpleFieldTree(
     s.name.show,
     s.info,
     FromSymbol.definitionFromSym(s.info.typeSymbol),
@@ -74,7 +74,7 @@ end extension
 
 extension (s: Symbol)
   // from primaryConstructor symbol
-  def toField(using clazz: ClassSymbol): Context ?=> Field = Field(
+  def toFieldTree(using clazz: ClassSymbol): Context ?=> FieldTree = FieldTree(
     s.name,
     This(clazz)
       .select(s.name, f => f.info.isParameterless),
@@ -86,7 +86,7 @@ extension (s: Symbol)
 end extension
 
 extension (ts: TypeTree)
-  def toTypeTree: Context ?=> TypeTypeTree = TypeTypeTree(
+  def toTypeTree: Context ?=> TpeTree = TpeTree(
     FromSymbol.definitionFromSym(ts.tpe.typeSymbol),
     ts.tpe.argTypes.map(_.typeSymbol).map(FromSymbol.definitionFromSym)
   )
@@ -101,7 +101,7 @@ extension (td: TypeDef)
 
   def getPrimaryConstructor: Context ?=> Symbols.Symbol = td.tpe.typeSymbol.primaryConstructor
 
-  def getName: Context ?=> String =
+  def showName: Context ?=> String =
     td.name.show
 
   def getAnnotations: Context ?=> List[untpd.Tree] =
@@ -114,7 +114,7 @@ extension (td: TypeDef)
       contrAnnots.map(f => FromSymbol.definitionFromSym(f.symbol)) ++ typeContrAnnots.map(_.tree)
     else getPrimaryConstructor.annotations.map(f => FromSymbol.definitionFromSym(f.symbol))
 
-  def toClassDef: Context ?=> TypeClassDef = TypeClassDef(
+  def toClassTree: Context ?=> ClassTree = ClassTree(
     td.name.show,
     td.tpe.typeParams
       .map(_.paramInfo)

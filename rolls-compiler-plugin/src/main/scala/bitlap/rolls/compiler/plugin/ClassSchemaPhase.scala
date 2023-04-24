@@ -6,10 +6,11 @@ import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.Types
+import dotty.tools.dotc.core.Types.TypeRef
 import dotty.tools.dotc.plugins.PluginPhase
 import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
-import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
+import dotty.tools.dotc.transform.*
 
 import scala.annotation.threadUnsafe
 
@@ -19,33 +20,38 @@ import scala.annotation.threadUnsafe
  */
 final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with TypeDefPluginPhaseFilter:
 
-  override val phaseName               = "ClassSchemaPhase"
+  override val phaseName: String       = RollsPhase.ClassSchema.name
+  override val description: String     = RollsPhase.ClassSchema.description
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
   override def transformTypeDef(tree: TypeDef)(using Context): Tree =
-    if (annotationFullNames.nonEmpty && tree.isClassDef && existsAnnot(tree)) handle(tree) else tree
+    if (annotationFullNames.nonEmpty && tree.isClassDef && existsAnnotations(tree)) mapTree(tree) else tree
   end transformTypeDef
 
   @threadUnsafe private lazy val Unknown = TypeSchema(typeName = "Unknown", fields = List.empty)
+  @threadUnsafe private lazy val IterableType: Context ?=> TypeRef = requiredClassRef("scala.collection.Iterable")
 
   override val annotationFullNames: List[String] = setting.config.classSchema.toList
 
-  override def handle(tree: TypeDef): Context ?=> TypeDef =
+  override def mapTree(tree: TypeDef): Context ?=> TypeDef =
     if tree.isClassDef then
-      val typeTypeTree = tree.toClassDef
+      val typeTypeTree = tree.toClassTree
       val methodSchema = typeTypeTree.template.body.map(mapDefDef).collect { case Some(value) => value }
       val classSchema  = ClassSchema(typeTypeTree.name, methodSchema)
       Utils.sendClassSchema(classSchema, setting.config)
     tree
-  end handle
+  end mapTree
+
+  private def filterNot(dd: DefDef): Context ?=> Boolean =
+    !dd.mods.isOneOf(Local | Protected | Private | Abstract | Synthetic | ParamAccessor | Implicit) &&
+    !defn.syntheticCoreMethods.map(_.name).contains(dd.name) &&
+    !defn.caseClassSynthesized.map(_.name).contains(dd.name)
 
   def mapDefDef(tree: Tree): Context ?=> Option[MethodSchema] =
     tree match
       case dd: DefDef =>
-        if !dd.mods.isOneOf(Local | Protected | Private | Abstract | Synthetic | ParamAccessor | Implicit) &&
-          !defn.syntheticCoreMethods.map(_.name).contains(dd.name) &&
-          !defn.caseClassSynthesized.map(_.name).contains(dd.name)
+        if filterNot(dd)
         then
           Some(
             MethodSchema(
@@ -64,10 +70,9 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
   private def mapTypeDef(tree: TypeDef): Context ?=> TypeSchema =
     tree match
       case tpeDef: TypeDef if tpeDef.isClassDef =>
-        lazy val IterableType: Types.TypeRef = requiredClassRef("scala.collection.Iterable")
         if tpeDef.tpe <:< IterableType
         then
-          val typeTree = tpeDef.toClassDef
+          val typeTree = tpeDef.toClassTree
           TypeSchema(typeName = typeTree.name, typeArgs = Option(typeTree.typeParams.map(tr => mapType(tr))))
         else mapTemplate(tpeDef)
       case tpeDef: TypeDef =>
@@ -75,7 +80,7 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
   end mapTypeDef
 
   private def mapTemplate(tree: TypeDef): Context ?=> TypeSchema =
-    val typeTree = tree.toClassDef
+    val typeTree = tree.toClassTree
     val fields   = typeTree.template.body.collect { case vd: ValDef => mapType(vd) }
     TypeSchema(
       typeName = typeTree.name,
@@ -112,7 +117,7 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
         TypeSchema(typeName = it.name.show)
       case it: Ident =>
         val fields = tree.tpe.fields.map { field =>
-          val fieldType = field.toFieldTree
+          val fieldType = field.toSimpleFieldTree
           mapType(fieldType.typeTree)
             .copy(name = Some(fieldType.name))
             .copy(typeArgs = Option(fieldType.argTypes.map(mapType)))

@@ -1,11 +1,8 @@
 package bitlap.rolls.compiler.plugin
 
-import dotty.tools.dotc.ast.tpd
-import dotty.tools.dotc.core.Contexts.Context
-import dotty.tools.dotc.core.DenotTransformers.IdentityDenotTransformer
-import dotty.tools.dotc.plugins.{ PluginPhase, StandardPlugin }
-import dotty.tools.dotc.transform.{ PickleQuotes, Staging }
-import dotty.tools.dotc.config.{ AllScalaSettings, Settings }
+import dotty.tools.dotc.plugins.*
+import dotty.tools.dotc.transform.*
+import dotty.tools.dotc.config.*
 
 /** @author
  *    梦境迷离
@@ -14,12 +11,17 @@ import dotty.tools.dotc.config.{ AllScalaSettings, Settings }
 class RollsCompilerPlugin extends StandardPlugin:
   self =>
 
-  override val name: String        = "RollsCompilerPlugin"
-  override val description: String = "Rolls Compiler Plugin"
+  override val name: String        = RollsCompilerPlugin.name
+  override val description: String = RollsCompilerPlugin.description
 
   def init(options: List[String]): List[PluginPhase] = {
     val setting = new RollsSetting(options)
     new ClassSchemaPhase(setting) :: new PrettyToStringPhase(setting) :: new ValidateIdentPrefixPhase(setting) :: Nil
   }
 
+end RollsCompilerPlugin
+
+object RollsCompilerPlugin:
+  val name        = "RollsCompilerPlugin"
+  val description = "Rolls Compiler Plugin"
 end RollsCompilerPlugin

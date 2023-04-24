@@ -8,7 +8,6 @@ import dotty.tools.dotc.core.Symbols
 import dotty.tools.dotc.core.Annotations.*
 import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.Types.*
-import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
 
 /** @author
@@ -24,37 +23,31 @@ trait PluginPhaseFilter[T]:
 
   def const(any: Any): Context ?=> tpd.Tree = Literal(Constant(any))
 
-  def existsAnnot(tree: T): Context ?=> Boolean
+  def existsAnnotations(tree: T): Context ?=> Boolean
 
-  def handle(tree: T): Context ?=> T
+  def mapTree(tree: T): Context ?=> T
 
-  def getDeclarationAnnots: Context ?=> List[ClassSymbol] = annotationFullNames.map(requiredClass(_))
+  def getPluginSettingAnnotations: Context ?=> List[ClassSymbol] = annotationFullNames.map(requiredClass(_))
 
 end PluginPhaseFilter
 
-trait ValDefPluginPhaseFilter extends PluginPhaseFilter[ValDef]:
-
-  override def existsAnnot(tree: ValDef): Context ?=> Boolean = {
-    val annotCls = annotationFullNames.map(requiredClass(_))
-    tree.mods.annotations.collectFirst {
-      case Apply(Select(New(Ident(an)), _), _) if annotCls.map(_.name.asSimpleName).contains(an.asSimpleName) =>
-        true
-    }.getOrElse(false)
-  }
-
-end ValDefPluginPhaseFilter
-
 trait TypeDefPluginPhaseFilter extends PluginPhaseFilter[TypeDef]:
 
-  override def existsAnnot(tree: TypeDef): Context ?=> Boolean = {
-    val declareAnnotCls = getDeclarationAnnots
+  def filterClassDefAnnotations(tree: TypeDef): Context ?=> Boolean =
+    annotationFullNames.nonEmpty && tree.isClassDef && existsAnnotations(tree)
+
+  def filterClassDef(tree: TypeDef): Context ?=> Boolean =
+    annotationFullNames.nonEmpty && tree.isClassDef
+
+  override def existsAnnotations(tree: TypeDef): Context ?=> Boolean = {
+    val declareAnnotCls = getPluginSettingAnnotations
     val exists = (tree.getContrAnnotations ++ tree.getAnnotations).collectFirst {
       case Apply(Select(New(Ident(an)), _), args) if declareAnnotCls.exists(_.name.asSimpleName == an.asSimpleName) =>
-        debug(s"${tree.getName} - annot args:$args", EmptyTree)
+        debug(s"${tree.showName} - existsAnnotations args:$args", EmptyTree)
         true
     }.getOrElse(false)
 
-    debug(s"${tree.getName} - $exists - TypeDef:$tree", EmptyTree)
+    debug(s"${tree.showName} - $exists - TypeDef:$tree", EmptyTree)
 
     exists
   }
