@@ -20,8 +20,8 @@ import scala.annotation.threadUnsafe
  */
 final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with TypeDefPluginPhaseFilter:
 
-  override val phaseName: String       = RollsPhase.ClassSchema.name
-  override val description: String     = RollsPhase.ClassSchema.description
+  override val phaseName: String       = RollsPluginPhase.ClassSchema.name
+  override val description: String     = RollsPluginPhase.ClassSchema.description
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 
@@ -50,17 +50,14 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
 
   def mapDefDef(tree: Tree): Context ?=> Option[MethodSchema] =
     tree match
-      case dd: DefDef =>
-        if filterNot(dd)
-        then
-          Some(
-            MethodSchema(
-              name = dd.name.show,
-              params = dd.termParamss.flatten.map(mapType),
-              resultType = mapType(dd.tpt)
-            )
+      case dd: DefDef if filterNot(dd) =>
+        Some(
+          MethodSchema(
+            name = dd.name.show,
+            params = dd.termParamss.flatten.map(mapType),
+            resultType = mapType(dd.tpt)
           )
-        else None
+        )
       case _ => None
   end mapDefDef
 
@@ -69,12 +66,11 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
 
   private def mapTypeDef(tree: TypeDef): Context ?=> TypeSchema =
     tree match
+      case tpeDef: TypeDef if tpeDef.isClassDef && tpeDef.tpe <:< IterableType =>
+        val typeTree = tpeDef.toClassTree
+        TypeSchema(typeName = typeTree.name, typeArgs = Option(typeTree.typeParams.map(tr => mapType(tr))))
       case tpeDef: TypeDef if tpeDef.isClassDef =>
-        if tpeDef.tpe <:< IterableType
-        then
-          val typeTree = tpeDef.toClassTree
-          TypeSchema(typeName = typeTree.name, typeArgs = Option(typeTree.typeParams.map(tr => mapType(tr))))
-        else mapTemplate(tpeDef)
+        mapTemplate(tpeDef)
       case tpeDef: TypeDef =>
         TypeSchema(typeName = tpeDef.name.show)
   end mapTypeDef

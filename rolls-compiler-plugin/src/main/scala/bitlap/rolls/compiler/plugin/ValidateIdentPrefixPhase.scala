@@ -22,8 +22,8 @@ import scala.annotation.threadUnsafe
  */
 final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase with TypeDefPluginPhaseFilter:
 
-  override val phaseName: String       = RollsPhase.ValidateIdentPrefix.name
-  override val description: String     = RollsPhase.ValidateIdentPrefix.description
+  override val phaseName: String       = RollsPluginPhase.ValidateIdentPrefix.name
+  override val description: String     = RollsPluginPhase.ValidateIdentPrefix.description
   override val runsAfter: Set[String]  = Set(Staging.name)
   override val runsBefore: Set[String] = Set(PickleQuotes.name)
 

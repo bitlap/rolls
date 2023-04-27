@@ -20,8 +20,8 @@ import scala.annotation.threadUnsafe
  */
 final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with TypeDefPluginPhaseFilter:
 
-  override val phaseName: String                 = RollsPhase.PrettyToString.name
-  override val description: String               = RollsPhase.PrettyToString.description
+  override val phaseName: String                 = RollsPluginPhase.PrettyToString.name
+  override val description: String               = RollsPluginPhase.PrettyToString.description
   override val runsAfter: Set[String]            = Set(Staging.name)
   override val runsBefore: Set[String]           = Set(PickleQuotes.name)
   override val annotationFullNames: List[String] = setting.config.prettyToString.toList
