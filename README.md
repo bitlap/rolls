@@ -1,6 +1,6 @@
 # rolls
 
-![CI][Badge-CI] [![Nexus][Badge-Releases]][Link-Releases] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots]
+![CI][Badge-CI] [![rolls-compiler-plugin Scala version support][ScalaIndex-Releases]][ScalaIndex-Link] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots]
 
 
 [Badge-CI]: https://github.com/bitlap/rolls/actions/workflows/ScalaCI.yml/badge.svg
@@ -10,6 +10,9 @@
 [Link-Codecov]: https://codecov.io/gh/bitlap/rolls
 [Badge-Releases]: https://img.shields.io/nexus/r/org.bitlap/rolls-compiler-plugin_3?server=https%3A%2F%2Fs01.oss.sonatype.org
 [Link-Releases]: https://s01.oss.sonatype.org/content/repositories/releases/org/bitlap/rolls-compiler-plugin_3/
+
+[ScalaIndex-Releases]: https://index.scala-lang.org/bitlap/rolls/rolls-compiler-plugin/latest-by-scala-version.svg?platform=jvm
+[ScalaIndex-Link]: https://index.scala-lang.org/bitlap/rolls/rolls-compiler-plugin
 
 # What is rolls?
 
