@@ -37,30 +37,40 @@ object StringUtils:
   private val kvr: Regex       = "(.*):(.*)".r
   private val pattern: Pattern = Pattern.compile(regex.toString())
 
-  private def extractJsonPairs(input: String): String = {
-    val matcher = pattern.matcher(input)
+  private def extractJsonPairs(jsonString: String): String =
+    val matcher = pattern.matcher(jsonString)
     while (matcher.find) {
       val tail = matcher.group().tail.init
       if (tail != null && tail.nonEmpty) {
         return tail
       } else return null
     }
-
     null
-  }
 
-  def asString[K, V](kvs: Seq[(K, V)]): String =
-    s"""\"{${kvs.map(kv => s"""\"\"${kv._1}\"\":\"\"${kv._2}\"\"""").mkString(",")}}\""""
+  def lowerUnderscore(camelCaseString: String): String =
+    if (camelCaseString == null || camelCaseString.isEmpty) return ""
+    val charArray = camelCaseString.toCharArray
+    val buffer    = new StringBuffer
+    var i         = 0
+    val l         = charArray.length
+    while (i < l) {
+      if (charArray(i) >= 65 && charArray(i) <= 90) buffer.append("_").append((charArray(i).toInt + 32).toChar)
+      else buffer.append(charArray(i))
+      i += 1
+    }
+    buffer.toString
 
-  def asClasses[T](jsonString: String)(func: (String, String) => T): List[T] = {
+  def asString[K, V](KeyValuePairs: Seq[(K, V)]): String =
+    s"""\"{${KeyValuePairs.map(kv => s"""\"\"${kv._1}\"\":\"\"${kv._2}\"\"""").mkString(",")}}\""""
+
+  def asClasses[T](jsonString: String)(jsonKeyValue: (String, String) => T): List[T] =
     val pairs = extractJsonPairs(jsonString)
     if (pairs == null) return Nil
     val jsonElements = pairs.split(",")
     val kvs = jsonElements.collect {
       case kvr(k, v) if k.length > 2 && v.length > 2 => k.init.tail -> v.init.tail
     }
-    kvs.toList.map(f => func(f._1, f._2))
-  }
+    kvs.toList.map(f => jsonKeyValue(f._1, f._2))
 
   def combineColumns(values: List[String])(using format: CSVFormat): String =
     if (values.isEmpty) ""

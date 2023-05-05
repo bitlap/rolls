@@ -31,10 +31,12 @@ object CSVUtils:
     val fields = mirrors.labels[T](using mirror)
     writeCSV(file, fields, objs.map(encodeLine))(using format)
 
-  private def writeCSV(file: File, headerRow: List[String], lines: List[String])(using
+  private def writeCSV(file: File, fields: List[String], lines: List[String])(using
     format: CSVFormat
   ): Boolean = {
     checkFile(file)
+    // write class fieldName as csv header
+    val headerRows = fields.map(StringUtils.lowerUnderscore)
     Using.resource(
       new PrintWriter(
         new FileWriter(file, format.stringCharset.charset, format.append),
@@ -42,12 +44,13 @@ object CSVUtils:
       )
     ) { r =>
 
-      if (headerRow.nonEmpty) {
+      if (headerRows.nonEmpty) {
         if (format.hasColIndex) {
-          r.println((List(0) ::: headerRow).mkString(format.delimiter.toString))
+          r.println((List(0) ::: headerRows).mkString(format.delimiter.toString))
         } else {
-          r.println(headerRow.mkString(format.delimiter.toString))
+          r.println(headerRows.mkString(format.delimiter.toString))
         }
+        r.flush()
       }
 
       lines.zipWithIndex.foreach { case (line, index) =>

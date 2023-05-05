@@ -99,7 +99,9 @@ class CSVUtilsSuite extends FunSuite {
   }
 
   test("CSVUtils#writeCSV multiple json columns") {
-    given CSVFormat = DefaultCSVFormat
+    given CSVFormat = new CSVFormat {
+      override val hasHeaders: Boolean = true
+    }
 
     val fileName = FileName("./multiple_json_columns_data.csv")
     val status = CSVUtils.writeCSV(fileName, Metric.`multiple_field_data_objs`) { m =>
