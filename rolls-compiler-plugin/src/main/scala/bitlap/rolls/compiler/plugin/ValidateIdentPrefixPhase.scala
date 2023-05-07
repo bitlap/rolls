@@ -30,7 +30,7 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
   override val annotationFullNames: List[String] = setting.config.validateIdentPrefix
 
   @threadUnsafe private lazy val ValidateAnnotationsClasses: List[Context ?=> ClassSymbol] =
-    setting.config.validateIdentPrefix.map(v => requiredClass(v))
+    setting.config.validateIdentPrefix.map(requiredClass(_))
 
   private lazy val startsWith = setting.config.validateShouldStartsWith
 
@@ -73,9 +73,7 @@ final class ValidateIdentPrefixPhase(setting: RollsSetting) extends PluginPhase 
 
       // if paramss contains annotation, check for case classes and functions
       val needCheckParams = paramSyms
-        .filter(p =>
-          ValidateAnnotationsClasses.map(_.name.asSimpleName).exists(declare => p.containsAnnotation(declare))
-        )
+        .filter(p => ValidateAnnotationsClasses.map(_.name.asSimpleName).exists(p.containsAnnotation(_)))
         .filter { f =>
           val caseClass =
             f.tpe <:< defn.ProductClass.typeRef && f.tpe.member(nme.copy).filterWithFlags(Synthetic, EmptyFlags).exists

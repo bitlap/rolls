@@ -64,11 +64,10 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
     }.getOrElse(false)
 
     if template.body.exists(filterDefName) then
-      val newBody = template.body.map { member =>
-        member match
-          case d: DefDef if d.name == methodName =>
-            mapDefDef(standard, classTree, d.symbol.asTerm)
-          case o => o
+      val newBody = template.body.map {
+        case d: DefDef if d.name == methodName =>
+          mapDefDef(standard, classTree, d.symbol.asTerm)
+        case o => o
       }
       val ret = ClassDefWithParents(clazz, template.constr, template.parents, newBody)
       debug(s"Modify ${classTree.name} toString", ret)
@@ -100,7 +99,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
   ): DefDef =
     val paramSyms = classTree.primaryConstructor.paramSymss.flatten.filter(!_.isType).map(_.toFieldTree)
     val elements = paramSyms
-      .filter(f => !f.isPrivate)
+      .filter(!_.isPrivate)
       .map { f =>
         ref(Tuple2Class)
           .select(nme.apply)

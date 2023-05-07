@@ -77,7 +77,7 @@ extension (s: Symbol)
   def toFieldTree(using clazz: ClassSymbol): Context ?=> FieldTree = FieldTree(
     s.name,
     This(clazz)
-      .select(s.name, f => f.info.isParameterless),
+      .select(s.name, _.info.isParameterless),
     s.info,
     s.isPrivate,
     s.annotations.map(_.tree)
@@ -119,7 +119,7 @@ extension (td: TypeDef)
     td.tpe.typeParams
       .map(_.paramInfo)
       .map(_.typeSymbol)
-      .map(s => FromSymbol.definitionFromSym(s)),
+      .map(FromSymbol.definitionFromSym),
     if (td.isClassDef) td.rhs.asInstanceOf[Template] else throw new Exception(s"Cannot get template from type:$td"),
     td.tpe.typeSymbol,
     getAnnotations,

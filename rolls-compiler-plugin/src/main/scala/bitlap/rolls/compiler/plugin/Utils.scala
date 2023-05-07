@@ -13,7 +13,7 @@ import scala.util.Using
  *    梦境迷离
  *  @version 1.0,2023/3/22
  */
-object Utils {
+object Utils:
 
   final val OK    = 200
   final val Empty = ""
@@ -67,9 +67,7 @@ object Utils {
     }
 
   def readObject(inputStream: InputStream): ClassSchema =
-    Using.resource(new ObjectInputStreamWithCustomClassLoader(inputStream)) { objectInputStream =>
-      objectInputStream.readObject().asInstanceOf[ClassSchema]
-    }
+    Using.resource(new ObjectInputStreamWithCustomClassLoader(inputStream))(_.readObject().asInstanceOf[ClassSchema])
 
   def readObject(className: String, config: RollsConfig = RollsConfig.default): ClassSchema =
     Using.resource(
@@ -78,9 +76,7 @@ object Utils {
           Files.readAllBytes(Paths.get(config.classSchemaFolder, "/", config.classSchemaFileName.format(className)))
         )
       )
-    ) { objectInputStream =>
-      objectInputStream.readObject().asInstanceOf[ClassSchema]
-    }
+    )(_.readObject().asInstanceOf[ClassSchema])
 
   private class ObjectInputStreamWithCustomClassLoader(
     inputStream: InputStream
@@ -92,4 +88,3 @@ object Utils {
         case ignore: ClassNotFoundException =>
           super.resolveClass(desc)
       }
-}

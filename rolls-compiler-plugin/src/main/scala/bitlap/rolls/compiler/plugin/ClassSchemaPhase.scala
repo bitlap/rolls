@@ -68,7 +68,7 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
     tree match
       case tpeDef: TypeDef if tpeDef.isClassDef && tpeDef.tpe <:< IterableType =>
         val typeTree = tpeDef.toClassTree
-        TypeSchema(typeName = typeTree.name, typeArgs = Option(typeTree.typeParams.map(tr => mapType(tr))))
+        TypeSchema(typeName = typeTree.name, typeArgs = Option(typeTree.typeParams.map(mapType)))
       case tpeDef: TypeDef if tpeDef.isClassDef =>
         mapTemplate(tpeDef)
       case tpeDef: TypeDef =>
@@ -96,7 +96,7 @@ final class ClassSchemaPhase(setting: RollsSetting) extends PluginPhase with Typ
   private def mapAppliedTypeTree(tree: AppliedTypeTree)(using ctx: Context): TypeSchema =
     TypeSchema(
       typeName = ctx.printer.nameString(tree.tpt.symbol),
-      typeArgs = Option(tree.args.map(a => mapType(a)))
+      typeArgs = Option(tree.args.map(mapType))
     )
   end mapAppliedTypeTree
 

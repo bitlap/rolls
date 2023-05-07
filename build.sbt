@@ -28,7 +28,7 @@ inThisBuild(
     licenses               := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
-        id = "dreamylost",
+        id = "jxnu-liguobin",
         name = "梦境迷离",
         email = "dreamylost@outlook.com",
         url = url("https://blog.dreamylost.cn")
