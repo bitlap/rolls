@@ -22,6 +22,7 @@
 package bitlap.rolls.csv
 
 import java.util.regex.Pattern
+
 import scala.collection.mutable.ListBuffer
 import scala.util.matching.Regex
 

@@ -1,18 +1,20 @@
 package bitlap.rolls.compiler.plugin
 
+import scala.annotation.threadUnsafe
+
 import bitlap.rolls.compiler.plugin.*
+
 import dotty.tools.dotc.ast.tpd.*
+import dotty.tools.dotc.core.*
+import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Flags.*
 import dotty.tools.dotc.core.Names.*
+import dotty.tools.dotc.core.StdNames.nme
 import dotty.tools.dotc.core.Symbols.*
-import dotty.tools.dotc.core.*
 import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.plugins.PluginPhase
 import dotty.tools.dotc.transform.*
-import dotty.tools.dotc.core.Constants.Constant
-import dotty.tools.dotc.core.StdNames.nme
-import scala.annotation.threadUnsafe
 
 /** @author
  *    梦境迷离
@@ -28,6 +30,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
 
   @threadUnsafe private lazy val methodName: Context ?=> Name             = StdNames.nme.toString_.asSimpleName
   @threadUnsafe private lazy val StringMaskClass: Context ?=> ClassSymbol = requiredClass(setting.config.stringMask)
+
   @threadUnsafe private lazy val RollsRuntimeClass: Context ?=> TermSymbol = requiredModule(
     setting.config.rollsRuntimeClass
   )

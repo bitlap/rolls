@@ -21,10 +21,11 @@
 
 package bitlap.rolls.core.jdbc
 
-import bitlap.rolls.core.internal.ResultSetXMacro
-
 import java.sql.*
+
 import scala.language.postfixOps
+
+import bitlap.rolls.core.internal.ResultSetXMacro
 
 /** @author
  *    梦境迷离
@@ -60,6 +61,7 @@ trait ResultSetX[T <: TypeRow] {
 
   def fetch(typeMappingFunc: TypeMappingArgs => TypeRow = getResultSetTuple): Seq[T]
 }
+
 object ResultSetX {
 
   inline def apply[T <: TypeRow](fetchInput: FetchInput): ResultSetX[T] = ${

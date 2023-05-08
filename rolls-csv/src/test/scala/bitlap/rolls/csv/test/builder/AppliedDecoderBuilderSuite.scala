@@ -1,11 +1,12 @@
 package bitlap.rolls.csv.test.builder
 
+import scala.compiletime.testing.*
+
 import bitlap.rolls.csv.*
 import bitlap.rolls.csv.builder.*
 import bitlap.rolls.csv.test.model.*
-import munit.FunSuite
 
-import scala.compiletime.testing.*
+import munit.FunSuite
 
 /** @author
  *    梦境迷离

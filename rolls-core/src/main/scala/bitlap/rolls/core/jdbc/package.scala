@@ -38,6 +38,7 @@ extension (typeRow: TypeRow)
 end extension
 
 extension (sqlStatement: StringContext)
+
   def sqlQ(args: Any*)(using Connection): FetchInput = {
     val stmt = summon[Connection].createStatement()
     stmt -> stmt.executeQuery(sqlStatement.s(args: _*))

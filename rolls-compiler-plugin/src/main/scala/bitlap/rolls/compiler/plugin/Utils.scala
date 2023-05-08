@@ -6,6 +6,7 @@ import java.net.http.*
 import java.net.http.HttpRequest.BodyPublishers
 import java.nio.file.*
 import java.time.Duration
+
 import scala.annotation.*
 import scala.util.Using
 
@@ -19,10 +20,12 @@ object Utils:
   final val Empty = ""
 
   final val ContentType = "Content-Type"
+
   @targetName("applicationJson")
   final val `application/json` = "application/json"
 
   private val timeout = Duration.ofSeconds(5)
+
   private lazy val client = HttpClient
     .newBuilder()
     .version(HttpClient.Version.HTTP_2)
@@ -81,6 +84,7 @@ object Utils:
   private class ObjectInputStreamWithCustomClassLoader(
     inputStream: InputStream
   ) extends ObjectInputStream(inputStream):
+
     override def resolveClass(desc: java.io.ObjectStreamClass): Class[_] =
       try
         Class.forName(desc.getName, false, getClass.getClassLoader)

@@ -1,13 +1,15 @@
 package bitlap.rolls.csv.test
 
+import java.io.File
+import java.nio.file.Files
+
+import scala.io.{ BufferedSource, Codec, Source }
+
 import bitlap.rolls.csv.*
 import bitlap.rolls.csv.CSVUtils.*
 import bitlap.rolls.csv.test.model.*
-import munit.FunSuite
 
-import java.io.File
-import java.nio.file.Files
-import scala.io.{ BufferedSource, Codec, Source }
+import munit.FunSuite
 
 /** @author
  *    梦境迷离

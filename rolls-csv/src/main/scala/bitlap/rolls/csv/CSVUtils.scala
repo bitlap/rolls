@@ -1,12 +1,13 @@
 package bitlap.rolls.csv
 
-import scala.io.Source
-import scala.io.*
 import java.io.*
-import bitlap.rolls.core.*
 
 import scala.deriving.Mirror
+import scala.io.*
+import scala.io.Source
 import scala.util.Using
+
+import bitlap.rolls.core.*
 
 /** @author
  *    梦境迷离

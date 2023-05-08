@@ -1,6 +1,9 @@
 package bitlap.rolls.compiler.plugin
 
+import scala.annotation.threadUnsafe
+
 import bitlap.rolls.compiler.plugin.*
+
 import dotty.tools.dotc.ast.tpd.*
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Flags.*
@@ -11,8 +14,6 @@ import dotty.tools.dotc.plugins.PluginPhase
 import dotty.tools.dotc.quoted.reflect.FromSymbol
 import dotty.tools.dotc.report
 import dotty.tools.dotc.transform.*
-
-import scala.annotation.threadUnsafe
 
 /** @author
  *    梦境迷离

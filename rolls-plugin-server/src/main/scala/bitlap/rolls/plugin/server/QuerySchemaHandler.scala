@@ -1,6 +1,7 @@
 package bitlap.rolls.plugin.server
 
 import bitlap.rolls.compiler.plugin.*
+
 import com.sun.net.httpserver.*
 
 /** @author
@@ -8,6 +9,7 @@ import com.sun.net.httpserver.*
  *  @version 1.0,2023/3/22
  */
 class QuerySchemaHandler extends HttpHandler {
+
   def handle(exchange: HttpExchange): Unit =
     try {
       val className           = getParamsFromQuery(exchange).getOrElse("className", "")

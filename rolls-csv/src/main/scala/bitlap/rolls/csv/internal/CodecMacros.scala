@@ -1,9 +1,9 @@
 package bitlap.rolls.csv.internal
 
-import bitlap.rolls.csv.*
-
 import scala.deriving.Mirror
 import scala.quoted.*
+
+import bitlap.rolls.csv.*
 
 /** @author
  *    梦境迷离
@@ -22,6 +22,7 @@ private[csv] object CodecMacros {
       maybeValueFromDerived.orElse(maybeValueFromComputed).getOrElse(fieldValue.toString)
     }
   }
+
   inline def decode[To, DerivedToSubs <: Tuple](
     toMirror: Mirror.ProductOf[To],
     computes: Map[FieldName, String => Any]

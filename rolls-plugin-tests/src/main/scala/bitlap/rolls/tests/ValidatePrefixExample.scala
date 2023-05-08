@@ -7,6 +7,7 @@ import caliban.schema.Annotations.GQLDescription
  *  @version 1.0,2023/4/12
  */
 object ValidatePrefixExample extends App {
+
   final case class StarDictInput(
     @GQLDescription("dictName")
     dictName: Option[String],

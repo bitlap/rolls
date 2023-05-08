@@ -1,12 +1,12 @@
 package bitlap.rolls.csv.builder
 
-import bitlap.rolls.csv.*
-import bitlap.rolls.csv.builder.*
-import bitlap.rolls.csv.internal.*
-
 import scala.compiletime.*
 import scala.compiletime.ops.int.*
 import scala.deriving.Mirror
+
+import bitlap.rolls.csv.*
+import bitlap.rolls.csv.builder.*
+import bitlap.rolls.csv.internal.*
 
 /** @author
  *    梦境迷离

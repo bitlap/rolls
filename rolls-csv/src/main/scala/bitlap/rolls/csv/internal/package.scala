@@ -9,6 +9,7 @@ import scala.quoted.*
  *  @version 1.0,2023/4/5
  */
 private[csv] inline def showType[T] = ${ showTypeImpl[T] }
+
 private[csv] def showTypeImpl[T: Type](using Quotes): Expr[String] = {
   import quotes.reflect.*
   Expr(Type.show[T])

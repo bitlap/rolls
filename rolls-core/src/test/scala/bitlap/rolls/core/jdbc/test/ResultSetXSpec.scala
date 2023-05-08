@@ -1,12 +1,14 @@
 package bitlap.rolls.core.jdbc.test
 
+import java.sql.*
+
+import scala.Tuple.Union
+
 import bitlap.rolls.core.annotations.prettyToString
 import bitlap.rolls.core.jdbc.*
+
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-
-import java.sql.*
-import scala.Tuple.Union
 
 /** @author
  *    梦境迷离

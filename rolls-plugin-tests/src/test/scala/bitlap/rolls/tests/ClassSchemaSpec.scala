@@ -1,13 +1,15 @@
 package bitlap.rolls.tests
 
+import java.io.*
+import java.nio.file.*
+import java.time.Instant
+
 import bitlap.rolls.core.annotations.prettyToString
+
 import org.scalacheck.Gen
 import org.scalacheck.Gen.*
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import java.io.*
-import java.nio.file.*
-import java.time.Instant
 
 /** @author
  *    梦境迷离

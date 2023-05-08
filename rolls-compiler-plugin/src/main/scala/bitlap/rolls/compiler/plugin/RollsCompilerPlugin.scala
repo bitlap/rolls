@@ -1,8 +1,8 @@
 package bitlap.rolls.compiler.plugin
 
+import dotty.tools.dotc.config.*
 import dotty.tools.dotc.plugins.*
 import dotty.tools.dotc.transform.*
-import dotty.tools.dotc.config.*
 
 /** @author
  *    梦境迷离

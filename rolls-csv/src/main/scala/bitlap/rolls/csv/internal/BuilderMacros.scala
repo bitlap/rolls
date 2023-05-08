@@ -1,11 +1,11 @@
 package bitlap.rolls.csv.internal
 
-import scala.quoted.*
 import scala.compiletime.*
+import scala.deriving.Mirror
+import scala.quoted.*
+
 import bitlap.rolls.csv.*
 import bitlap.rolls.csv.builder.*
-
-import scala.deriving.Mirror
 
 /** @author
  *    梦境迷离
@@ -67,6 +67,7 @@ private[csv] object BuilderMacros {
   }
 
   extension (value: String) {
+
     def asConstantType(using Quotes): Type[? <: AnyKind] = {
       import quotes.reflect.*
       ConstantType(StringConstant(value)).asType

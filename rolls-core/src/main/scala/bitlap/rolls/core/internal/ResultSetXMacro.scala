@@ -1,11 +1,12 @@
 package bitlap.rolls.core.internal
 
-import bitlap.rolls.core.jdbc.*
-
 import java.sql.ResultSet
-import scala.quoted.*
+
 import scala.compiletime.*
 import scala.deriving.Mirror
+import scala.quoted.*
+
+import bitlap.rolls.core.jdbc.*
 
 /** @author
  *    梦境迷离

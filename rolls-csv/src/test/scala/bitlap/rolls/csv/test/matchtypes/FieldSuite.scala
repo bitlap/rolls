@@ -1,11 +1,12 @@
 package bitlap.rolls.csv.test.matchtypes
 
+import scala.deriving.Mirror
+
 import bitlap.rolls.csv.*
 import bitlap.rolls.csv.internal.Field
 import bitlap.rolls.csv.test.model.*
-import munit.FunSuite
 
-import scala.deriving.Mirror
+import munit.FunSuite
 
 /** @author
  *    梦境迷离

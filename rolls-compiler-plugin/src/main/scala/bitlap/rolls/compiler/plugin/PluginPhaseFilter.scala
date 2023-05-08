@@ -2,10 +2,10 @@ package bitlap.rolls.compiler.plugin
 
 import dotty.tools.dotc.ast.tpd
 import dotty.tools.dotc.ast.tpd.*
+import dotty.tools.dotc.core.Annotations.*
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.Contexts.Context
 import dotty.tools.dotc.core.Symbols
-import dotty.tools.dotc.core.Annotations.*
 import dotty.tools.dotc.core.Symbols.*
 import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.report

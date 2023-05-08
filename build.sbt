@@ -38,6 +38,7 @@ inThisBuild(
 )
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
+
 lazy val commonSettings =
   Seq(
     scalaVersion                  := scala3Version,
@@ -118,6 +119,7 @@ lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
   )
 
 lazy val reader = scala.io.Source.fromFile("config.properties")
+
 lazy val config = {
   val ret = reader.getLines().toList.map(p => s"-P:RollsCompilerPlugin:$p")
   reader.close()

@@ -1,6 +1,7 @@
 package bitlap.rolls.csv
 
 import java.nio.charset.Charset as JCharset
+
 import scala.util.Try
 
 /** @author

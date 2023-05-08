@@ -16,6 +16,7 @@ extension [From <: Product](value: From)
 end extension
 
 extension [A <: String](value: A)
+
   transparent inline def into[To]: AppliedDecoderBuilder[To, _ <: Tuple, _ <: Tuple] =
     AppliedDecoderBuilder.create[To](String.valueOf(value))
 

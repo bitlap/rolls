@@ -1,7 +1,7 @@
 package bitlap.rolls.csv
 
-import scala.deriving.Mirror
 import scala.compiletime.*
+import scala.deriving.Mirror
 
 /** @author
  *    梦境迷离
@@ -25,6 +25,7 @@ object Encoder:
   given Encoder[Short]   = s => s.toString
   given Encoder[Long]    = s => s.toString
   given Encoder[Byte]    = s => s.toString
+
   given optionCodec[T: Encoder]: Encoder[Option[T]] = s =>
     s match
       case Some(s) => summon[Encoder[T]].encode(s)

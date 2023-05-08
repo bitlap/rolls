@@ -1,8 +1,8 @@
 package bitlap.rolls.core
 
 import scala.compiletime.*
-import scala.quoted.*
 import scala.deriving.Mirror
+import scala.quoted.*
 import scala.reflect.{ classTag, ClassTag }
 
 /** @author
@@ -12,6 +12,7 @@ import scala.reflect.{ classTag, ClassTag }
 object extensions:
 
   extension (tpe: Type[?])
+
     def fullName(using Quotes): String = {
       import quotes.reflect.*
       TypeRepr.of(using tpe).show(using Printer.TypeReprCode)

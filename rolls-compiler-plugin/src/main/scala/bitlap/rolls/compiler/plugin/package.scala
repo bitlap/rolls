@@ -1,19 +1,19 @@
 package bitlap.rolls.compiler.plugin
 
-import dotty.tools.dotc.ast.tpd.*
+import scala.collection.immutable.List
+
 import dotty.tools.dotc.ast.*
+import dotty.tools.dotc.ast.tpd.*
 import dotty.tools.dotc.core.Annotations.*
-import dotty.tools.dotc.core.Denotations.SingleDenotation
-import dotty.tools.dotc.core.Names.*
-import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.core.Contexts.Context
+import dotty.tools.dotc.core.Denotations.SingleDenotation
 import dotty.tools.dotc.core.Flags.*
+import dotty.tools.dotc.core.Names.*
 import dotty.tools.dotc.core.StdNames.nme
 import dotty.tools.dotc.core.Symbols
 import dotty.tools.dotc.core.Symbols.*
+import dotty.tools.dotc.core.Types.*
 import dotty.tools.dotc.quoted.reflect.FromSymbol
-
-import scala.collection.immutable.List
 
 /** @author
  *    梦境迷离
@@ -26,6 +26,7 @@ final case class FieldTree(
   isPrivate: Boolean,
   annotations: List[Tree] // on term
 ):
+
   def containsAnnotation(annotation: Name): Context ?=> Boolean =
     (annotations ++ getAnnotatedTypeAnnotation.toList).collectFirst {
       case Apply(Select(New(Ident(an)), _), _) if an.asSimpleName == annotation => true
@@ -63,7 +64,9 @@ final case class ClassTree(
   primaryConstructor: Symbol,
   isCaseClass: Boolean
 )
+
 extension (s: SingleDenotation)
+
   def toSimpleFieldTree: Context ?=> SimpleFieldTree = SimpleFieldTree(
     s.name.show,
     s.info,
@@ -73,6 +76,7 @@ extension (s: SingleDenotation)
 end extension
 
 extension (s: Symbol)
+
   // from primaryConstructor symbol
   def toFieldTree(using clazz: ClassSymbol): Context ?=> FieldTree = FieldTree(
     s.name,
@@ -86,6 +90,7 @@ extension (s: Symbol)
 end extension
 
 extension (ts: TypeTree)
+
   def toTypeTree: Context ?=> TpeTree = TpeTree(
     FromSymbol.definitionFromSym(ts.tpe.typeSymbol),
     ts.tpe.argTypes.map(_.typeSymbol).map(FromSymbol.definitionFromSym)

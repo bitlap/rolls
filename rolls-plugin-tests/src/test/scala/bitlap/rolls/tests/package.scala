@@ -1,10 +1,11 @@
 package bitlap.rolls.tests
 
+import java.time.Instant
+
 import bitlap.rolls.core.*
 import bitlap.rolls.core.annotations.{ classSchema, prettyToString, stringMask }
-import caliban.schema.Annotations.GQLDescription
 
-import java.time.Instant
+import caliban.schema.Annotations.GQLDescription
 
 /** @author
  *    梦境迷离

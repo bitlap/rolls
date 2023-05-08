@@ -18,6 +18,7 @@ final case class RollsConfig(
   postClassSchemaToServer: Boolean = false,
   validateShouldStartsWith: String = ""
 )
+
 object RollsConfig:
   lazy val default: RollsConfig = RollsConfig()
 end RollsConfig
@@ -25,6 +26,7 @@ end RollsConfig
 final class RollsSetting(configString: List[String]) {
 
   private enum RollsConfigKey:
+
     case classSchema, prettyToString, classSchemaFolder, classSchemaFileName,
       classSchemaPostUri, classSchemaQueryUri, postClassSchemaToServer, stringMask, rollsRuntimeClass,
       rollsRuntimeToStringMethod, validateIdentPrefix, validateShouldStartsWith

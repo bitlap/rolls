@@ -1,8 +1,8 @@
 package bitlap.rolls.plugin.server
 
-import com.sun.net.httpserver.{ HttpExchange, HttpHandler, HttpServer as NHttpServer }
-
 import java.net.InetSocketAddress
+
+import com.sun.net.httpserver.{ HttpExchange, HttpHandler, HttpServer as NHttpServer }
 
 /** @author
  *    梦境迷离

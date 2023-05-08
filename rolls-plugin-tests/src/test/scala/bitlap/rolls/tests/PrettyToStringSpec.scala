@@ -1,12 +1,14 @@
 package bitlap.rolls.tests
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
-import org.scalacheck.Gen
-import Gen.*
+import java.time.Instant
+
 import bitlap.rolls.core.annotations.prettyToString
 
-import java.time.Instant
+import org.scalacheck.Gen
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+
+import Gen.*
 
 /** @author
  *    梦境迷离

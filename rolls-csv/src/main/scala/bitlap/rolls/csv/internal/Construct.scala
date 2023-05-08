@@ -1,11 +1,11 @@
 package bitlap.rolls.csv.internal
 
-import bitlap.rolls.csv.*
-
 import scala.collection.mutable.ListBuffer
-import scala.deriving.Mirror
-import scala.compiletime.ops.int.*
 import scala.compiletime.*
+import scala.compiletime.ops.int.*
+import scala.deriving.Mirror
+
+import bitlap.rolls.csv.*
 
 /** @author
  *    梦境迷离
