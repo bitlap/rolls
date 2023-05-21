@@ -45,7 +45,7 @@ object CSVUtils:
       )
     ) { r =>
 
-      if (headerRows.nonEmpty) {
+      if (format.hasHeaders && headerRows.nonEmpty) {
         if (format.hasColIndex) {
           r.println((List(0) ::: headerRows).mkString(format.delimiter.toString))
         } else {
