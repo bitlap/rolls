@@ -24,6 +24,7 @@ scalacOptions ++= config
 Add the following properties to **config.properties**:
 ```properties
 # Multiple annotations split by '|'
+# Why is '|' ?, see https://github.com/lampepfl/dotty/pull/17448#event-9286210944
 validateIdentPrefix=caliban.schema.Annotations.GQLDescription
 validateShouldStartsWith=star
 ```
