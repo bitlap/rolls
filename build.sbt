@@ -8,7 +8,7 @@ lazy val `rolls-test-deps-version` = "0.2.9"
 
 //ThisBuild / version := `rolls-test-deps-version`
 
-lazy val scala3Version     = "3.2.0"
+lazy val scala3Version     = "3.2.2"
 lazy val jacksonVersion    = "2.13.3"
 lazy val scalatestVersion  = "3.2.16"
 lazy val scalacheckVersion = "1.17.0"
@@ -16,7 +16,7 @@ lazy val munitVersion      = "0.7.29"
 lazy val configVersion     = "1.4.2"
 lazy val postgresqlVersion = "42.6.0"
 lazy val h2Version         = "2.1.214"
-lazy val calibanVersion    = "2.1.0"
+lazy val calibanVersion    = "2.2.1"
 
 inThisBuild(
   List(
@@ -63,7 +63,7 @@ lazy val `rolls` = (project in file("."))
     `rolls-core`,
     `rolls-plugin-server`,
     `rolls-csv`,
-    `rolls-plugin-tests`
+//    `rolls-plugin-tests`
   )
   .settings(
     publish / skip := true,

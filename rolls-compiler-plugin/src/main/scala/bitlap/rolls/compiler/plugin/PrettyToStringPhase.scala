@@ -117,7 +117,7 @@ final class PrettyToStringPhase(setting: RollsSetting) extends PluginPhase with 
           )
       }
 
-    val list = mkList(elements, TypeTree(defn.AnyType))
+    val list = mkList(elements, TypeTree(defn.AnyType, false))
     val body = ref(RollsRuntimeClass.requiredMethod(setting.config.rollsRuntimeToStringMethod))
       .withSpan(ctx.owner.span.focus)
       .appliedToArgs(const(standard) :: const(classTree.name) :: list :: Nil)
