@@ -62,7 +62,7 @@ lazy val `rolls` = (project in file("."))
     `rolls-compiler-plugin`,
     `rolls-core`,
     `rolls-plugin-server`,
-    `rolls-csv`,
+    `rolls-csv`
 //    `rolls-plugin-tests`
   )
   .settings(
