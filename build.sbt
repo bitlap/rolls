@@ -17,6 +17,7 @@ lazy val configVersion     = "1.4.2"
 lazy val postgresqlVersion = "42.6.0"
 lazy val h2Version         = "2.1.214"
 lazy val calibanVersion    = "2.2.1"
+lazy val zioVersion        = "2.0.13"
 
 inThisBuild(
   List(
@@ -62,7 +63,8 @@ lazy val `rolls` = (project in file("."))
     `rolls-compiler-plugin`,
     `rolls-core`,
     `rolls-plugin-server`,
-    `rolls-csv`
+    `rolls-csv`,
+    `rolls-zio`
 //    `rolls-plugin-tests`
   )
   .settings(
@@ -80,6 +82,15 @@ lazy val `rolls-csv` = (project in file("rolls-csv"))
     )
   )
   .dependsOn(`rolls-core`)
+
+lazy val `rolls-zio` = (project in file("rolls-zio"))
+  .settings(
+    commonSettings,
+    name := "rolls-zio",
+    libraryDependencies ++= Seq(
+      "dev.zio" %% "zio" % zioVersion % Provided
+    )
+  )
 
 lazy val `rolls-core` = (project in file("rolls-core"))
   .settings(
