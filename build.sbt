@@ -8,7 +8,7 @@ lazy val `rolls-test-deps-version` = "0.2.9+10-a5e4507e-SNAPSHOT"
 
 //ThisBuild / version := `rolls-test-deps-version`
 
-lazy val scala3Version     = "3.2.2"
+lazy val scala3Version     = "3.3.0"
 lazy val jacksonVersion    = "2.13.3"
 lazy val scalatestVersion  = "3.2.16"
 lazy val scalacheckVersion = "1.17.0"
