@@ -88,7 +88,8 @@ lazy val `rolls-zio` = (project in file("rolls-zio"))
     commonSettings,
     name := "rolls-zio",
     libraryDependencies ++= Seq(
-      "dev.zio" %% "zio" % zioVersion % Provided
+      "dev.zio"       %% "zio"       % zioVersion       % Provided,
+      "org.scalatest" %% "scalatest" % scalatestVersion % Test
     )
   )
 
