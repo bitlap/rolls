@@ -15,7 +15,7 @@ lazy val scalacheckVersion = "1.17.0"
 lazy val munitVersion      = "0.7.29"
 lazy val configVersion     = "1.4.2"
 lazy val postgresqlVersion = "42.6.0"
-lazy val h2Version         = "2.1.214"
+lazy val h2Version         = "2.2.220"
 lazy val calibanVersion    = "2.2.1"
 lazy val zioVersion        = "2.0.13"
 
