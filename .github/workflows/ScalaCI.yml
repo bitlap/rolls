@@ -29,8 +29,6 @@ jobs:
   
   test:
     runs-on: ubuntu-latest
-    # https://github.com/scoverage/sbt-scoverage/issues/444
-    if: ${{ vars.RUN_ROLLS_TEST == 'Y' }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup JDK
@@ -43,11 +41,9 @@ jobs:
         run: sbt coverage test
 
       - name: Aggregate coverage report
-        if: ${{ vars.RUN_ROLLS_TEST_AGGREGATE == 'Y' }}
         run: sbt coverageAggregate
 
       - name: Upload test coverage report
-        if: ${{ vars.RUN_ROLLS_TEST_AGGREGATE == 'Y' }}
         run: bash <(curl -s https://codecov.io/bash)
   
   publish:
@@ -65,7 +61,7 @@ jobs:
           java-version: 11
 
       - name: Update docs
-        if: ${{ vars.RUN_ROLLS_TEST == 'Y' }}
+        if: ${{ vars.RUN_ROLLS_MDOC == 'Y' }}
         run: |
           git config --global user.name "Rolls Docs"
           git config --global user.email "568845948@qq.com"
