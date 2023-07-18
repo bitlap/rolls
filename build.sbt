@@ -17,7 +17,7 @@ lazy val configVersion     = "1.4.2"
 lazy val postgresqlVersion = "42.6.0"
 lazy val h2Version         = "2.1.214"
 lazy val calibanVersion    = "2.2.1"
-lazy val zioVersion        = "2.0.13"
+lazy val zioVersion        = "2.0.15"
 
 inThisBuild(
   List(
