@@ -4,7 +4,7 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-lazy val `rolls-test-deps-version` = "0.2.10+16-93b91029-SNAPSHOT"
+lazy val `rolls-test-deps-version` = "0.3.0"
 
 //ThisBuild / version := `rolls-test-deps-version`
 
@@ -126,7 +126,7 @@ lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
     commonSettings,
     name := "rolls-compiler-plugin",
     libraryDependencies ++= List(
-      "org.scala-lang" %% "scala3-compiler" % scala3Version
+      "org.scala-lang" %% "scala3-compiler" % scala3Version % Provided
     )
   )
 
