@@ -64,8 +64,8 @@ lazy val `rolls` = (project in file("."))
     `rolls-core`,
     `rolls-plugin-server`,
     `rolls-csv`,
-    `rolls-zio`
-//    `rolls-plugin-tests`
+    `rolls-zio`,
+    `rolls-plugin-tests`
   )
   .settings(
     publish / skip := true,
