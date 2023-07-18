@@ -8,7 +8,7 @@ This guide gets you started with rolls with a simple working example.
 ## Prerequisites
 
 * [JDK](https://jdk.java.net) version 8 or higher
-* [Scala](https://www.scala-lang.org/) 3.2.0 or higher
+* [Scala](https://www.scala-lang.org/) 3.3.0 or higher
 
 ## Get the example code
 
