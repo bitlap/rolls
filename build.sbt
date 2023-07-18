@@ -4,7 +4,7 @@ ThisBuild / resolvers ++= Seq(
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-lazy val `rolls-test-deps-version` = "0.2.9+10-a5e4507e-SNAPSHOT"
+lazy val `rolls-test-deps-version` = "0.2.10+16-93b91029-SNAPSHOT"
 
 //ThisBuild / version := `rolls-test-deps-version`
 
