@@ -79,9 +79,9 @@ extension (typeRow: TypeRow)
     case x          => Iterator(x)
   }
 
-  def values: LazyList[Any] = LazyList.from(flatProduct(typeRow))
+  def lazyColumns: LazyList[Any] = LazyList.from(flatProduct(typeRow))
 
-  def columnValues[T]: List[T] = flatProduct(typeRow).toList.map(_.asInstanceOf[T])
+  def columns[T]: List[T] = flatProduct(typeRow).toList.map(_.asInstanceOf[T])
 
 end extension
 

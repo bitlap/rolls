@@ -27,7 +27,7 @@ class ResultSetXSpec extends AnyFlatSpec with Matchers {
     val rs: ResultSetX = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
     val rows           = rs.fetch()
     assert(rows.size == 2)
-    assert(rows.head.values.size == 4)
+    assert(rows.head.lazyColumns.size == 4)
   }
 
   "ResultSetX with tuple" should "ok on class" in {
@@ -39,7 +39,7 @@ class ResultSetXSpec extends AnyFlatSpec with Matchers {
     val rs: ResultSetX = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
     val rows           = rs.fetch()
     assert(rows.size == 2)
-    assert(rows.head.values.size == 4)
+    assert(rows.head.lazyColumns.size == 4)
   }
 
   "ResultSetX with RowType" should "ok on class" in {
@@ -51,7 +51,7 @@ class ResultSetXSpec extends AnyFlatSpec with Matchers {
     val rs   = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
     val rows = rs.fetch()
     assert(rows.size == 2)
-    val row = rows.head.columnValues[rs.Out]
-    assert(row.size == 4)
+    val columns = rows.head.columns[rs.Out]
+    assert(columns.size == 4)
   }
 }
