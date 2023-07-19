@@ -59,7 +59,7 @@ trait ResultSetX {
     }) :* getColumnValues(resultSet, idx + 1, size)
   }
 
-  type RowType
+  type Out
 
   def fetch(typeMappingFunc: TypeMappingArgs => TypeRow = getResultSetTuple): LazyList[TypeRow]
 }
