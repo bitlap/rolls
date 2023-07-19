@@ -18,14 +18,42 @@ class ResultSetXSpec extends AnyFlatSpec with Matchers {
 
   Class.forName("org.h2.Driver")
 
+  type MySelectResultType = TypeRow4[Int, String, String, String]
+
   "ResultSetX" should "ok on class" in {
     given Connection = DriverManager
       .getConnection(
         "jdbc:h2:mem:zim?caseSensitive=false;MODE=MYSQL;TRACE_LEVEL_FILE=2;INIT=RUNSCRIPT FROM 'classpath:test.sql'"
       )
     // default type mapping
-    val rows = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER").fetch()
+    val rs: ResultSetX = ResultSetX[MySelectResultType](sqlQ"select * from T_USER")
+    val rows           = rs.fetch()
     assert(rows.size == 2)
     assert(rows.head.values.size == 4)
+  }
+
+  "ResultSetX with tuple" should "ok on class" in {
+    given Connection = DriverManager
+      .getConnection(
+        "jdbc:h2:mem:zim?caseSensitive=false;MODE=MYSQL;TRACE_LEVEL_FILE=2;INIT=RUNSCRIPT FROM 'classpath:test.sql'"
+      )
+
+    val rs: ResultSetX = ResultSetX[MySelectResultType](sqlQ"select * from T_USER")
+    val rows           = rs.fetch()
+    assert(rows.size == 2)
+    assert(rows.head.values.size == 4)
+  }
+
+  "ResultSetX with RowType" should "ok on class" in {
+    given Connection = DriverManager
+      .getConnection(
+        "jdbc:h2:mem:zim?caseSensitive=false;MODE=MYSQL;TRACE_LEVEL_FILE=2;INIT=RUNSCRIPT FROM 'classpath:test.sql'"
+      )
+
+    val rs   = ResultSetX[MySelectResultType](sqlQ"select * from T_USER")
+    val rows = rs.fetch()
+    assert(rows.size == 2)
+    val row = rows.head.columnValues[rs.RowType]
+    assert(row.size == 4)
   }
 }

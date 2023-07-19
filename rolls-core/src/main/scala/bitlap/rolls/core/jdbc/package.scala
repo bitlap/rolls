@@ -16,16 +16,61 @@ end extension
 
 type FetchInput = (Statement, ResultSet)
 
-type TypeRow                                      = Tuple
-type TypeRow1[T1]                                 = Tuple1[T1] *: EmptyTuple
-type TypeRow2[T1, T2]                             = (T1, T2)
-type TypeRow3[T1, T2, T3]                         = (T1, T2, T3)
-type TypeRow4[T1, T2, T3, T4]                     = (T1, T2, T3, T4)
-type TypeRow5[T1, T2, T3, T4, T5]                 = (T1, T2, T3, T4, T5)
-type TypeRow6[T1, T2, T3, T4, T5, T6]             = (T1, T2, T3, T4, T5, T6)
-type TypeRow7[T1, T2, T3, T4, T5, T6, T7]         = (T1, T2, T3, T4, T5, T6, T7)
-type TypeRow8[T1, T2, T3, T4, T5, T6, T7, T8]     = (T1, T2, T3, T4, T5, T6, T7, T8)
+type TypeRow = Tuple
+
+type TypeRow1[T1] = Tuple1[T1]
+
+type TypeRow2[T1, T2] = (T1, T2)
+
+type TypeRow3[T1, T2, T3] = (T1, T2, T3)
+
+type TypeRow4[T1, T2, T3, T4] = (T1, T2, T3, T4)
+
+type TypeRow5[T1, T2, T3, T4, T5] = (T1, T2, T3, T4, T5)
+
+type TypeRow6[T1, T2, T3, T4, T5, T6] = (T1, T2, T3, T4, T5, T6)
+
+type TypeRow7[T1, T2, T3, T4, T5, T6, T7] = (T1, T2, T3, T4, T5, T6, T7)
+
+type TypeRow8[T1, T2, T3, T4, T5, T6, T7, T8] = (T1, T2, T3, T4, T5, T6, T7, T8)
+
 type TypeRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9] = (T1, T2, T3, T4, T5, T6, T7, T8, T9)
+
+type TypeRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] = (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)
+
+type TypeRow11[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11] = (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)
+
+type TypeRow12[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12] = (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)
+
+type TypeRow13[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)
+
+type TypeRow14[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)
+
+type TypeRow15[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)
+
+type TypeRow16[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)
+
+type TypeRow17[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17)
+
+type TypeRow18[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18)
+
+type TypeRow19[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19)
+
+type TypeRow20[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20)
+
+type TypeRow21[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21)
+
+type TypeRow22[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22] =
+  (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22)
 
 extension (typeRow: TypeRow)
 
@@ -34,7 +79,10 @@ extension (typeRow: TypeRow)
     case x          => Iterator(x)
   }
 
-  def values: List[Any] = flatProduct(typeRow).toList
+  def values: LazyList[Any] = LazyList.from(flatProduct(typeRow))
+
+  def columnValues[T]: List[T] = flatProduct(typeRow).toList.map(_.asInstanceOf[T])
+
 end extension
 
 extension (sqlStatement: StringContext)
@@ -48,6 +96,5 @@ extension (sqlStatement: StringContext)
     val stmt = summon[Connection].createStatement()
     stmt.execute(sqlStatement.s(args: _*))
     stmt -> stmt.getResultSet
-
   }
 end extension

@@ -14,7 +14,7 @@ import bitlap.rolls.core.jdbc.*
  */
 object ResultSetXMacro {
 
-  def resultSetXImpl[T <: TypeRow: Type](fetchInput: Expr[FetchInput])(using quotes: Quotes): Expr[ResultSetX[T]] =
+  def resultSetXImpl[T <: TypeRow: Type](fetchInput: Expr[FetchInput])(using quotes: Quotes): Expr[ResultSetX] =
     import quotes.reflect.*
     def error = report.errorAndAbort(
       s"Cannot derive ResultSetX for ${TypeRepr.of[T].show}. Only case classes are supported."
@@ -24,16 +24,17 @@ object ResultSetXMacro {
         '{
           val stat      = $fetchInput._1
           val resultSet = $fetchInput._2
-          new ResultSetX[T]:
-            override def fetch(typeMappingFunc: TypeMappingArgs => TypeRow): Seq[T] =
+          new ResultSetX:
+            override type RowType = T
+            override def fetch(typeMappingFunc: TypeMappingArgs => TypeRow): LazyList[TypeRow] =
               val columnSize = resultSet.getMetaData.getColumnCount
-              val result     = _root_.scala.collection.mutable.ListBuffer[TypeRow]()
+              val result     = _root_.scala.collection.immutable.LazyList.newBuilder[TypeRow]
               while (resultSet.next()) {
-                val values = typeMappingFunc(TypeMappingArgs(resultSet, columnSize))
-                result += values
+                val row = typeMappingFunc(TypeMappingArgs(resultSet, columnSize))
+                result.addOne(row)
               }
               if (!resultSet.isClosed()) resultSet.close()
               if (!stat.isClosed()) stat.close()
-              result.result().asInstanceOf[Seq[T]]
+              result.result()
         }
 }
