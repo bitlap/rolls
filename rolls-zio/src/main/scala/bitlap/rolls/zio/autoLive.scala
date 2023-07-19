@@ -16,8 +16,30 @@ trait autoLive:
 
   type R
 
-  final def buildInstance[O: ClassTag](args: Any*): O =
+  final def checkArgs[O: ClassTag](args: Any*): Option[String] = {
+    val clazz = args.map(_.getClass).toList
+    val argTypeList =
+      classTag[O].runtimeClass.getConstructors.filter(_.getParameterCount == len).head.getParameterTypes.toList
+    if (
+      clazz.size == argTypeList.size && argTypeList.forall(a => clazz.contains(a)) && clazz
+        .forall(a => argTypeList.contains(a))
+    )
+      None
+    else
+      Some(s"""
+           |Constructor argument type mismatch
+           |Expect: ${argTypeList.map(_.getTypeName).mkString("[", ",", "]")}
+           |Actual: ${clazz.map(_.getTypeName).mkString("[", ",", "]")}
+           |""".stripMargin)
+  }
+
+  final def buildInstance[O: ClassTag](args: Any*): O = {
+    val check = checkArgs[O](args*)
+    check.fold(()) { msg =>
+      java.lang.System.err.println(msg)
+    }
     classTag[O].runtimeClass.getConstructors.filter(_.getParameterCount == len).head.newInstance(args*).asInstanceOf[O]
+  }
 
   lazy val live: ZLayer[R, Nothing, Any]
 

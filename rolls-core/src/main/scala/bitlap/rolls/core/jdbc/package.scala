@@ -88,12 +88,16 @@ end extension
 extension (sqlStatement: StringContext)
 
   def sqlQ(args: Any*)(using Connection): FetchInput = {
-    val stmt = summon[Connection].createStatement()
+    val conn = summon[Connection]
+    if (conn.isClosed) throw new Exception("Cannot use `sqlQ` after Connection has been closed")
+    val stmt = conn.createStatement()
     stmt -> stmt.executeQuery(sqlStatement.s(args: _*))
   }
 
   def sql(args: Any*)(using Connection): FetchInput = {
-    val stmt = summon[Connection].createStatement()
+    val conn = summon[Connection]
+    if (conn.isClosed) throw new Exception("Cannot use `sql` after Connection has been closed")
+    val stmt = conn.createStatement()
     stmt.execute(sqlStatement.s(args: _*))
     stmt -> stmt.getResultSet
   }
