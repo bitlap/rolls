@@ -81,7 +81,13 @@ extension (typeRow: TypeRow)
 
   def lazyColumns: LazyList[Any] = LazyList.from(flatProduct(typeRow))
 
-  def columns[T]: List[T] = flatProduct(typeRow).toList.map(_.asInstanceOf[T])
+  def columns[T]: T = {
+    // NOTE: typeRow will always be a Tuple2
+    val list = flatProduct(typeRow).toList
+    // convert Tuple2 to real TupleX
+    val realTuple = Tuple.fromArray(list.toArray[Any])
+    realTuple.asInstanceOf[T]
+  }
 
 end extension
 

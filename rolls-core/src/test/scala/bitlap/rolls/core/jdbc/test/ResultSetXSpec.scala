@@ -24,8 +24,8 @@ class ResultSetXSpec extends AnyFlatSpec with Matchers {
         "jdbc:h2:mem:zim?caseSensitive=false;MODE=MYSQL;TRACE_LEVEL_FILE=2;INIT=RUNSCRIPT FROM 'classpath:test.sql'"
       )
     // default type mapping
-    val rs: ResultSetX = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
-    val rows           = rs.fetch()
+    val rs   = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
+    val rows = rs.fetch()
     assert(rows.size == 2)
     assert(rows.head.lazyColumns.size == 4)
   }
@@ -36,8 +36,8 @@ class ResultSetXSpec extends AnyFlatSpec with Matchers {
         "jdbc:h2:mem:zim?caseSensitive=false;MODE=MYSQL;TRACE_LEVEL_FILE=2;INIT=RUNSCRIPT FROM 'classpath:test.sql'"
       )
 
-    val rs: ResultSetX = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
-    val rows           = rs.fetch()
+    val rs   = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
+    val rows = rs.fetch()
     assert(rows.size == 2)
     assert(rows.head.lazyColumns.size == 4)
   }
@@ -51,6 +51,8 @@ class ResultSetXSpec extends AnyFlatSpec with Matchers {
     val rs   = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
     val rows = rs.fetch()
     assert(rows.size == 2)
+    val column1 = rows.head.columns[rs.Out]._1
+    assert(column1 > 0)
     val columns = rows.head.columns[rs.Out]
     assert(columns.size == 4)
   }

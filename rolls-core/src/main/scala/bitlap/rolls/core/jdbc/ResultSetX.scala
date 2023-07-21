@@ -31,7 +31,7 @@ import bitlap.rolls.core.internal.ResultSetXMacro
  *    梦境迷离
  *  @version 1.0,2023/4/8
  */
-trait ResultSetX {
+trait ResultSetX[T] {
 
   protected def getResultSetTuple(typeMappingArgs: TypeMappingArgs): TypeRow =
     val resultSet = typeMappingArgs.underlyingMappingResultSet
@@ -55,18 +55,19 @@ trait ResultSetX {
       case Types.TIME      => Tuple(resultSet.getTime(name))
       case Types.FLOAT     => Tuple(resultSet.getFloat(name))
       case Types.DATE      => Tuple(resultSet.getDate(name))
+      case Types.DECIMAL   => Tuple(resultSet.getBigDecimal(name))
       case _               => Tuple(resultSet.getObject(name))
     }) :* getColumnValues(resultSet, idx + 1, size)
   }
 
-  type Out
+  type Out <: T
 
   def fetch(typeMappingFunc: TypeMappingArgs => TypeRow = getResultSetTuple): LazyList[TypeRow]
 }
 
 object ResultSetX {
 
-  inline def apply[T <: TypeRow](fetchInput: FetchInput): ResultSetX = ${
+  transparent inline def apply[T <: TypeRow](fetchInput: FetchInput): ResultSetX[T] = ${
     ResultSetXMacro.resultSetXImpl[T]('fetchInput)
   }
 }
