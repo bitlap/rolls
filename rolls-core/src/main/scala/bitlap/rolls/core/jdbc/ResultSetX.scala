@@ -67,7 +67,7 @@ trait ResultSetX[T] {
 
 object ResultSetX {
 
-  transparent inline def apply[T <: TypeRow](fetchInput: FetchInput): ResultSetX[T] = ${
+  inline def apply[T <: TypeRow](fetchInput: FetchInput): ResultSetX[T] = ${
     ResultSetXMacro.resultSetXImpl[T]('fetchInput)
   }
 }
