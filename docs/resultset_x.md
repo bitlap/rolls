@@ -26,9 +26,12 @@ val statement = DriverManager
   .getConnection(
     "jdbc:h2:mem:zim?caseSensitive=false;MODE=MYSQL;TRACE_LEVEL_FILE=2;INIT=RUNSCRIPT FROM 'classpath:test.sql'"
   )
-// rows is a Scala Tuple
-val rows = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER").fetch()
-assert(rows.size == 2)
-// Scala3 Tuple to List
-assert(rows.head.values.size == 4)
+val rs   = ResultSetX[TypeRow4[Int, String, String, String]](sqlQ"select * from T_USER")
+// rows is a Scala List[Tuple]
+val rows: LazyList[TypeRow] = rs.fetch()
+// get first column
+val column1: Int = rows.head.columns[rs.Out]._1
+
+// get all columns
+val columns: LazyList[Any] = rows.head.lazyColumns
 ```
