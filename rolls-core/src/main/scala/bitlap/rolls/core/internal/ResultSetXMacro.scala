@@ -29,12 +29,12 @@ object ResultSetXMacro {
             override def fetch(typeMappingFunc: TypeMappingArgs => TypeRow): LazyList[TypeRow] =
               val columnSize = resultSet.getMetaData.getColumnCount
               val result     = _root_.scala.collection.immutable.LazyList.newBuilder[TypeRow]
-              while (resultSet.next()) {
-                val row = typeMappingFunc(TypeMappingArgs(resultSet, columnSize))
-                result.addOne(row)
+              scala.util.Using.resources(stat, resultSet) { (_, rs) =>
+                while (rs.next()) {
+                  val row = typeMappingFunc(TypeMappingArgs(rs, columnSize))
+                  result.addOne(row)
+                }
               }
-              if (!resultSet.isClosed()) resultSet.close()
-              if (!stat.isClosed()) stat.close()
               result.result()
         }
 }
