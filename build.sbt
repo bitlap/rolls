@@ -1,10 +1,9 @@
 ThisBuild / resolvers ++= Seq(
-  Resolver.mavenLocal,
   "Sonatype OSS Snapshots" at "https://s01.oss.sonatype.org/content/repositories/snapshots",
   "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases"
 )
 
-lazy val `rolls-test-deps-version` = "0.3.1"
+lazy val `rolls-test-deps-version` = "0.3.3"
 
 //ThisBuild / version := `rolls-test-deps-version`
 
@@ -62,7 +61,6 @@ lazy val `rolls` = (project in file("."))
   .aggregate(
     `rolls-compiler-plugin`,
     `rolls-core`,
-    `rolls-plugin-server`,
     `rolls-csv`,
     `rolls-zio`,
     `rolls-plugin-tests`
@@ -105,21 +103,6 @@ lazy val `rolls-core` = (project in file("rolls-core"))
       "com.h2database"                 % "h2"                         % h2Version        % Test
     )
   )
-
-lazy val `rolls-plugin-server` = (project in file("rolls-plugin-server"))
-  .settings(
-    commonSettings,
-    publish / skip := true,
-    name           := "rolls-plugin-server",
-    libraryDependencies ++= Seq(
-      "org.postgresql"                 % "postgresql"                 % postgresqlVersion,
-      "com.typesafe"                   % "config"                     % configVersion,
-      "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % jacksonVersion,
-      "com.github.pjfanning"          %% "jackson-module-scala3-enum" % jacksonVersion,
-      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310"    % jacksonVersion
-    )
-  )
-  .dependsOn(`rolls-compiler-plugin`, `rolls-core`)
 
 lazy val `rolls-compiler-plugin` = (project in file("rolls-compiler-plugin"))
   .settings(
