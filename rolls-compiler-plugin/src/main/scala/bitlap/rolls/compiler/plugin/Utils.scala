@@ -62,7 +62,7 @@ object Utils:
         Files.createDirectories(Paths.get(config.classSchemaFolder))
         Files.createFile(file)
         Files.write(file, byteArr.toByteArray).getFileName.toUri.toString
-        if (config.postClassSchemaToServer) {
+        if (config.classSchemaPostUri != null && config.classSchemaPostUri.nonEmpty) {
           val buffer = BodyPublishers.ofByteArray(byteArr.toByteArray)
           postClassSchema(buffer, config)
         }

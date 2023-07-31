@@ -13,9 +13,7 @@ final case class RollsConfig(
   rollsRuntimeToStringMethod: String = "toString_",
   classSchemaFolder: String = "/tmp/.compiler",
   classSchemaFileName: String = "classSchema_%s.txt",
-  classSchemaPostUri: String = "http://localhost:18000/rolls-doc",
-  classSchemaQueryUri: String = "http://localhost:18000/rolls-schema",
-  postClassSchemaToServer: Boolean = false,
+  classSchemaPostUri: String = "",
   validateShouldStartsWith: String = ""
 )
 
@@ -28,7 +26,7 @@ final class RollsSetting(configString: List[String]) {
   private enum RollsConfigKey:
 
     case classSchema, prettyToString, classSchemaFolder, classSchemaFileName,
-      classSchemaPostUri, classSchemaQueryUri, postClassSchemaToServer, stringMask, rollsRuntimeClass,
+      classSchemaPostUri, stringMask, rollsRuntimeClass,
       rollsRuntimeToStringMethod, validateIdentPrefix, validateShouldStartsWith
 
   def config: RollsConfig = readConfig()
@@ -41,15 +39,13 @@ final class RollsSetting(configString: List[String]) {
         assert(parts.length == 2, "incorrect config line = " + line)
         val configValue = if (parts(1).trim.isEmpty) None else Some(parts(1).trim)
         RollsConfigKey.valueOf(parts(0).trim) match
-          case RollsConfigKey.classSchema             => config.copy(classSchema = configValue)
-          case RollsConfigKey.prettyToString          => config.copy(prettyToString = configValue)
-          case RollsConfigKey.stringMask              => config.copy(stringMask = parts(1).trim)
-          case RollsConfigKey.classSchemaFolder       => config.copy(classSchemaFolder = parts(1).trim)
-          case RollsConfigKey.classSchemaFileName     => config.copy(classSchemaFileName = parts(1).trim)
-          case RollsConfigKey.classSchemaPostUri      => config.copy(classSchemaPostUri = parts(1).trim)
-          case RollsConfigKey.classSchemaQueryUri     => config.copy(classSchemaQueryUri = parts(1).trim)
-          case RollsConfigKey.postClassSchemaToServer => config.copy(postClassSchemaToServer = parts(1).trim.toBoolean)
-          case RollsConfigKey.rollsRuntimeClass       => config.copy(rollsRuntimeClass = parts(1).trim)
+          case RollsConfigKey.classSchema                => config.copy(classSchema = configValue)
+          case RollsConfigKey.prettyToString             => config.copy(prettyToString = configValue)
+          case RollsConfigKey.stringMask                 => config.copy(stringMask = parts(1).trim)
+          case RollsConfigKey.classSchemaFolder          => config.copy(classSchemaFolder = parts(1).trim)
+          case RollsConfigKey.classSchemaFileName        => config.copy(classSchemaFileName = parts(1).trim)
+          case RollsConfigKey.classSchemaPostUri         => config.copy(classSchemaPostUri = parts(1).trim)
+          case RollsConfigKey.rollsRuntimeClass          => config.copy(rollsRuntimeClass = parts(1).trim)
           case RollsConfigKey.rollsRuntimeToStringMethod => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
           case RollsConfigKey.validateIdentPrefix =>
             config.copy(validateIdentPrefix = parts(1).trim.split('|').map(_.trim).toList)

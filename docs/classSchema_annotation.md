@@ -36,17 +36,13 @@ final case class SimpleClassTest() {
 final case class SubSubSubAuthPermissionPO(list: List[String])
 ```
 
-## Query Schema
+## Get Data
 
-If you are building with sbt, add the following to your `build.sbt`:
+By default, binary files (use java serialization) will be stored in `/tmp/.compiler/classSchema_%s.txt`, which can be configured by `config.properties`.
+
+If you need to obtain data through HTTP, add the following to your `build.sbt`:
 
 ```scala
-autoCompilerPlugins := true
-addCompilerPlugin("org.bitlap" %% "rolls-compiler-plugin" % "<version>")
-libraryDependencies ++= Seq(
-  "org.bitlap" %% "rolls-core" % "<version>"
-)
-
 lazy val reader = scala.io.Source.fromFile("config.properties")
 lazy val config = {
   val ret = reader.getLines().toList.map(p => s"-P:RollsCompilerPlugin:$p")
@@ -55,131 +51,19 @@ lazy val config = {
 }
 
 scalacOptions ++= config
+libraryDependencies ++= Seq(
+  "org.bitlap" %% "rolls-compiler-plugin" % "<version>"
+)
 ```
 
-Add the following properties to **config.properties**:
+Then add the following properties to **config.properties**:
 ```properties
-classSchemaPostUri=http://localhost:18000/rolls-doc     # post data
-postClassSchemaToServer=true                            # enable
-classSchemaQueryUri=http://localhost:18000/rolls-schema # query data
+classSchemaPostUri=http://localhost:18000/rolls-doc
 ```
 
-**Run Server**
+The data will be written to the uri service as a post request through the `ObjectOutputStream`, We read a case class object through the tool method:
+
 ```scala
-sbt "rolls-server/runMain bitlap.rolls.server.HttpServer"
-```
-
-`curl http://localhost:18000/rolls-schema?className=SimpleClassTest`
-
-By default, binary files will be stored in `/tmp/.compiler/classSchema_%s.txt`, which can be configured by `config.properties`.
-
-## Get JSON output
-
-```json
-{
-  "className":"SimpleClassTest",
-  "methods":[
-    {
-      "name":"testMethod",
-      "params":[
-        {
-          "typeName":"List",
-          "name":"listField",
-          "typeArgs":[
-            {
-              "typeName":"SubSubSubAuthPermissionPO",
-              "fields":[
-                {
-                  "typeName":"List",
-                  "name":"list",
-                  "typeArgs":[
-                    {
-                      "typeName":"String"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "typeName":"String",
-          "name":"stringField"
-        },
-        {
-          "typeName":"Option",
-          "name":"optField",
-          "typeArgs":[
-            {
-              "typeName":"SubSubSubAuthPermissionPO",
-              "fields":[
-                {
-                  "typeName":"List",
-                  "name":"list",
-                  "typeArgs":[
-                    {
-                      "typeName":"String"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "typeName":"SubSubSubAuthPermissionPO",
-          "name":"nestedObjectField",
-          "fields":[
-            {
-              "typeName":"List",
-              "name":"list",
-              "typeArgs":[
-                {
-                  "typeName":"String"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "typeName":"Either",
-          "name":"eitherField",
-          "typeArgs":[
-            {
-              "typeName":"String"
-            },
-            {
-              "typeName":"SubSubSubAuthPermissionPO",
-              "fields":[
-                {
-                  "typeName":"List",
-                  "name":"list",
-                  "typeArgs":[
-                    {
-                      "typeName":"String"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "resultType":{
-        "typeName":"SubSubSubAuthPermissionPO",
-        "fields":[
-          {
-            "typeName":"List",
-            "name":"list",
-            "typeArgs":[
-              {
-                "typeName":"String"
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
-}
+val inputStream: InputStream = ???
+val schema: ClassSchema = Utils.readObject(inputStream)
 ```
