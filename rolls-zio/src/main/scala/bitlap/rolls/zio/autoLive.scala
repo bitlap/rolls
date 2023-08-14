@@ -17,19 +17,18 @@ trait autoLive:
   type R
 
   final def checkArgs[O: ClassTag](args: Any*): Option[String] = {
-    val clazz = args.map(_.getClass).toList
     val argTypeList =
       classTag[O].runtimeClass.getConstructors.filter(_.getParameterCount == len).head.getParameterTypes.toList
     val msg = () => {
       Some(s"""
            |Constructor argument type mismatch
            |Expect: ${argTypeList.map(_.getTypeName).mkString("[", ",", "]")}
-           |Actual: ${clazz.map(_.getTypeName).mkString("[", ",", "]")}
+           |Actual: ${args.map(_.getClass).toList.map(_.getTypeName).mkString("[", ",", "]")}
            |""".stripMargin)
     }
-    if (clazz.size == argTypeList.size) {
-      val eq = argTypeList.zip(clazz).forall { (c1, c2) =>
-        c2.isAssignableFrom(c1)
+    if (args.size == argTypeList.size) {
+      val eq = argTypeList.zip(args).forall { (c1, c2) =>
+        c1.isInstance(c2)
       }
       if (eq) None else msg()
     } else
