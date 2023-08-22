@@ -38,7 +38,7 @@ object Utils:
     val request = HttpRequest.newBuilder
       .header(ContentType, `application/json`)
       .version(HttpClient.Version.HTTP_2)
-      .uri(URI.create(config.classSchemaPostUri))
+      .uri(URI.create(config.classSchemaPostUri.getOrElse("")))
       .POST(body)
       .timeout(timeout)
       .build
@@ -62,7 +62,7 @@ object Utils:
         Files.createDirectories(Paths.get(config.classSchemaFolder))
         Files.createFile(file)
         Files.write(file, byteArr.toByteArray).getFileName.toUri.toString
-        if (config.classSchemaPostUri != null && config.classSchemaPostUri.nonEmpty) {
+        if (config.classSchemaPostUri.isDefined) {
           val buffer = BodyPublishers.ofByteArray(byteArr.toByteArray)
           postClassSchema(buffer, config)
         }

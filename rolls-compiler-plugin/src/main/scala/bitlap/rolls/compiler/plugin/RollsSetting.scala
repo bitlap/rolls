@@ -13,7 +13,7 @@ final case class RollsConfig(
   rollsRuntimeToStringMethod: String = "toString_",
   classSchemaFolder: String = "/tmp/.compiler",
   classSchemaFileName: String = "classSchema_%s.txt",
-  classSchemaPostUri: String = "",
+  classSchemaPostUri: Option[String] = None,
   validateShouldStartsWith: String = ""
 )
 
@@ -44,7 +44,7 @@ final class RollsSetting(configString: List[String]) {
           case RollsConfigKey.stringMask                 => config.copy(stringMask = parts(1).trim)
           case RollsConfigKey.classSchemaFolder          => config.copy(classSchemaFolder = parts(1).trim)
           case RollsConfigKey.classSchemaFileName        => config.copy(classSchemaFileName = parts(1).trim)
-          case RollsConfigKey.classSchemaPostUri         => config.copy(classSchemaPostUri = parts(1).trim)
+          case RollsConfigKey.classSchemaPostUri         => config.copy(classSchemaPostUri = configValue)
           case RollsConfigKey.rollsRuntimeClass          => config.copy(rollsRuntimeClass = parts(1).trim)
           case RollsConfigKey.rollsRuntimeToStringMethod => config.copy(rollsRuntimeToStringMethod = parts(1).trim)
           case RollsConfigKey.validateIdentPrefix =>
