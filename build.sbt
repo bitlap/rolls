@@ -14,7 +14,7 @@ lazy val scalacheckVersion = "1.17.0"
 lazy val munitVersion      = "0.7.29"
 lazy val h2Version         = "2.2.220"
 lazy val calibanVersion    = "2.3.0"
-lazy val zioVersion        = "2.0.15"
+lazy val zioVersion        = "2.0.16"
 
 inThisBuild(
   List(
