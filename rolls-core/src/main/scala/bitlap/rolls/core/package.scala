@@ -50,8 +50,7 @@ end shows
 
 object mirrors:
 
-  inline def toProduct[T](inline tuple: Tuple)(using m: Mirror.ProductOf[T]) =
-    summon[Mirror.ProductOf[T]].fromProduct(tuple)
+  inline def toProduct[T](inline tuple: Tuple)(using m: Mirror.ProductOf[T]): T = m.fromProduct(tuple)
 
   inline def tupleTypeToString[A <: Tuple]: List[String] = inline erasedValue[A] match {
     case _: EmptyTuple => Nil
