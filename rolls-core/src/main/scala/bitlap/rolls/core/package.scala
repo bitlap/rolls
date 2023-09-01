@@ -4,6 +4,7 @@ import scala.compiletime.*
 import scala.deriving.Mirror
 import scala.quoted.*
 import scala.reflect.{ classTag, ClassTag }
+import scala.runtime.Tuples
 
 /** @author
  *    梦境迷离
@@ -17,6 +18,12 @@ object extensions:
       import quotes.reflect.*
       TypeRepr.of(using tpe).show(using Printer.TypeReprCode)
     }
+  end extension
+
+  extension (tuple: Tuple) inline def toProduct[T](using mirror: Mirror.ProductOf[T]): T = mirrors.toProduct(tuple)
+  end extension
+
+  extension (product: Product) inline def toTuple: Tuple = Tuples.fromProduct(product)
   end extension
 
 end extensions
@@ -42,6 +49,9 @@ object shows:
 end shows
 
 object mirrors:
+
+  inline def toProduct[T](inline tuple: Tuple)(using m: Mirror.ProductOf[T]) =
+    summon[Mirror.ProductOf[T]].fromProduct(tuple)
 
   inline def tupleTypeToString[A <: Tuple]: List[String] = inline erasedValue[A] match {
     case _: EmptyTuple => Nil
