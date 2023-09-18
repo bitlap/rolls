@@ -12,7 +12,7 @@ lazy val jacksonVersion    = "2.13.3"
 lazy val scalatestVersion  = "3.2.17"
 lazy val scalacheckVersion = "1.17.0"
 lazy val munitVersion      = "0.7.29"
-lazy val h2Version         = "2.2.222"
+lazy val h2Version         = "2.2.224"
 lazy val calibanVersion    = "2.3.0"
 lazy val zioVersion        = "2.0.16"
 
