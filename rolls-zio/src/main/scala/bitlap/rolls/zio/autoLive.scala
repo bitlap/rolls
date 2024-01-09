@@ -133,7 +133,7 @@ object autoLive:
     override val len: Int = 6
 
     override lazy val live: ZLayer[R, Nothing, O] =
-      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R5) => buildInstance[O](i1, i2, i3, i4, i5, i6))
+      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R6) => buildInstance[O](i1, i2, i3, i4, i5, i6))
   end deriveLive6
 
   open class deriveLive7[
@@ -151,7 +151,7 @@ object autoLive:
     override val len: Int = 7
 
     override lazy val live: ZLayer[R, Nothing, O] =
-      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R5, i7: R7) =>
+      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R6, i7: R7) =>
         buildInstance[O](i1, i2, i3, i4, i5, i6, i7)
       )
   end deriveLive7
@@ -172,7 +172,7 @@ object autoLive:
     override val len: Int = 8
 
     override lazy val live: ZLayer[R, Nothing, O] =
-      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R5, i7: R7, i8: R8) =>
+      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R6, i7: R7, i8: R8) =>
         buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8)
       )
   end deriveLive8
@@ -194,7 +194,7 @@ object autoLive:
     override val len: Int = 9
 
     override lazy val live: ZLayer[R, Nothing, O] =
-      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R5, i7: R7, i8: R8, i9: R9) =>
+      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R6, i7: R7, i8: R8, i9: R9) =>
         buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9)
       )
   end deriveLive9
@@ -217,7 +217,7 @@ object autoLive:
     override val len: Int = 10
 
     override lazy val live: ZLayer[R, Nothing, O] =
-      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R5, i7: R7, i8: R8, i9: R9, i10: R10) =>
+      ZLayer.fromFunction((i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R6, i7: R7, i8: R8, i9: R9, i10: R10) =>
         buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10)
       )
   end deriveLive10
@@ -242,7 +242,7 @@ object autoLive:
 
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
-        (i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R5, i7: R7, i8: R8, i9: R9, i10: R10, i11: R11) =>
+        (i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R6, i7: R7, i8: R8, i9: R9, i10: R10, i11: R11) =>
           buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11)
       )
   end deriveLive11
@@ -268,7 +268,7 @@ object autoLive:
 
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
-        (i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R5, i7: R7, i8: R8, i9: R9, i10: R10, i11: R11, i12: R12) =>
+        (i1: R1, i2: R2, i3: R3, i4: R4, i5: R5, i6: R6, i7: R7, i8: R8, i9: R9, i10: R10, i11: R11, i12: R12) =>
           buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12)
       )
   end deriveLive12
@@ -301,7 +301,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -342,7 +342,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -385,7 +385,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -430,7 +430,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -477,7 +477,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -526,7 +526,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -578,7 +578,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -632,7 +632,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -688,7 +688,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
@@ -769,7 +769,7 @@ object autoLive:
           i3: R3,
           i4: R4,
           i5: R5,
-          i6: R5,
+          i6: R6,
           i7: R7,
           i8: R8,
           i9: R9,
