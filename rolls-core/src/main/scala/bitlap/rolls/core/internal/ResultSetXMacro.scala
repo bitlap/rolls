@@ -26,6 +26,7 @@ object ResultSetXMacro {
           val resultSet = $fetchInput._2
           new ResultSetX[T]:
             override type Out = types
+
             override def fetch(typeMappingFunc: TypeMappingArgs => TypeRow): LazyList[TypeRow] =
               val columnSize = resultSet.getMetaData.getColumnCount
               val result     = _root_.scala.collection.immutable.LazyList.newBuilder[TypeRow]
