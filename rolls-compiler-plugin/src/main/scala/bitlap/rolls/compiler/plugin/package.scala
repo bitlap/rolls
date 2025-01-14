@@ -20,11 +20,11 @@ import dotty.tools.dotc.quoted.reflect.FromSymbol
  *  @version 1.0,2023/3/31
  */
 final case class FieldTree(
-  name: Name,
-  thisDot: Select,
-  tpe: Type,
-  isPrivate: Boolean,
-  annotations: List[Tree] // on term
+    name: Name,
+    thisDot: Select,
+    tpe: Type,
+    isPrivate: Boolean,
+    annotations: List[Tree] // on term
 ):
 
   def containsAnnotation(annotation: Name): Context ?=> Boolean =
@@ -42,27 +42,27 @@ final case class FieldTree(
 end FieldTree
 
 final case class SimpleFieldTree(
-  name: String,
-  tpe: Type,
-  typeTree: Tree,
-  argTypes: List[Tree]
+    name: String,
+    tpe: Type,
+    typeTree: Tree,
+    argTypes: List[Tree]
 )
 
 final case class TpeTree(
-  typeSymbol: Tree,
-  argTypes: List[Tree]
+    typeSymbol: Tree,
+    argTypes: List[Tree]
 )
 
 final case class ClassTree(
-  name: String,
-  typeParams: List[Tree],
-  template: Template,
-  typeSymbol: Symbol,
-  annotations: List[untpd.Tree],
-  classSymbol: ClassSymbol,
-  contrAnnotations: List[Tree],
-  primaryConstructor: Symbol,
-  isCaseClass: Boolean
+    name: String,
+    typeParams: List[Tree],
+    template: Template,
+    typeSymbol: Symbol,
+    annotations: List[untpd.Tree],
+    classSymbol: ClassSymbol,
+    contrAnnotations: List[Tree],
+    primaryConstructor: Symbol,
+    isCaseClass: Boolean
 )
 
 extension (s: SingleDenotation)

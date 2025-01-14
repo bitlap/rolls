@@ -12,7 +12,7 @@ import bitlap.rolls.csv.*
 private[csv] object CodecMacros {
 
   inline def encode[From, DerivedFromSubs <: Tuple](
-    computes: Map[FieldName, Any => String]
+      computes: Map[FieldName, Any => String]
   )(using CSVFormat): Encoder[From] = { (from: From) =>
     val encoders = Derivation.encodersForAllFields[DerivedFromSubs]
     Construct.constructCSV(from.asInstanceOf[Product]) { (labelsToValuesOfFrom, label) =>
@@ -24,8 +24,8 @@ private[csv] object CodecMacros {
   }
 
   inline def decode[To, DerivedToSubs <: Tuple](
-    toMirror: Mirror.ProductOf[To],
-    computes: Map[FieldName, String => Any]
+      toMirror: Mirror.ProductOf[To],
+      computes: Map[FieldName, String => Any]
   )(using CSVFormat): Decoder[To] = { (to: String) =>
     val strings  = StringUtils.splitColumns(to)
     val decoders = Derivation.decodersForAllFields[DerivedToSubs]

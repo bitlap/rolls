@@ -13,16 +13,16 @@ import bitlap.rolls.csv.internal.*
  *  @version 1.0,2023/4/5
  */
 final class AppliedDecoderBuilder[
-  To,
-  ToSubs <: Tuple,
-  DerivedToSubs <: Tuple
+    To,
+    ToSubs <: Tuple,
+    DerivedToSubs <: Tuple
 ](
-  private val appliedTo: String,
-  private[csv] override val computes: Map[FieldName, String => Any]
+    private val appliedTo: String,
+    private[csv] override val computes: Map[FieldName, String => Any]
 ) extends DecoderBuilder[AppliedDecoderBuilder, To, ToSubs, DerivedToSubs]:
 
   override def construct[DerivedToSubs <: Tuple](
-    computes: Map[FieldName, String => Any]
+      computes: Map[FieldName, String => Any]
   ): AppliedDecoderBuilder[To, ToSubs, DerivedToSubs] =
     new AppliedDecoderBuilder[To, ToSubs, DerivedToSubs](this.appliedTo, computes)
 

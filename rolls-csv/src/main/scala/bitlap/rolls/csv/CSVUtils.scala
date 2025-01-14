@@ -21,19 +21,19 @@ object CSVUtils:
   def FileName(fileName: String): FileName = fileName
 
   inline def writeCSV[T](fileName: FileName, objs: List[T])(
-    encodeLine: T => String
+      encodeLine: T => String
   )(using mirror: Mirror.ProductOf[T], format: CSVFormat = DefaultCSVFormat): Boolean =
     val fields = mirrors.labels[T](using mirror)
     writeCSV(new File(fileName), fields, objs.map(encodeLine))(using format)
 
   inline def writeCSV[T](file: File, objs: List[T])(
-    encodeLine: T => String
+      encodeLine: T => String
   )(using mirror: Mirror.ProductOf[T], format: CSVFormat): Boolean =
     val fields = mirrors.labels[T](using mirror)
     writeCSV(file, fields, objs.map(encodeLine))(using format)
 
   private def writeCSV(file: File, fields: List[String], lines: List[String])(using
-    format: CSVFormat
+      format: CSVFormat
   ): Boolean = {
     checkFile(file)
     // write class fieldName as csv header
@@ -69,13 +69,13 @@ object CSVUtils:
   }
 
   inline def readCSV[T](file: File)(
-    decodeLine: String => T
+      decodeLine: String => T
   )(using mirror: Mirror.ProductOf[T], format: CSVFormat): CSVData[T] =
     CSVUtils.readFromFileWithMetadata[T](file, decodeLine)
 
   inline def readCSV[T](fileName: FileName)(decodeLine: String => T)(using
-    mirror: Mirror.ProductOf[T],
-    format: CSVFormat = DefaultCSVFormat
+      mirror: Mirror.ProductOf[T],
+      format: CSVFormat = DefaultCSVFormat
   ): CSVData[T] =
     CSVUtils.readFromFileWithMetadata[T](new File(fileName), decodeLine)
 
@@ -91,8 +91,8 @@ object CSVUtils:
   }
 
   inline private def readFromFileWithMetadata[T](file: File, decodeLine: String => T)(using
-    mirror: Mirror.ProductOf[T],
-    format: CSVFormat
+      mirror: Mirror.ProductOf[T],
+      format: CSVFormat
   ): CSVData[T] = {
     val lines: Iterator[String] = Source.fromFile(file)(Codec(format.stringCharset.charset)).getLines()
 

@@ -11,8 +11,10 @@ private[csv] object FieldSelector:
 
   object SelectorLambda:
 
-    def unapply(using quotes: Quotes)(
-      arg: quotes.reflect.Term
+    def unapply(using
+        quotes: Quotes
+    )(
+        arg: quotes.reflect.Term
     ): Option[(List[quotes.reflect.ValDef], quotes.reflect.Term)] =
       import quotes.reflect.*
       arg match {

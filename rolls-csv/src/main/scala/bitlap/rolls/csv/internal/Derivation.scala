@@ -13,7 +13,7 @@ import bitlap.rolls.csv.*
 private[csv] object Derivation:
 
   inline def encodersForAllFields[
-    FromFields <: Tuple
+      FromFields <: Tuple
   ]: Map[FieldName, Encoder[Any]] =
     inline erasedValue[FromFields] match {
       case _: EmptyTuple =>
@@ -23,7 +23,7 @@ private[csv] object Derivation:
     }
 
   inline def decodersForAllFields[
-    FromFields <: Tuple
+      FromFields <: Tuple
   ]: Map[FieldName, Decoder[Any]] =
     inline erasedValue[FromFields] match {
       case _: EmptyTuple =>
@@ -33,8 +33,8 @@ private[csv] object Derivation:
     }
 
   private inline def decoderForField[
-    FieldLabel <: String,
-    FromFields <: Tuple
+      FieldLabel <: String,
+      FromFields <: Tuple
   ]: (FieldName, Decoder[Any]) =
     inline erasedValue[FromFields] match {
       case _: EmptyTuple =>
@@ -46,8 +46,8 @@ private[csv] object Derivation:
     }
 
   private inline def encoderForField[
-    FieldLabel <: String,
-    FromFields <: Tuple
+      FieldLabel <: String,
+      FromFields <: Tuple
   ]: (FieldName, Encoder[Any]) =
     inline erasedValue[FromFields] match {
       case _: EmptyTuple =>

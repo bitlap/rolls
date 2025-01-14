@@ -16,14 +16,14 @@ private[csv] object BuilderMacros {
   private type IsString[S <: String] = S
 
   transparent inline def dropCompletionField[
-    SpecificBuilder[_, _ <: Tuple, _ <: Tuple],
-    From,
-    FromSubs <: Tuple,
-    DerivedFromSubs <: Tuple,
-    FieldType
+      SpecificBuilder[_, _ <: Tuple, _ <: Tuple],
+      From,
+      FromSubs <: Tuple,
+      DerivedFromSubs <: Tuple,
+      FieldType
   ](
-    inline builder: SpecificBuilder[From, FromSubs, DerivedFromSubs],
-    inline selector: From => FieldType
+      inline builder: SpecificBuilder[From, FromSubs, DerivedFromSubs],
+      inline selector: From => FieldType
   ) = ${ dropCompletionFieldMacro('builder, 'selector) }
 
   inline def selectedField[From, Field](inline selector: From => Field): String =
@@ -33,14 +33,14 @@ private[csv] object BuilderMacros {
     Expr(selectedFieldName(selector))
 
   private def dropCompletionFieldMacro[
-    SpecificBuilder[_, _ <: Tuple, _ <: Tuple]: Type,
-    From: Type,
-    FromSubs <: Tuple: Type,
-    DerivedFromSubs <: Tuple: Type,
-    Field: Type
+      SpecificBuilder[_, _ <: Tuple, _ <: Tuple]: Type,
+      From: Type,
+      FromSubs <: Tuple: Type,
+      DerivedFromSubs <: Tuple: Type,
+      Field: Type
   ](
-    builder: Expr[SpecificBuilder[From, FromSubs, DerivedFromSubs]],
-    selector: Expr[From => Field]
+      builder: Expr[SpecificBuilder[From, FromSubs, DerivedFromSubs]],
+      selector: Expr[From => Field]
   )(using Quotes) =
     import quotes.reflect.*
     val selectedField = selectedFieldName(selector).asConstantType

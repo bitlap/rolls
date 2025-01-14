@@ -14,10 +14,10 @@ import bitlap.rolls.csv.*
 private[csv] object Construct:
 
   inline def constructInstance[L](
-    values: List[String],
-    i: Int,
-    decoders: Map[FieldName, Decoder[Any]],
-    computes: Map[FieldName, String => Any]
+      values: List[String],
+      i: Int,
+      decoders: Map[FieldName, Decoder[Any]],
+      computes: Map[FieldName, String => Any]
   ): List[Any] =
     inline erasedValue[L] match
       case _: EmptyTuple => Nil
@@ -32,7 +32,7 @@ private[csv] object Construct:
   end constructInstance
 
   inline def constructCSV(
-    from: Product
+      from: Product
   )(unsafeMapper: (Map[FieldName, Any], FieldName) => String)(using csvFormat: CSVFormat): String = {
     val labelsToValuesOfFrom = FieldName.wrapAll(from.productElementNames.zip(from.productIterator).toMap)
     val result = from.productElementNames.map { label =>

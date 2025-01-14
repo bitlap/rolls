@@ -89,11 +89,11 @@ object autoLive:
   end deriveLive3
 
   open class deriveLive4[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4
@@ -104,12 +104,12 @@ object autoLive:
   end deriveLive4
 
   open class deriveLive5[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5
@@ -120,13 +120,13 @@ object autoLive:
   end deriveLive5
 
   open class deriveLive6[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6
@@ -137,14 +137,14 @@ object autoLive:
   end deriveLive6
 
   open class deriveLive7[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7
@@ -157,15 +157,15 @@ object autoLive:
   end deriveLive7
 
   open class deriveLive8[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8
@@ -178,16 +178,16 @@ object autoLive:
   end deriveLive8
 
   open class deriveLive9[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9
@@ -200,17 +200,17 @@ object autoLive:
   end deriveLive9
 
   open class deriveLive10[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10
@@ -223,18 +223,18 @@ object autoLive:
   end deriveLive10
 
   open class deriveLive11[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11
@@ -248,19 +248,19 @@ object autoLive:
   end deriveLive11
 
   open class deriveLive12[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12
@@ -274,20 +274,20 @@ object autoLive:
   end deriveLive12
 
   open class deriveLive13[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13
@@ -296,39 +296,39 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13
         ) => buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13)
       )
   end deriveLive13
 
   open class deriveLive14[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14
@@ -337,41 +337,41 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14
         ) => buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14)
       )
   end deriveLive14
 
   open class deriveLive15[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag,
-    R15: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag,
+      R15: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15
@@ -380,43 +380,43 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14,
-          i15: R15
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14,
+            i15: R15
         ) => buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15)
       )
   end deriveLive15
 
   open class deriveLive16[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag,
-    R15: ClassTag: Tag,
-    R16: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag,
+      R15: ClassTag: Tag,
+      R16: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15 & R16
@@ -425,45 +425,45 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14,
-          i15: R15,
-          i16: R16
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14,
+            i15: R15,
+            i16: R16
         ) => buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16)
       )
   end deriveLive16
 
   open class deriveLive17[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag,
-    R15: ClassTag: Tag,
-    R16: ClassTag: Tag,
-    R17: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag,
+      R15: ClassTag: Tag,
+      R16: ClassTag: Tag,
+      R17: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15 & R16 & R17
@@ -472,47 +472,47 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14,
-          i15: R15,
-          i16: R16,
-          i17: R17
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14,
+            i15: R15,
+            i16: R16,
+            i17: R17
         ) => buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17)
       )
   end deriveLive17
 
   open class deriveLive18[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag,
-    R15: ClassTag: Tag,
-    R16: ClassTag: Tag,
-    R17: ClassTag: Tag,
-    R18: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag,
+      R15: ClassTag: Tag,
+      R16: ClassTag: Tag,
+      R17: ClassTag: Tag,
+      R18: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15 & R16 & R17 & R18
@@ -521,49 +521,49 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14,
-          i15: R15,
-          i16: R16,
-          i17: R17,
-          i18: R18
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14,
+            i15: R15,
+            i16: R16,
+            i17: R17,
+            i18: R18
         ) => buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18)
       )
   end deriveLive18
 
   open class deriveLive19[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag,
-    R15: ClassTag: Tag,
-    R16: ClassTag: Tag,
-    R17: ClassTag: Tag,
-    R18: ClassTag: Tag,
-    R19: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag,
+      R15: ClassTag: Tag,
+      R16: ClassTag: Tag,
+      R17: ClassTag: Tag,
+      R18: ClassTag: Tag,
+      R19: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15 & R16 & R17 & R18 &
@@ -573,51 +573,51 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14,
-          i15: R15,
-          i16: R16,
-          i17: R17,
-          i18: R18,
-          i19: R19
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14,
+            i15: R15,
+            i16: R16,
+            i17: R17,
+            i18: R18,
+            i19: R19
         ) => buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19)
       )
   end deriveLive19
 
   open class deriveLive20[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag,
-    R15: ClassTag: Tag,
-    R16: ClassTag: Tag,
-    R17: ClassTag: Tag,
-    R18: ClassTag: Tag,
-    R19: ClassTag: Tag,
-    R20: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag,
+      R15: ClassTag: Tag,
+      R16: ClassTag: Tag,
+      R17: ClassTag: Tag,
+      R18: ClassTag: Tag,
+      R19: ClassTag: Tag,
+      R20: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15 & R16 & R17 & R18 &
@@ -627,53 +627,53 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14,
-          i15: R15,
-          i16: R16,
-          i17: R17,
-          i18: R18,
-          i19: R19,
-          i20: R20
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14,
+            i15: R15,
+            i16: R16,
+            i17: R17,
+            i18: R18,
+            i19: R19,
+            i20: R20
         ) => buildInstance[O](i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20)
       )
   end deriveLive20
 
   open class deriveLive21[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag,
-    R15: ClassTag: Tag,
-    R16: ClassTag: Tag,
-    R17: ClassTag: Tag,
-    R18: ClassTag: Tag,
-    R19: ClassTag: Tag,
-    R20: ClassTag: Tag,
-    R21: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag,
+      R15: ClassTag: Tag,
+      R16: ClassTag: Tag,
+      R17: ClassTag: Tag,
+      R18: ClassTag: Tag,
+      R19: ClassTag: Tag,
+      R20: ClassTag: Tag,
+      R21: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15 & R16 & R17 & R18 &
@@ -683,27 +683,27 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14,
-          i15: R15,
-          i16: R16,
-          i17: R17,
-          i18: R18,
-          i19: R19,
-          i20: R20,
-          i21: R21
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14,
+            i15: R15,
+            i16: R16,
+            i17: R17,
+            i18: R18,
+            i19: R19,
+            i20: R20,
+            i21: R21
         ) =>
           buildInstance[O](
             i1,
@@ -732,29 +732,29 @@ object autoLive:
   end deriveLive21
 
   open class deriveLive22[
-    O: ClassTag: Tag,
-    R1: ClassTag: Tag,
-    R2: ClassTag: Tag,
-    R3: ClassTag: Tag,
-    R4: ClassTag: Tag,
-    R5: ClassTag: Tag,
-    R6: ClassTag: Tag,
-    R7: ClassTag: Tag,
-    R8: ClassTag: Tag,
-    R9: ClassTag: Tag,
-    R10: ClassTag: Tag,
-    R11: ClassTag: Tag,
-    R12: ClassTag: Tag,
-    R13: ClassTag: Tag,
-    R14: ClassTag: Tag,
-    R15: ClassTag: Tag,
-    R16: ClassTag: Tag,
-    R17: ClassTag: Tag,
-    R18: ClassTag: Tag,
-    R19: ClassTag: Tag,
-    R20: ClassTag: Tag,
-    R21: ClassTag: Tag,
-    R22: ClassTag: Tag
+      O: ClassTag: Tag,
+      R1: ClassTag: Tag,
+      R2: ClassTag: Tag,
+      R3: ClassTag: Tag,
+      R4: ClassTag: Tag,
+      R5: ClassTag: Tag,
+      R6: ClassTag: Tag,
+      R7: ClassTag: Tag,
+      R8: ClassTag: Tag,
+      R9: ClassTag: Tag,
+      R10: ClassTag: Tag,
+      R11: ClassTag: Tag,
+      R12: ClassTag: Tag,
+      R13: ClassTag: Tag,
+      R14: ClassTag: Tag,
+      R15: ClassTag: Tag,
+      R16: ClassTag: Tag,
+      R17: ClassTag: Tag,
+      R18: ClassTag: Tag,
+      R19: ClassTag: Tag,
+      R20: ClassTag: Tag,
+      R21: ClassTag: Tag,
+      R22: ClassTag: Tag
   ] extends autoLive:
 
     override type R = R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15 & R16 & R17 & R18 &
@@ -764,28 +764,28 @@ object autoLive:
     override lazy val live: ZLayer[R, Nothing, O] =
       ZLayer.fromFunction(
         (
-          i1: R1,
-          i2: R2,
-          i3: R3,
-          i4: R4,
-          i5: R5,
-          i6: R6,
-          i7: R7,
-          i8: R8,
-          i9: R9,
-          i10: R10,
-          i11: R11,
-          i12: R12,
-          i13: R13,
-          i14: R14,
-          i15: R15,
-          i16: R16,
-          i17: R17,
-          i18: R18,
-          i19: R19,
-          i20: R20,
-          i21: R21,
-          i22: R22
+            i1: R1,
+            i2: R2,
+            i3: R3,
+            i4: R4,
+            i5: R5,
+            i6: R6,
+            i7: R7,
+            i8: R8,
+            i9: R9,
+            i10: R10,
+            i11: R11,
+            i12: R12,
+            i13: R13,
+            i14: R14,
+            i15: R15,
+            i16: R16,
+            i17: R17,
+            i18: R18,
+            i19: R19,
+            i20: R20,
+            i21: R21,
+            i22: R22
         ) =>
           buildInstance[O](
             i1,

@@ -9,20 +9,20 @@ import caliban.schema.Annotations.GQLDescription
 object ValidatePrefixExample extends App {
 
   final case class StarDictInput(
-    @GQLDescription("dictName")
-    dictName: Option[String],
-    @GQLDescription("dictCode")
-    dictCode: Option[String],
-    @GQLDescription("starDictPayload")
-    starDictPayload: StarDictPayload,
-    @GQLDescription("starDictFunction")
-    starDictFunction: String => StarDictPayload
+      @GQLDescription("dictName")
+      dictName: Option[String],
+      @GQLDescription("dictCode")
+      dictCode: Option[String],
+      @GQLDescription("starDictPayload")
+      starDictPayload: StarDictPayload,
+      @GQLDescription("starDictFunction")
+      starDictFunction: String => StarDictPayload
   )
 
   final case class StarDictPayload(
-    @GQLDescription("id")
-    id: Option[String],
-    @GQLDescription("name")
-    name: Option[String]
+      @GQLDescription("id")
+      id: Option[String],
+      @GQLDescription("name")
+      name: Option[String]
   )
 }

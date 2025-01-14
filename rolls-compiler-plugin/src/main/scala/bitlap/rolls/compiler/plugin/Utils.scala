@@ -82,7 +82,7 @@ object Utils:
     )(_.readObject().asInstanceOf[ClassSchema])
 
   private class ObjectInputStreamWithCustomClassLoader(
-    inputStream: InputStream
+      inputStream: InputStream
   ) extends ObjectInputStream(inputStream):
 
     override def resolveClass(desc: java.io.ObjectStreamClass): Class[_] =

@@ -11,16 +11,16 @@ import bitlap.rolls.csv.internal.*
  *  @version 1.0,2023/4/5
  */
 trait EncoderBuilder[
-  SpecificBuilder[_, _ <: Tuple, _ <: Tuple],
-  From,
-  FromSubs <: Tuple,
-  DerivedFromSubs <: Tuple
+    SpecificBuilder[_, _ <: Tuple, _ <: Tuple],
+    From,
+    FromSubs <: Tuple,
+    DerivedFromSubs <: Tuple
 ]:
   private[csv] val computes: Map[FieldName, Any => String]
 
   final transparent inline def withFieldComputed[Field](
-    inline selector: From => Field,
-    f: Field => String
+      inline selector: From => Field,
+      f: Field => String
   ) = {
     val selectedField   = BuilderMacros.selectedField(selector)
     val computedField   = FieldName(selectedField) -> f.asInstanceOf[Any => String]
@@ -35,7 +35,7 @@ trait EncoderBuilder[
     }
 
   def construct[DerivedFromSubs <: Tuple](
-    computes: Map[FieldName, Any => String] = this.computes
+      computes: Map[FieldName, Any => String] = this.computes
   ): SpecificBuilder[From, FromSubs, DerivedFromSubs]
 
 end EncoderBuilder

@@ -5,16 +5,16 @@ package bitlap.rolls.compiler.plugin
  *  @version 1.0,2023/3/31
  */
 final case class RollsConfig(
-  classSchema: Option[String] = Some("bitlap.rolls.core.annotations.classSchema"),
-  prettyToString: Option[String] = Some("bitlap.rolls.core.annotations.prettyToString"),
-  stringMask: String = "bitlap.rolls.core.annotations.stringMask",
-  validateIdentPrefix: List[String] = List.empty,
-  rollsRuntimeClass: String = "bitlap.rolls.core.RollsRuntime",
-  rollsRuntimeToStringMethod: String = "toString_",
-  classSchemaFolder: String = "/tmp/.compiler",
-  classSchemaFileName: String = "classSchema_%s.txt",
-  classSchemaPostUri: Option[String] = None,
-  validateShouldStartsWith: String = ""
+    classSchema: Option[String] = Some("bitlap.rolls.core.annotations.classSchema"),
+    prettyToString: Option[String] = Some("bitlap.rolls.core.annotations.prettyToString"),
+    stringMask: String = "bitlap.rolls.core.annotations.stringMask",
+    validateIdentPrefix: List[String] = List.empty,
+    rollsRuntimeClass: String = "bitlap.rolls.core.RollsRuntime",
+    rollsRuntimeToStringMethod: String = "toString_",
+    classSchemaFolder: String = "/tmp/.compiler",
+    classSchemaFileName: String = "classSchema_%s.txt",
+    classSchemaPostUri: Option[String] = None,
+    validateShouldStartsWith: String = ""
 )
 
 object RollsConfig:
